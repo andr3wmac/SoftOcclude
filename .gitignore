@@ -1,0 +1,9 @@
+obj/
+bin/
+Demo/CPUT/Debug/
+Demo/CPUT/x64/
+Demo/Debug/
+Demo/lib/
+Demo/SoftwareOcclusionCulling_2012/Win32/
+Demo/
+SoftOcclude/Debug/
