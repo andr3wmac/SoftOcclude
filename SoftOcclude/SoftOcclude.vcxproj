@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}</ProjectGuid>
+    <RootNamespace>SoftOcclude</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include\;</IncludePath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\Lib\x86\;</LibraryPath>
+    <TargetName>$(ProjectName)_32D</TargetName>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include\;</IncludePath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\Lib\x86\;</LibraryPath>
+    <TargetName>$(ProjectName)_32R</TargetName>
+    <OutDir>$(SolutionDir)\lib\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Extra\SoftMath.h" />
+    <ClInclude Include="Extra\SoftFrustum.h" />
+    <ClInclude Include="Rasterizers\AABBoxRasterizer.h" />
+    <ClInclude Include="Rasterizers\AABBoxRasterizerScalar.h" />
+    <ClInclude Include="Rasterizers\AABBoxRasterizerScalarST.h" />
+    <ClInclude Include="Rasterizers\Constants.h" />
+    <ClInclude Include="Rasterizers\DepthBufferRasterizer.h" />
+    <ClInclude Include="Rasterizers\DepthBufferRasterizerScalar.h" />
+    <ClInclude Include="Rasterizers\DepthBufferRasterizerScalarST.h" />
+    <ClInclude Include="Rasterizers\HelperScalar.h" />
+    <ClInclude Include="Rasterizers\TransformedAABBoxScalar.h" />
+    <ClInclude Include="Rasterizers\TransformedMeshScalar.h" />
+    <ClInclude Include="Rasterizers\TransformedModelScalar.h" />
+    <ClInclude Include="SoftOcclude.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Extra\SoftFrustum.cpp" />
+    <ClCompile Include="Rasterizers\AABBoxRasterizer.cpp" />
+    <ClCompile Include="Rasterizers\AABBoxRasterizerScalar.cpp" />
+    <ClCompile Include="Rasterizers\AABBoxRasterizerScalarST.cpp" />
+    <ClCompile Include="Rasterizers\DepthBufferRasterizer.cpp" />
+    <ClCompile Include="Rasterizers\DepthBufferRasterizerScalar.cpp" />
+    <ClCompile Include="Rasterizers\DepthBufferRasterizerScalarST.cpp" />
+    <ClCompile Include="Rasterizers\HelperScalar.cpp" />
+    <ClCompile Include="Rasterizers\TransformedAABBoxScalar.cpp" />
+    <ClCompile Include="Rasterizers\TransformedMeshScalar.cpp" />
+    <ClCompile Include="Rasterizers\TransformedModelScalar.cpp" />
+    <ClCompile Include="SoftOcclude.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
