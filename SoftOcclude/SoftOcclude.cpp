@@ -24,6 +24,8 @@
 
 SoftOcclusionTest::SoftOcclusionTest()
 {
+   mCurrIdx = 0;
+
    mpDBRScalarST = new DepthBufferRasterizerScalarST;
    mpDBR = mpDBRScalarST;
 
@@ -35,19 +37,40 @@ SoftOcclusionTest::~SoftOcclusionTest()
 {
    SAFE_DELETE(mpDBR);
    SAFE_DELETE(mpAABB);
+
+   _aligned_free(mpCPUDepthBuf[0]);
+   _aligned_free(mpCPUDepthBuf[1]);
 }
 
 void SoftOcclusionTest::Render(SoftFrustum *pFrustum, float pFov, UINT idx)
 {
+   // TODO: Perform the flip/flop internally
+   mCurrIdx = idx;
+
+   mpDBR->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[idx], idx);
+   mpAABB->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[idx], idx);
+
    mpDBR->TransformModelsAndRasterizeToDepthBuffer(pFrustum, pFov, idx); 
    mpAABB->SetDepthSummaryBuffer(mpDBR->GetDepthSummaryBuffer(idx), idx);
    mpAABB->TransformAABBoxAndDepthTest(pFrustum, pFov, idx);
 }
 
-void SoftOcclusionTest::SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx)
+void SoftOcclusionTest::SetScreenSize(int width, int height)
 {
-   mpDBR->SetViewProj(viewMatrix, projMatrix, idx);
-   mpAABB->SetViewProjMatrix(viewMatrix, projMatrix, idx);
+   // TODO: Destroy old buffer
+   //       Store width/height to replace SCREENW and SCREENH constants
+   mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
+   mpCPUDepthBuf[1] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
+   
+   // Clear buffers to zero.
+   memset(mpCPUDepthBuf[0], 0, width * height *4);
+   memset(mpCPUDepthBuf[1], 0, width * height *4);
+}
+
+void SoftOcclusionTest::SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix)
+{
+   mpDBR->SetViewProj(viewMatrix, projMatrix, mCurrIdx);
+   mpAABB->SetViewProjMatrix(viewMatrix, projMatrix, mCurrIdx);
 }
 
 void SoftOcclusionTest::SetEnableFrustrumCulling(bool value)
@@ -55,13 +78,9 @@ void SoftOcclusionTest::SetEnableFrustrumCulling(bool value)
    mpDBR->SetEnableFCulling(value);
    mpAABB->SetEnableFCulling(value);
 }
+
 void SoftOcclusionTest::ResetInsideFrustum()
 {
    mpDBR->ResetInsideFrustum();
    mpAABB->ResetInsideFrustum();
-}
-void SoftOcclusionTest::SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx)
-{
-   mpDBR->SetCPURenderTargetPixels(pRenderTargetPixels, idx);
-   mpAABB->SetCPURenderTargetPixels(pRenderTargetPixels, idx);
 }

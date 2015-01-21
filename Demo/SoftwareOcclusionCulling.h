@@ -83,7 +83,7 @@ private:
    CPUTMaterialDX11        *mpShowDepthBufMtrlSSE;
    CPUTMaterialDX11        *mpShowDepthBufMtrl;
     
-   char                    *mpCPUDepthBuf[2];
+   //char                    *mpCPUDepthBuf[2];
    char                    *mpGPUDepthBuf;
     
    ID3D11Texture2D         *mpCPURenderTargetScalar[2];
@@ -209,7 +209,7 @@ public:
       }
 
       mpAssetSetSky = NULL;
-      mpCPUDepthBuf[0] = mpCPUDepthBuf[1] = NULL;
+      //mpCPUDepthBuf[0] = mpCPUDepthBuf[1] = NULL;
       mpShowDepthBufMtrlScalar = mpShowDepthBufMtrlSSE = mpShowDepthBufMtrl = NULL;
 
       // andrewmac:
@@ -222,8 +222,8 @@ public:
       SAFE_RELEASE(mpCamera);
       SAFE_RELEASE(mpShadowCamera);
 
-      _aligned_free(mpCPUDepthBuf[0]);
-      _aligned_free(mpCPUDepthBuf[1]);
+      //_aligned_free(mpCPUDepthBuf[0]);
+      //_aligned_free(mpCPUDepthBuf[1]);
       _aligned_free(mpGPUDepthBuf);
       SAFE_RELEASE(mpCPURenderTargetScalar[0]);
       SAFE_RELEASE(mpCPURenderTargetScalar[1]);
@@ -275,7 +275,7 @@ public:
       _mm_free(p);
    }
 
-   UINT *mpCPURenderTargetPixels;
+   //UINT *mpCPURenderTargetPixels;
 
    virtual CPUTEventHandledCode HandleKeyboardEvent(CPUTKey key);
    virtual CPUTEventHandledCode HandleMouseEvent(int x, int y, int wheel, CPUTMouseState state);

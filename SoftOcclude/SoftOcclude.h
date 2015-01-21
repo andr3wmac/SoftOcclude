@@ -35,42 +35,47 @@ class SoftOcclusionTest
       AABBoxRasterizer                 *mpAABB;
       AABBoxRasterizerScalarST         *mpAABBScalarST;
 
+      // Depth Buffer
+      UINT                             mCurrIdx;
+      char                             *mpCPUDepthBuf[2];
+
    public:
       SoftOcclusionTest();
       ~SoftOcclusionTest();
 
-      // Stats Functions
-      void ComputeR2DBTime(UINT idx) { mpDBR->ComputeR2DBTime(idx); }
-      UINT GetNumOccludersR2DB(UINT idx) { return mpDBR->GetNumOccludersR2DB(idx); }
-      UINT GetNumRasterizedTriangles(UINT idx) { return mpDBR->GetNumRasterizedTriangles(idx); } 
-      double GetRasterizeTime() { return mpDBR->GetRasterizeTime(); }
-      UINT GetNumCulled(UINT idx) { return mpAABB->GetNumCulled(idx); } 
-      UINT GetNumCulledTriangles(UINT idx) { return mpAABB->GetNumCulledTriangles(idx); }
-      double GetDepthTestTime() { return mpAABB->GetDepthTestTime(); }
-      UINT GetNumFCullCount() { return mpAABB->GetNumFCullCount(); }
-      UINT GetNumTrisRendered() { return mpAABB->GetNumTrisRendered(); }
-
-      // Shared Functions
-      void SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx);
+      // Configuration
+      void SetScreenSize(int width, int height);
+      void SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix);
       void SetEnableFrustrumCulling(bool value);
+      void SetDepthTestTasks(UINT numTasks) { mpAABB->SetDepthTestTasks(numTasks); }
       void ResetInsideFrustum();
-      void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx);
-      void Render(SoftFrustum *pFrustum, float pFov, UINT idx);
 
-      // Occluder (mpDBR) Functions
+      // Occluder Management
       TransformedModelScalar* AddOccluder() { return mpDBR->AddOccluder(); }
       void RefreshOccluders() { mpDBR->RefreshOccluders(); }
       void SetOccluderSizeThreshold(float occluderSizeThreshold){ mpDBR->SetOccluderSizeThreshold(occluderSizeThreshold); }
-      UINT GetNumOccluders() { return mpDBR->GetNumOccluders(); }
-      UINT GetNumOccluderTris() { return mpDBR->GetNumTriangles(); }
       
-      // Occludee (mpAABB) Functions
+      // Occludee Management
       TransformedAABBoxScalar* AddOccludee() { return mpAABB->AddOccludee(); }
-      void RefreshOccludees() { mpDBR->RefreshOccluders(); }
       void SetOccludeeSizeThreshold(float occludeeSizeThreshold){ mpAABB->SetOccludeeSizeThreshold(occludeeSizeThreshold); }
-      void SetDepthTestTasks(UINT numTasks) { mpAABB->SetDepthTestTasks(numTasks); }
-      UINT GetNumOccludees() { return mpAABB->GetNumOccludees(); }
-      UINT GetNumOccludeeTris() { return mpDBR->GetNumTriangles(); }
 
-      bool IsOccludeeVisible(UINT idx, UINT modelIdx) { return mpAABB->IsVisible(idx, modelIdx); }
+      // Core Functionality
+      char* GetDepthBuffer() { return mpCPUDepthBuf[mCurrIdx]; }
+      void  Render(SoftFrustum *pFrustum, float pFov, UINT idx);
+      bool  IsOccludeeVisible(UINT modelIdx) { return mpAABB->IsVisible(mCurrIdx, modelIdx); }
+
+      // Library Statistics Functions
+      UINT     GetNumOccluders()             { return mpDBR->GetNumOccluders(); }
+      UINT     GetNumOccluderTris()          { return mpDBR->GetNumTriangles(); }
+      UINT     GetNumOccludees()             { return mpAABB->GetNumOccludees(); }
+      UINT     GetNumOccludeeTris()          { return mpDBR->GetNumTriangles(); }
+      void     ComputeR2DBTime()             { mpDBR->ComputeR2DBTime(mCurrIdx); }
+      UINT     GetNumOccludersR2DB()         { return mpDBR->GetNumOccludersR2DB(mCurrIdx); }
+      UINT     GetNumRasterizedTriangles()   { return mpDBR->GetNumRasterizedTriangles(mCurrIdx); } 
+      double   GetRasterizeTime()            { return mpDBR->GetRasterizeTime(); }
+      UINT     GetNumCulled()                { return mpAABB->GetNumCulled(mCurrIdx); } 
+      UINT     GetNumCulledTriangles()       { return mpAABB->GetNumCulledTriangles(mCurrIdx); }
+      double   GetDepthTestTime()            { return mpAABB->GetDepthTestTime(); }
+      UINT     GetNumFCullCount()            { return mpAABB->GetNumFCullCount(); }
+      UINT     GetNumTrisRendered()          { return mpAABB->GetNumTrisRendered(); }
 };

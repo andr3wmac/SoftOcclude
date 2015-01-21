@@ -126,6 +126,7 @@ void MySample::Create()
    //mpAABB->SetDepthTestTasks(mNumDepthTestTasks);
 
    // andrewmac: 
+   mOcclusionTest->SetScreenSize(SCREENW, SCREENH);
    mOcclusionTest->SetDepthTestTasks(mNumDepthTestTasks);
 
    //
@@ -148,8 +149,8 @@ void MySample::Create()
    CPUTMaterial::mGlobalProperties.AddValue( _L("_Shadow"), _L("$shadow_depth") );
 
    // Creating a render target to view the CPU rasterized depth buffer
-   mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * SCREENW*SCREENH*4, 16);
-   mpCPUDepthBuf[1] = (char*)_aligned_malloc(sizeof(char) * SCREENW*SCREENH*4, 16);
+   //mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * SCREENW*SCREENH*4, 16);
+   //mpCPUDepthBuf[1] = (char*)_aligned_malloc(sizeof(char) * SCREENW*SCREENH*4, 16);
    mpGPUDepthBuf    = (char*)_aligned_malloc(sizeof(char) * SCREENW*SCREENH*4, 16);
 
    CD3D11_TEXTURE2D_DESC cpuRenderTargetDescSSE
@@ -536,7 +537,7 @@ CPUTEventHandledCode MySample::HandleKeyboardEvent(CPUTKey key)
             else 
             {
                 state = CPUT_CHECKBOX_UNCHECKED;
-                memset(mpCPUDepthBuf[mCurrIdx], 0, SCREENW * SCREENH *4);
+                //memset(mpCPUDepthBuf[mCurrIdx], 0, SCREENW * SCREENH *4);
 
                 mpOccludersR2DBText->SetText(         _L("\tDepth rasterized models: 0"));
                 mpOccluderRasterizedTrisText->SetText(_L("\tDepth rasterized tris: \t0"));
@@ -807,7 +808,7 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
         {
             mEnableCulling = false;
             mFirstFrame = false;
-            memset(mpCPUDepthBuf[mCurrIdx], 0, SCREENW * SCREENH *4);
+            //memset(mpCPUDepthBuf[mCurrIdx], 0, SCREENW * SCREENH *4);
 
             mpOccludersR2DBText->SetText(         _L("\tDepth rasterized models: 0"));
             mpOccluderRasterizedTrisText->SetText(_L("\tDepth rasterized tris: \t0"));
@@ -906,7 +907,9 @@ void MySample::UpdateGPUDepthBuf(UINT idx)
 
     for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
     {
-        depthfloat = (float*)&mpCPUDepthBuf[idx][i];
+        //depthfloat = (float*)&mpCPUDepthBuf[idx][i];
+        // andrewmac:
+        depthfloat = (float*)&mOcclusionTest->GetDepthBuffer()[i];
 
         tmpdepth = (int)ceil(*depthfloat * 30000);
         maxdepth = tmpdepth > maxdepth ? tmpdepth : maxdepth;
@@ -916,7 +919,9 @@ void MySample::UpdateGPUDepthBuf(UINT idx)
 
     for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
     {
-        depthfloat = (float*)&mpCPUDepthBuf[idx][i];
+        //depthfloat = (float*)&mpCPUDepthBuf[idx][i];
+        // andrewmac:
+        depthfloat = (float*)&mOcclusionTest->GetDepthBuffer()[i];
 
         tmpdepth = (int)ceil(*depthfloat * 20000);
         depth = (char)(tmpdepth * scale);
@@ -941,7 +946,7 @@ void MySample::RenderVisibleModels(CPUTAssetSet **pAssetSet,
     int count = 0;
     for(UINT modelId = 0; modelId < mNumModels; modelId++)
     {
-        if(mOcclusionTest->IsOccludeeVisible(idx, modelId))
+        if(mOcclusionTest->IsOccludeeVisible(modelId))
         {
             mpModels[modelId]->Render(renderParams);
             count++;
@@ -1042,7 +1047,7 @@ void MySample::Render(double deltaSeconds)
    //mpAABB->SetViewProjMatrix(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix(), mCurrIdx);
 
    // andrewmac:
-   mOcclusionTest->SetViewProj(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix(), mCurrIdx);
+   mOcclusionTest->SetViewProj(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix());
 
    // If view frustum culling is enabled then determine which occluders and occludees are 
    // inside the view frustum and run the software occlusion culling on only the those models
@@ -1059,7 +1064,7 @@ void MySample::Render(double deltaSeconds)
    if(mEnableCulling)
    {
       // Set the Depth Buffer
-      mpCPURenderTargetPixels = (UINT*)mpCPUDepthBuf[mCurrIdx];
+      //mpCPURenderTargetPixels = (UINT*)mpCPUDepthBuf[mCurrIdx];
         
       //mpDBR->SetCPURenderTargetPixels(mpCPURenderTargetPixels, mCurrIdx);
       // Transform the occluder models and rasterize them to the depth buffer
@@ -1076,8 +1081,6 @@ void MySample::Render(double deltaSeconds)
       memcpy(viewFrustum.mpPosition, mCameraCopy[mCurrIdx].mFrustum.mpPosition, sizeof(viewFrustum.mpPosition));
       memcpy(viewFrustum.mpNormal, mCameraCopy[mCurrIdx].mFrustum.mpNormal, sizeof(viewFrustum.mpNormal));
 
-      // TODO: Remove call to SetCPURenderTargetPixel and move mpCPUDepthBuf into library
-      mOcclusionTest->SetCPURenderTargetPixels(mpCPURenderTargetPixels, mCurrIdx);
       mOcclusionTest->Render(&viewFrustum, mCameraCopy[mCurrIdx].GetFov(), mCurrIdx);
    }
     
@@ -1134,11 +1137,11 @@ void MySample::Render(double deltaSeconds)
       //mRasterizeTime = mpDBR->GetRasterizeTime();
 
       // andrewmac:
-      mOcclusionTest->ComputeR2DBTime(mCurrIdx);
-      mNumOccludersR2DB = mOcclusionTest->GetNumOccludersR2DB(mCurrIdx);
-      mNumOccluderRasterizedTris = mOcclusionTest->GetNumRasterizedTriangles(mCurrIdx);
-      mNumCulled = mOcclusionTest->GetNumCulled(mCurrIdx);
-      mNumOccludeeCulledTris = mOcclusionTest->GetNumCulledTriangles(mCurrIdx);
+      mOcclusionTest->ComputeR2DBTime();
+      mNumOccludersR2DB = mOcclusionTest->GetNumOccludersR2DB();
+      mNumOccluderRasterizedTris = mOcclusionTest->GetNumRasterizedTriangles();
+      mNumCulled = mOcclusionTest->GetNumCulled();
+      mNumOccludeeCulledTris = mOcclusionTest->GetNumCulledTriangles();
       mRasterizeTime = mOcclusionTest->GetRasterizeTime();
         
       mNumVisible = mNumOccludees - mNumCulled;
@@ -1190,7 +1193,7 @@ void MySample::Render(double deltaSeconds)
       //mNumOccludeeVisibleTris = mpAABB->GetNumTrisRendered();
 
       // andrewmac:
-      mNumCulled = mOcclusionTest->GetNumCulled(mCurrIdx) + fCullCount;
+      mNumCulled = mOcclusionTest->GetNumCulled() + fCullCount;
       mNumOccludeeVisibleTris = mOcclusionTest->GetNumTrisRendered();
 
       mNumOccludeeCulledTris = mNumOccludeeTris - mNumOccludeeVisibleTris;
