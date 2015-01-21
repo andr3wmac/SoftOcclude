@@ -322,10 +322,10 @@ enum eCPUTMapType
     //-----------------------------------------------------------------------------
     inline std::wstring ptoc(const void *pPointer)
     {
-		wchar_t wcstring[65];
-		swprintf_s(wcstring, _L("%p"), pPointer);
+        wchar_t wcstring[65];
+        swprintf_s(wcstring, _L("%p"), pPointer);
 
-		return wcstring;
+        return wcstring;
     }
 
     // convert char* to wide/unicode string

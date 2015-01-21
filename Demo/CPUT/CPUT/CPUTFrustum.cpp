@@ -18,13 +18,13 @@
 
 CPUTFrustum::CPUTFrustum()
 {
-	mPlanes = (float *) _aligned_malloc(4 * 2 * sizeof(__m128), sizeof(__m128));
+    mPlanes = (float *) _aligned_malloc(4 * 2 * sizeof(__m128), sizeof(__m128));
 }
 
 //-----------------------------------------------
 CPUTFrustum::~CPUTFrustum()
 {
-	_aligned_free(mPlanes);
+    _aligned_free(mPlanes);
 }
 
 //-----------------------------------------------
@@ -111,21 +111,21 @@ void CPUTFrustum::InitializeFrustum
     mpNormal[4] = cross3(bottomRight, farRight).normalize();    // right
     mpNormal[5] = cross3(farRight,    farBottom).normalize();   // far clip plane
 
-	for (int i=0; i < 6; i++)
-	{
-		mPlanes[0*8 + i] = mpNormal[i].x;
-		mPlanes[1*8 + i] = mpNormal[i].y;
-		mPlanes[2*8 + i] = mpNormal[i].z;
-		mPlanes[3*8 + i] = -dot3(mpNormal[i], mpPosition[(i < 3) ? 0 : 6]);
-	}
+    for (int i=0; i < 6; i++)
+    {
+        mPlanes[0*8 + i] = mpNormal[i].x;
+        mPlanes[1*8 + i] = mpNormal[i].y;
+        mPlanes[2*8 + i] = mpNormal[i].z;
+        mPlanes[3*8 + i] = -dot3(mpNormal[i], mpPosition[(i < 3) ? 0 : 6]);
+    }
 
-	for (int i=6; i < 8; i++)
-	{
-		mPlanes[0*8 + i] = 0;
-		mPlanes[1*8 + i] = 0;
-		mPlanes[2*8 + i] = 0;
-		mPlanes[3*8 + i] = -1.0f;
-	}
+    for (int i=6; i < 8; i++)
+    {
+        mPlanes[0*8 + i] = 0;
+        mPlanes[1*8 + i] = 0;
+        mPlanes[2*8 + i] = 0;
+        mPlanes[3*8 + i] = -1.0f;
+    }
 }
 
 //-----------------------------------------------

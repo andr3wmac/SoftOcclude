@@ -28,12 +28,12 @@ class SoftOcclusionTest
 {
    protected:
       // Occluders
-      DepthBufferRasterizer	 		*mpDBR;
-	   DepthBufferRasterizerScalarST	*mpDBRScalarST;
+      DepthBufferRasterizer            *mpDBR;
+      DepthBufferRasterizerScalarST    *mpDBRScalarST;
 
       // Occludees
-	   AABBoxRasterizer				   *mpAABB;
-	   AABBoxRasterizerScalarST		*mpAABBScalarST;
+      AABBoxRasterizer                 *mpAABB;
+      AABBoxRasterizerScalarST         *mpAABBScalarST;
 
    public:
       SoftOcclusionTest();

@@ -69,13 +69,13 @@ double CPUTTimerWin::StopTimer()
 
 LARGE_INTEGER CPUTTimerWin::GetTimer()
 {
-	QueryPerformanceCounter(&mlLastMeasured);
-	return mlLastMeasured;
+    QueryPerformanceCounter(&mlLastMeasured);
+    return mlLastMeasured;
 }
 
 double CPUTTimerWin::GetTime(LARGE_INTEGER t1, LARGE_INTEGER t2)
 {
-	return ((double(t2.QuadPart - t1.QuadPart)) / ((double)(mlFrequency.QuadPart)));
+    return ((double(t2.QuadPart - t1.QuadPart)) / ((double)(mlFrequency.QuadPart)));
 }
 
 //

@@ -24,7 +24,7 @@ public:
    float3 mpPosition[8];
    float3 mpNormal[6];
 
-	float *mPlanes;
+   float *mPlanes;
 
    UINT mNumFrustumVisibleModels;
    UINT mNumFrustumCulledModels;
@@ -34,18 +34,18 @@ public:
 
    void InitializeFrustum
    (
-      float nearClipDistance,
-      float farClipDistance,
-      float aspectRatio,
-      float fov,
-      const float3 &position,
-      const float3 &look,
-      const float3 &up
+     float nearClipDistance,
+     float farClipDistance,
+     float aspectRatio,
+     float fov,
+     const float3 &position,
+     const float3 &look,
+     const float3 &up
    );
 
    bool IsVisible(
-      const float3 &center,
-      const float3 &half
+     const float3 &center,
+     const float3 &half
    );
 
 };

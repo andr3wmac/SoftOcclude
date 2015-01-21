@@ -61,7 +61,7 @@ CPUTMaterialDX11::CPUTMaterialDX11() :
     mpDomainShader(NULL),
     mRequiresPerModelPayload(-1)
 {
-	// TODO: Is there a better/safer way to initialize this list?
+    // TODO: Is there a better/safer way to initialize this list?
     mpShaderParametersList[0] =  &mPixelShaderParameters,
     mpShaderParametersList[1] =  &mComputeShaderParameters,
     mpShaderParametersList[2] =  &mVertexShaderParameters,
@@ -348,7 +348,7 @@ void CPUTMaterialDX11::BindTextures( CPUTShaderParameters &params, const CPUTMod
         // might not be contiguous, and there might be gaps (bind points without assigned textures)
         // TODO: Warn about missing bind points?
         params.mppBindViews[bindPoint] = ((CPUTTextureDX11*)mpTexture[textureCount])->GetShaderResourceView();
-		params.mppBindViews[bindPoint]->AddRef();
+        params.mppBindViews[bindPoint]->AddRef();
     }
 }
 
@@ -682,21 +682,21 @@ void CPUTMaterialDX11::RebindTexturesAndBuffers()
         {
             UINT bindPoint = (*pCur)->mpTextureParameterBindPoint[ii];
             (*pCur)->mppBindViews[bindPoint] = ((CPUTTextureDX11*)mpTexture[ii])->GetShaderResourceView();
-			(*pCur)->mppBindViews[bindPoint]->AddRef();
+            (*pCur)->mppBindViews[bindPoint]->AddRef();
         }
-	    for( UINT ii=0; ii<(*pCur)->mBufferCount; ii++ )
+        for( UINT ii=0; ii<(*pCur)->mBufferCount; ii++ )
         {
             UINT bindPoint = (*pCur)->mpBufferParameterBindPoint[ii];
             SAFE_RELEASE((*pCur)->mppBindViews[bindPoint]);
             (*pCur)->mppBindViews[bindPoint] = ((CPUTBufferDX11*)mpBuffer[ii])->GetShaderResourceView();
-			(*pCur)->mppBindViews[bindPoint]->AddRef();
+            (*pCur)->mppBindViews[bindPoint]->AddRef();
         }
         for( UINT ii=0; ii<(*pCur)->mUAVCount; ii++ )
         {
             UINT bindPoint = (*pCur)->mpUAVParameterBindPoint[ii];
             SAFE_RELEASE((*pCur)->mppBindUAVs[bindPoint]);
             (*pCur)->mppBindUAVs[bindPoint] = ((CPUTBufferDX11*)mpUAV[ii])->GetUnorderedAccessView();
-			(*pCur)->mppBindUAVs[bindPoint]->AddRef();
+            (*pCur)->mppBindUAVs[bindPoint]->AddRef();
         }
     }
 }

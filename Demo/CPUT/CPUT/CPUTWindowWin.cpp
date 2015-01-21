@@ -20,18 +20,18 @@
 TCHAR lpMsgBuf[100]; // declare global in case error is about lack of resources
 _inline void HandleWin32Error()
 {
-	
-	DWORD err = GetLastError();
-	FormatMessage(
-		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		err,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		lpMsgBuf,
-		100,
-		NULL );
-	ASSERT(false, lpMsgBuf);
-	
+    
+    DWORD err = GetLastError();
+    FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        err,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        lpMsgBuf,
+        100,
+        NULL );
+    ASSERT(false, lpMsgBuf);
+    
 }
 #else
 _inline void HandleWin32Error() {}
@@ -98,18 +98,18 @@ CPUTResult CPUTWindowWin::Create(CPUT* cput, const cString WindowTitle, const in
         classID = MyRegisterClass(mhInst);
         if(0==classID)
         {
-			HandleWin32Error();
+            HandleWin32Error();
             return CPUT_ERROR_WINDOW_CANNOT_REGISTER_APP;
         }
     }
 
 
-	// Perform Win32 instance initialization
+    // Perform Win32 instance initialization
     const int nCmdShow = SW_SHOWNORMAL;
-	if (false == InitInstance(nCmdShow, windowWidth, windowHeight, windowX, windowY))
-	{
-		return CPUT_ERROR_CANNOT_GET_WINDOW_INSTANCE;
-	}
+    if (false == InitInstance(nCmdShow, windowWidth, windowHeight, windowX, windowY))
+    {
+        return CPUT_ERROR_CANNOT_GET_WINDOW_INSTANCE;
+    }
 
     // store the CPUT pointer
     mCPUT = (CPUT*) cput;
@@ -123,8 +123,8 @@ CPUTResult CPUTWindowWin::Create(CPUT* cput, const cString WindowTitle, const in
 //-----------------------------------------------------------------------------
 int CPUTWindowWin::Destroy()
 {
-	DestroyWindow(mhWnd);
-	mCPUT = NULL;
+    DestroyWindow(mhWnd);
+    mCPUT = NULL;
     return true;
 }
 
@@ -140,9 +140,9 @@ int CPUTWindowWin::ReturnCode()
 //-----------------------------------------------------------------------------
 ATOM CPUTWindowWin::MyRegisterClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wcex;
+    WNDCLASSEX wcex;
 
-	wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.cbSize = sizeof(WNDCLASSEX);
 
     // load icon from resource file
     LPCTSTR iconPathName= L"..\\CPUT.ico";
@@ -150,20 +150,20 @@ ATOM CPUTWindowWin::MyRegisterClass(HINSTANCE hInstance)
     HANDLE hIcon = LoadImage(hInstance, iconPathName, IMAGE_ICON, 0, 0, icon_flags);
 
     // set up RegisterClass struct
-    wcex.style			= CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= (HICON) hIcon; //LoadIcon(hInstance, iconSTR);
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
-	wcex.lpszMenuName	= NULL;
-    wcex.lpszClassName	= mAppTitle.c_str();
-	wcex.hIconSm		= NULL; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL)); // no small icon for now
+    wcex.style            = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra        = 0;
+    wcex.cbWndExtra        = 0;
+    wcex.hInstance        = hInstance;
+    wcex.hIcon            = (HICON) hIcon; //LoadIcon(hInstance, iconSTR);
+    wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground    = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName    = NULL;
+    wcex.lpszClassName    = mAppTitle.c_str();
+    wcex.hIconSm        = NULL; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL)); // no small icon for now
 
     // register the window class
-	return RegisterClassEx(&wcex);
+    return RegisterClassEx(&wcex);
 }
 
 
@@ -248,15 +248,15 @@ LRESULT CALLBACK CPUTWindowWin::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
     LRESULT res;
 
     switch (message)
-	{
-	case WM_COMMAND:
+    {
+    case WM_COMMAND:
         int     wmId, wmEvent;
-		wmId    = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
+        wmId    = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
 
         // handle any menu item events here
         // see reference code in file history for examples
-		break;
+        break;
 
     case WM_KEYDOWN:
         if(mCPUT)
@@ -319,10 +319,10 @@ LRESULT CALLBACK CPUTWindowWin::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         return 0;
         break;
 
-	case WM_PAINT:
-	    PAINTSTRUCT ps;
-	    HDC hdc;
-		hdc = BeginPaint(hWnd, &ps);
+    case WM_PAINT:
+        PAINTSTRUCT ps;
+        HDC hdc;
+        hdc = BeginPaint(hWnd, &ps);
         EndPaint(hWnd, &ps);
         break;
 
@@ -394,11 +394,11 @@ LRESULT CALLBACK CPUTWindowWin::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         PostQuitMessage(0);
         break;
 
-	default:
+    default:
         // we don't handle it - pass it on thru to parent
         res = DefWindowProc(hWnd, message, wParam, lParam);
         return res;
-	}
+    }
 
     // translate handled code
     if(CPUT_EVENT_HANDLED == handledCode)
@@ -406,7 +406,7 @@ LRESULT CALLBACK CPUTWindowWin::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
         return 1;
     }
 
-	return 0;
+    return 0;
 }
 
 
@@ -695,50 +695,50 @@ CPUTMouseState CPUTWindowWin::ConvertMouseState(WPARAM wParam)
 //-----------------------------------------------------------------------------
 int CPUTWindowWin::StartMessageLoop()
 {
-	//
-	// Message pump
-	//
+    //
+    // Message pump
+    //
     MSG msg = { 0 };
-	bool fRunning = true;
+    bool fRunning = true;
     while(fRunning)
     {
         // PeekMessage() is a passthru on no events
         // so it allows us to render while no events are present
         if( PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
         {
-			if (msg.message == WM_QUIT)
-			{
-				PostQuitMessage(0);
-				fRunning = false;
-			}
+            if (msg.message == WM_QUIT)
+            {
+                PostQuitMessage(0);
+                fRunning = false;
+            }
             TranslateMessage( &msg );
             DispatchMessage( &msg );
         } else
-		{
+        {
             // trigger render and other calls
             mCPUT->InnerExecutionLoop();
         }
     }
-	
-	//
-	// Drain out the rest of the message queue.
-	//
-	while( PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
-	{
-		TranslateMessage( &msg );
-		DispatchMessage( &msg );
-	}
+    
+    //
+    // Drain out the rest of the message queue.
+    //
+    while( PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
+    {
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
+    }
 
-	if (UnregisterClass(mAppTitle.c_str(), mhInst) == 0) {
-		HandleWin32Error();
-	}
+    if (UnregisterClass(mAppTitle.c_str(), mhInst) == 0) {
+        HandleWin32Error();
+    }
 
-	//
-	// Set the window handle to NULL to indicate window shutdown is complete
-	//
-	mhWnd = NULL;
+    //
+    // Set the window handle to NULL to indicate window shutdown is complete
+    //
+    mhWnd = NULL;
 
     // return code
     mAppClosedReturnCode =  (int) msg.wParam;
-	return mAppClosedReturnCode;
+    return mAppClosedReturnCode;
 }

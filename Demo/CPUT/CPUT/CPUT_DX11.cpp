@@ -524,7 +524,7 @@ CPUTResult CPUT_DX11::CreateAndBindDepthBuffer(int width, int height)
     CPUTSetDebugName( mpDepthStencilBuffer, _L("DepthBufferTexture") );
 
     // 2. Initialize the description of the stencil state.
-    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;	
+    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;    
     ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
     // Set up the description of the stencil state.
@@ -882,10 +882,10 @@ CPUTResult CPUT_DX11::CPUTParseCommandLine(cString commandLine, CPUTWindowCreati
                         // vsync set to 30 FPS
                         pWindowParams->deviceParams.refreshRate = 30;
                     }
-					if( (0==boolString.compare(_L("off"))) || (0==boolString.compare(_L("false"))) )
-					{
-						pWindowParams->deviceParams.refreshRate = 0;
-					}
+                    if( (0==boolString.compare(_L("off"))) || (0==boolString.compare(_L("false"))) )
+                    {
+                        pWindowParams->deviceParams.refreshRate = 0;
+                    }
                 }
                 else if(0==ParameterName.compare(_L("xpos")))
                 {
@@ -937,7 +937,7 @@ CPUTResult CPUT_DX11::CPUTCreateWindowAndContext(const cString WindowTitle, CPUT
 
     HEAPCHECK;
 
-	// create the window
+    // create the window
     result = MakeWindow(WindowTitle, windowParams.windowWidth, windowParams.windowHeight, windowParams.windowPositionX, windowParams.windowPositionY);
     if(CPUTFAILED(result))
     {

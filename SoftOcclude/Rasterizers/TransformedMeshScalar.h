@@ -23,61 +23,61 @@
 
 class TransformedMeshScalar : public HelperScalar
 {
-	public:
-		TransformedMeshScalar();
-		~TransformedMeshScalar();
-		void Initialize(Vertex* pVertices, 
-                  UINT pNumVertices, 
-                  UINT* pIndices, 
-                  UINT pNumIndices,
-                  UINT pNumTriangles);
+   public:
+      TransformedMeshScalar();
+      ~TransformedMeshScalar();
+      void Initialize(Vertex* pVertices, 
+              UINT pNumVertices, 
+              UINT* pIndices, 
+              UINT pNumIndices,
+              UINT pNumTriangles);
 
-		void TransformVertices(const float4x4& cumulativeMatrix, 
-							   UINT start, 
-							   UINT end,
-							   UINT idx);
+      void TransformVertices(const float4x4& cumulativeMatrix, 
+                        UINT start, 
+                        UINT end,
+                        UINT idx);
 
-		void BinTransformedTrianglesST(UINT taskId,
-									   UINT modelId,
-									   UINT meshId,
-									   UINT start,
-									   UINT end,
-									   UINT* pBin,
-									   USHORT* pBinModel,
-									   USHORT* pBinMesh,
-									   USHORT* pNumTrisInBin,
-									   UINT idx);
+      void BinTransformedTrianglesST(UINT taskId,
+                              UINT modelId,
+                              UINT meshId,
+                              UINT start,
+                              UINT end,
+                              UINT* pBin,
+                              USHORT* pBinModel,
+                              USHORT* pBinMesh,
+                              USHORT* pNumTrisInBin,
+                              UINT idx);
 
-		void BinTransformedTrianglesMT(UINT taskId,
-									   UINT modelId,
-									   UINT meshId,
-									   UINT start,
-									   UINT end,
-									   UINT* pBin,
-									   USHORT* pBinModel,
-									   USHORT* pBinMesh,
-									   USHORT* pNumTrisInBin,
-									   UINT idx);
+      void BinTransformedTrianglesMT(UINT taskId,
+                              UINT modelId,
+                              UINT meshId,
+                              UINT start,
+                              UINT end,
+                              UINT* pBin,
+                              USHORT* pBinModel,
+                              USHORT* pBinMesh,
+                              USHORT* pNumTrisInBin,
+                              UINT idx);
 
-		void GetOneTriangleData(float* xformedPos, UINT triId, UINT idx);
+      void GetOneTriangleData(float* xformedPos, UINT triId, UINT idx);
 
-		inline UINT GetNumTriangles() {return mNumTriangles;}
-		inline UINT GetNumVertices() {return mNumVertices;}
-		inline void SetXformedPos(float4 *pXformedPos0, float4 *pXformedPos1)
-		{
-			mpXformedPos[0] = pXformedPos0;
-			mpXformedPos[1] = pXformedPos1;
-		}
-	
-	private:
-		UINT mNumVertices;
-		UINT mNumIndices;
-		UINT mNumTriangles;
-		Vertex *mpVertices;
-		UINT *mpIndices;
-		float4 *mpXformedPos[2]; 
-		
-		void Gather(float4 pOut[3], UINT triId, UINT idx);
+      inline UINT GetNumTriangles() {return mNumTriangles;}
+      inline UINT GetNumVertices() {return mNumVertices;}
+      inline void SetXformedPos(float4 *pXformedPos0, float4 *pXformedPos1)
+      {
+         mpXformedPos[0] = pXformedPos0;
+         mpXformedPos[1] = pXformedPos1;
+      }
+   
+   private:
+      UINT mNumVertices;
+      UINT mNumIndices;
+      UINT mNumTriangles;
+      Vertex *mpVertices;
+      UINT *mpIndices;
+      float4 *mpXformedPos[2]; 
+      
+      void Gather(float4 pOut[3], UINT triId, UINT idx);
 };
 
 

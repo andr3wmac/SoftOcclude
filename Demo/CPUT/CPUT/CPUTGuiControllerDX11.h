@@ -67,8 +67,8 @@ public:
 
     // initialization
     CPUTResult Initialize(ID3D11DeviceContext *pImmediateContext, cString &ResourceDirectory);
-	CPUTResult ReleaseResources();
-	
+    CPUTResult ReleaseResources();
+    
 
     // Control creation/deletion 'helpers'
     CPUTResult CreateButton(const cString pButtonText, CPUTControlID controlID, CPUTControlID panelID, CPUTButton **ppButton=NULL);
@@ -150,22 +150,22 @@ private:
 
     // members for saving render state before/after drawing gui
     D3D11_PRIMITIVE_TOPOLOGY    mTopology;
-	float mFPSAvg[AVG_FRAMES];
-	UINT mFPSInst;
+    float mFPSAvg[AVG_FRAMES];
+    UINT mFPSInst;
 
     // helper functions
     CPUTGuiControllerDX11();    // singleton
     ~CPUTGuiControllerDX11();
 
-	void* operator new(size_t i)
-	{
-		return _mm_malloc(i, 16);
-	}
+    void* operator new(size_t i)
+    {
+        return _mm_malloc(i, 16);
+    }
 
-	void operator delete(void* p)
-	{
-		_mm_free(p);
-	}
+    void operator delete(void* p)
+    {
+        _mm_free(p);
+    }
 
     CPUTResult RegisterGUIResources(ID3D11DeviceContext *pImmediateContext, cString VertexShaderFilename, cString RenderStateFile, cString PixelShaderFilename, cString DefaultFontFilename, cString ControlTextureAtlas);
     void SetGUIDrawingState(ID3D11DeviceContext *pImmediateContext);

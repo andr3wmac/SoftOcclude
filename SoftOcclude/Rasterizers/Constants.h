@@ -34,23 +34,23 @@ extern LARGE_INTEGER glFrequency;
 #define PI 3.1415926535f
 
 #if defined(DP_LARGE)
-	const int SCREENW = 1280;
-	const int SCREENH = 720;
+   const int SCREENW = 1280;
+   const int SCREENH = 720;
 
-	const int TILE_WIDTH_IN_PIXELS   = 160;
-	const int TILE_HEIGHT_IN_PIXELS  = 192;
+   const int TILE_WIDTH_IN_PIXELS   = 160;
+   const int TILE_HEIGHT_IN_PIXELS  = 192;
 #elif defined(DP_MEDIUM)
-	const int SCREENW = 640;
-	const int SCREENH = 360;
+   const int SCREENW = 640;
+   const int SCREENH = 360;
 
-	const int TILE_WIDTH_IN_PIXELS   = 80;
-	const int TILE_HEIGHT_IN_PIXELS  = 96;
+   const int TILE_WIDTH_IN_PIXELS   = 80;
+   const int TILE_HEIGHT_IN_PIXELS  = 96;
 #elif defined(DP_SMALL)
-	const int SCREENW = 320;
-	const int SCREENH = 192;
+   const int SCREENW = 320;
+   const int SCREENH = 192;
 
-	const int TILE_WIDTH_IN_PIXELS   = 40;
-	const int TILE_HEIGHT_IN_PIXELS  = 48;
+   const int TILE_WIDTH_IN_PIXELS   = 40;
+   const int TILE_HEIGHT_IN_PIXELS  = 48;
 #endif
 
 
@@ -85,10 +85,10 @@ const int AABB_INDICES  = 36;
 const int AABB_TRIANGLES = 12;
 
 const float4x4 viewportMatrix(
-    0.5f*(float)SCREENW,                 0.0f,  0.0f, 0.0f,
-                   0.0f, -0.5f*(float)SCREENH,  0.0f, 0.0f,
-                   0.0f,                 0.0f,  1.0f, 0.0f,
-    0.5f*(float)SCREENW,  0.5f*(float)SCREENH,  0.0f, 1.0f
+   0.5f*(float)SCREENW,             0.0f,  0.0f, 0.0f,
+               0.0f, -0.5f*(float)SCREENH,  0.0f, 0.0f,
+               0.0f,             0.0f,  1.0f, 0.0f,
+   0.5f*(float)SCREENW,  0.5f*(float)SCREENH,  0.0f, 1.0f
 );
 
 const int OCCLUDER_SETS = 2;

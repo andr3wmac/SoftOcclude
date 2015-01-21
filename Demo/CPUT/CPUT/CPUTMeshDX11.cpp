@@ -41,22 +41,22 @@ CPUTMeshDX11::CPUTMeshDX11():
     mpShadowInputLayout(NULL),
     mNumberOfInputLayoutElements(0),
     mpLayoutDescription(NULL),
-	mpRawVertices(NULL),
-	mpRawIndices(NULL)
+    mpRawVertices(NULL),
+    mpRawIndices(NULL)
 {
 }
 
 //-----------------------------------------------------------------------------
 CPUTMeshDX11::~CPUTMeshDX11()
 {
-	//CC added
-	// Release the index buffer
-   	SAFE_DELETE_ARRAY(mpIndexData);
-	SAFE_DELETE_ARRAY(mpRawIndices);
-	// Release the vertex buffer
-	SAFE_DELETE_ARRAY(mpVertexData);
-	_aligned_free(mpRawVertices);
-	// CC added ends
+    //CC added
+    // Release the index buffer
+       SAFE_DELETE_ARRAY(mpIndexData);
+    SAFE_DELETE_ARRAY(mpRawIndices);
+    // Release the vertex buffer
+    SAFE_DELETE_ARRAY(mpVertexData);
+    _aligned_free(mpRawVertices);
+    // CC added ends
 
     ClearAllObjects();
 }
@@ -122,12 +122,12 @@ CPUTResult CPUTMeshDX11::CreateNativeResources(
 
         // set the DX index buffer format
         mIndexBufferFormat = ConvertToDirectXFormat(pIndexDataInfo->mElementType, pIndexDataInfo->mElementComponentCount);
-		// CC added
-		// Allocate index buffer and copy the raw index data 
-		mIndexElementByteSize = pIndexDataInfo->mElementSizeInBytes;
-		mpIndexData = new char[pIndexDataInfo->mElementCount * pIndexDataInfo->mElementSizeInBytes];
-		memcpy(mpIndexData, pIndexData, pIndexDataInfo->mElementCount * pIndexDataInfo->mElementSizeInBytes);
-		// CC added ends
+        // CC added
+        // Allocate index buffer and copy the raw index data 
+        mIndexElementByteSize = pIndexDataInfo->mElementSizeInBytes;
+        mpIndexData = new char[pIndexDataInfo->mElementCount * pIndexDataInfo->mElementSizeInBytes];
+        memcpy(mpIndexData, pIndexData, pIndexDataInfo->mElementCount * pIndexDataInfo->mElementSizeInBytes);
+        // CC added ends
     }
 
     // set up data format info
@@ -136,7 +136,7 @@ CPUTResult CPUTMeshDX11::CreateNativeResources(
     ZeroMemory( &mVertexBufferDesc, sizeof(mVertexBufferDesc) );
     mVertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     // set the stride for one 'element' block of verts
-	mVertexStride = pVertexDataInfo[vertexDataInfoArraySize-1].mOffset + pVertexDataInfo[vertexDataInfoArraySize-1].mElementSizeInBytes; // size in bytes of a single vertex block
+    mVertexStride = pVertexDataInfo[vertexDataInfoArraySize-1].mOffset + pVertexDataInfo[vertexDataInfoArraySize-1].mElementSizeInBytes; // size in bytes of a single vertex block
     mVertexBufferDesc.ByteWidth = mVertexCount * mVertexStride; // size in bytes of entire buffer
     mVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     mVertexBufferDesc.CPUAccessFlags = 0;  // default to no cpu access for speed
@@ -147,11 +147,11 @@ CPUTResult CPUTMeshDX11::CreateNativeResources(
     hr = pD3dDevice->CreateBuffer( &mVertexBufferDesc, &resourceData, &mpVertexBuffer );
     ASSERT( !FAILED(hr), _L("Failed creating vertex buffer") );
     CPUTSetDebugName( mpVertexBuffer, _L("Vertex buffer") );
-	// CC added
-	// Allocate vertex buffer and copy the raw vertex data 
-	mpVertexData = new char[pVertexDataInfo[0].mElementCount * mVertexStride];
-	memcpy(mpVertexData, pVertexData, pVertexDataInfo[0].mElementCount * mVertexStride);
-	// CC added ends
+    // CC added
+    // Allocate vertex buffer and copy the raw vertex data 
+    mpVertexData = new char[pVertexDataInfo[0].mElementCount * mVertexStride];
+    memcpy(mpVertexData, pVertexData, pVertexDataInfo[0].mElementCount * mVertexStride);
+    // CC added ends
 
 
     // create the buffer for the shader resource view
@@ -159,7 +159,7 @@ CPUTResult CPUTMeshDX11::CreateNativeResources(
     ZeroMemory( &desc, sizeof(desc) );
     desc.Usage = D3D11_USAGE_DEFAULT;
     // set the stride for one 'element' block of verts
-	mVertexStride           = pVertexDataInfo[vertexDataInfoArraySize-1].mOffset + pVertexDataInfo[vertexDataInfoArraySize-1].mElementSizeInBytes; // size in bytes of a single vertex block
+    mVertexStride           = pVertexDataInfo[vertexDataInfoArraySize-1].mOffset + pVertexDataInfo[vertexDataInfoArraySize-1].mElementSizeInBytes; // size in bytes of a single vertex block
     desc.ByteWidth           = mVertexCount * mVertexStride; // size in bytes of entire buffer
     desc.BindFlags           = D3D11_BIND_SHADER_RESOURCE;
     desc.CPUAccessFlags      = 0;
@@ -208,7 +208,7 @@ CPUTResult CPUTMeshDX11::CreateNativeResources(
 //-----------------------------------------------------------------------------
 void CPUTMeshDX11::Draw(CPUTRenderParameters &renderParams, CPUTModel *pModel, ID3D11InputLayout *pInputLayout )
 {
-	mDrawCallCount++;
+    mDrawCallCount++;
     // Skip empty meshes.
     if( !mIndexCount ) { return; }
 
@@ -297,13 +297,13 @@ void CPUTMeshDX11::BindVertexShaderLayout( CPUTMaterial *pMaterial, CPUTMaterial
         // Get the vertex layout for this shader/format comb
         // If already exists, then GetLayout() returns the existing layout for reuse.
         CPUTVertexShaderDX11 *pVertexShader = ((CPUTMaterialDX11*)pMaterial)->GetVertexShader();
-	    SAFE_RELEASE(mpInputLayout);
+        SAFE_RELEASE(mpInputLayout);
         CPUTInputLayoutCacheDX11::GetInputLayoutCache()->GetLayout(pDevice, mpLayoutDescription, pVertexShader, &mpInputLayout);
     }
     if( pShadowCastMaterial )
     {
         CPUTVertexShaderDX11 *pVertexShader = ((CPUTMaterialDX11*)pShadowCastMaterial)->GetVertexShader();
-	    SAFE_RELEASE(mpShadowInputLayout);
+        SAFE_RELEASE(mpShadowInputLayout);
         CPUTInputLayoutCacheDX11::GetInputLayoutCache()->GetLayout(pDevice, mpLayoutDescription, pVertexShader, &mpShadowInputLayout);
     }
 }
@@ -459,106 +459,106 @@ void CPUTMeshDX11::UnmapIndices( CPUTRenderParameters &params )
 // CC added
 CPUTResult CPUTMeshDX11::GetByteSizeFromFormat(const DXGI_FORMAT& dxgiFormat, int &sizeInBytes)
 {
-	CPUTResult result = CPUT_SUCCESS;
+    CPUTResult result = CPUT_SUCCESS;
 
-	if(dxgiFormat == DXGI_FORMAT_R32_FLOAT)
-	{
-		sizeInBytes = 4;
-	}
-	else if(dxgiFormat == DXGI_FORMAT_R32G32_FLOAT)
-	{
-		sizeInBytes = 8;
-	}
-	else if(dxgiFormat == DXGI_FORMAT_R32G32B32_FLOAT)
-	{
-		sizeInBytes = 12;
-	}
-	else if(dxgiFormat == DXGI_FORMAT_R32G32B32A32_FLOAT)
-	{
-		sizeInBytes = 16;
-	}
-	else 
-	{
-		result = CPUT_ERROR_INVALID_PARAMETER;
-	}
+    if(dxgiFormat == DXGI_FORMAT_R32_FLOAT)
+    {
+        sizeInBytes = 4;
+    }
+    else if(dxgiFormat == DXGI_FORMAT_R32G32_FLOAT)
+    {
+        sizeInBytes = 8;
+    }
+    else if(dxgiFormat == DXGI_FORMAT_R32G32B32_FLOAT)
+    {
+        sizeInBytes = 12;
+    }
+    else if(dxgiFormat == DXGI_FORMAT_R32G32B32A32_FLOAT)
+    {
+        sizeInBytes = 16;
+    }
+    else 
+    {
+        result = CPUT_ERROR_INVALID_PARAMETER;
+    }
 
-	return result;
+    return result;
 }
 
 
 CPUTResult CPUTMeshDX11::ExtractVerticesandIndices()
 {
-	CPUTResult result = CPUT_SUCCESS;
-	int vertexSizeInBytes;  
-	
-	result = GetByteSizeFromFormat((mpLayoutDescription + mNumberOfInputLayoutElements -1)->Format, vertexSizeInBytes);
-	if(CPUTFAILED(result))
-	{
-		return result;
-	}
-	vertexSizeInBytes += (mpLayoutDescription + mNumberOfInputLayoutElements -1)->AlignedByteOffset;
-	
-	const unsigned int* indexData = (const unsigned int *)mpIndexData;
-	const char* vertexData = (const char *)mpVertexData;
+    CPUTResult result = CPUT_SUCCESS;
+    int vertexSizeInBytes;  
+    
+    result = GetByteSizeFromFormat((mpLayoutDescription + mNumberOfInputLayoutElements -1)->Format, vertexSizeInBytes);
+    if(CPUTFAILED(result))
+    {
+        return result;
+    }
+    vertexSizeInBytes += (mpLayoutDescription + mNumberOfInputLayoutElements -1)->AlignedByteOffset;
+    
+    const unsigned int* indexData = (const unsigned int *)mpIndexData;
+    const char* vertexData = (const char *)mpVertexData;
 
-	// Determine set of vertices with unique positions
-	auto vertexLess = [=](UINT indA, UINT indB) -> bool {
+    // Determine set of vertices with unique positions
+    auto vertexLess = [=](UINT indA, UINT indB) -> bool {
     return memcmp(vertexData + indA * vertexSizeInBytes, vertexData + indB * vertexSizeInBytes, 3 * sizeof(float)) < 0;
-	};
+    };
 
-	// Step 1: build an index list, sort by vertex position
-	// -> vertices with same position will cluster together
-	std::vector<unsigned int> sortedInds;
-	sortedInds.reserve(mVertexCount);
-	for(unsigned int i = 0; i < mVertexCount; i++)
-		sortedInds.push_back(i);
-	
-	std::sort(sortedInds.begin(), sortedInds.end(), vertexLess);
-	
-	// Step 2: determine unique verts and build reverse map
-	std::vector<unsigned int> indToUnique(mVertexCount);
-	indToUnique.reserve(mVertexCount);
-	
-	unsigned int nUniqueVerts = 0;
-	for(unsigned int i = 0; i < mVertexCount; i++)
-	{
-		if(i == 0 || vertexLess(sortedInds[i-1], sortedInds[i]))
-			nUniqueVerts++;
+    // Step 1: build an index list, sort by vertex position
+    // -> vertices with same position will cluster together
+    std::vector<unsigned int> sortedInds;
+    sortedInds.reserve(mVertexCount);
+    for(unsigned int i = 0; i < mVertexCount; i++)
+        sortedInds.push_back(i);
+    
+    std::sort(sortedInds.begin(), sortedInds.end(), vertexLess);
+    
+    // Step 2: determine unique verts and build reverse map
+    std::vector<unsigned int> indToUnique(mVertexCount);
+    indToUnique.reserve(mVertexCount);
+    
+    unsigned int nUniqueVerts = 0;
+    for(unsigned int i = 0; i < mVertexCount; i++)
+    {
+        if(i == 0 || vertexLess(sortedInds[i-1], sortedInds[i]))
+            nUniqueVerts++;
 
-		indToUnique[sortedInds[i]] = nUniqueVerts - 1;
-	}
+        indToUnique[sortedInds[i]] = nUniqueVerts - 1;
+    }
 
-	// Step 3: we now have a set of unique vertex positions, but they're
-	// sorted by position; we want our vertex buffer to roughly match index
-	// order for cache efficiency later, so shuffle things around one more
-	// time so we reference vertices in the order they appear.
-	
-	mRawVertexCount = nUniqueVerts;
-	mpRawVertices = (Vertex*)_aligned_malloc(sizeof(Vertex) * mRawVertexCount, 32);
-	mpRawIndices = new unsigned int[mIndexCount];
-		
-	std::vector<unsigned int> uniqueToVB(nUniqueVerts, ~0u);
-	assert(mIndexElementByteSize == 4);
-	unsigned int vertCounter = 0;
-	
-	for(unsigned int i = 0; i < mIndexCount; i++)
-	{
-		unsigned int inInd = indexData[i];
-		unsigned int uniq = indToUnique[inInd];
-		unsigned int vb = uniqueToVB[uniq];
-		
-		if(vb == ~0u) // we haven't referenced this vert yet, add it to the VB!
-		{
-			vb = uniqueToVB[uniq] = vertCounter++;
-			
-			const float *srcVert = (const float *) (vertexData + inInd * vertexSizeInBytes);
-			mpRawVertices[vb].pos.x = srcVert[0];
-			mpRawVertices[vb].pos.y = srcVert[1];
-			mpRawVertices[vb].pos.z = srcVert[2];
-		}
-		mpRawIndices[i] = vb;
-	}
-	
-	assert(vertCounter <= nUniqueVerts); // could be < if there's unreferenced verts.
-	return result;	
+    // Step 3: we now have a set of unique vertex positions, but they're
+    // sorted by position; we want our vertex buffer to roughly match index
+    // order for cache efficiency later, so shuffle things around one more
+    // time so we reference vertices in the order they appear.
+    
+    mRawVertexCount = nUniqueVerts;
+    mpRawVertices = (Vertex*)_aligned_malloc(sizeof(Vertex) * mRawVertexCount, 32);
+    mpRawIndices = new unsigned int[mIndexCount];
+        
+    std::vector<unsigned int> uniqueToVB(nUniqueVerts, ~0u);
+    assert(mIndexElementByteSize == 4);
+    unsigned int vertCounter = 0;
+    
+    for(unsigned int i = 0; i < mIndexCount; i++)
+    {
+        unsigned int inInd = indexData[i];
+        unsigned int uniq = indToUnique[inInd];
+        unsigned int vb = uniqueToVB[uniq];
+        
+        if(vb == ~0u) // we haven't referenced this vert yet, add it to the VB!
+        {
+            vb = uniqueToVB[uniq] = vertCounter++;
+            
+            const float *srcVert = (const float *) (vertexData + inInd * vertexSizeInBytes);
+            mpRawVertices[vb].pos.x = srcVert[0];
+            mpRawVertices[vb].pos.y = srcVert[1];
+            mpRawVertices[vb].pos.z = srcVert[2];
+        }
+        mpRawIndices[i] = vb;
+    }
+    
+    assert(vertCounter <= nUniqueVerts); // could be < if there's unreferenced verts.
+    return result;    
 }

@@ -378,9 +378,9 @@ CPUTResult CPUTGuiController::AddControl(CPUTControl *pControl, CPUTControlID pa
 //-----------------------------------------------------------------------------
 CPUTControl* CPUTGuiController::GetControl(CPUTControlID controlID, CPUTResult *pResult)
 {
-	if (pResult)
+    if (pResult)
     {
-		*pResult = CPUT_SUCCESS;
+        *pResult = CPUT_SUCCESS;
     }
 
     for(UINT i=0; i<mControlPanelIDList.size(); i++)
@@ -393,12 +393,12 @@ CPUTControl* CPUTGuiController::GetControl(CPUTControlID controlID, CPUTResult *
             }
         }
     }
-	
-	if (pResult)
+    
+    if (pResult)
     {
-		*pResult = CPUT_GUI_INVALID_CONTROL_ID;
+        *pResult = CPUT_GUI_INVALID_CONTROL_ID;
     }
-	return NULL;
+    return NULL;
 }
 
 // Find control and return pointer and panel id for it

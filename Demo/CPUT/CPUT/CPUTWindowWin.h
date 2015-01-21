@@ -49,7 +49,7 @@ public:
     HWND GetHWnd() { return mhWnd;};
 
 protected:
-    HINSTANCE           mhInst;					// current instance
+    HINSTANCE           mhInst;                    // current instance
     HWND                mhWnd;                     // window handle
     int                 mAppClosedReturnCode;      // windows OS return code
     cString             mAppTitle;                 // title put at top of window

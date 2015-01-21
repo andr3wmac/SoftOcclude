@@ -57,7 +57,7 @@ CPUTResult CPUTAssetSetDX11::LoadAssetSet(cString name)
     for(UINT ii=0; ii<mAssetCount-1; ii++) // Note: -1 because we added one for the root node (we don't load it)
     {
         CPUTConfigBlock *pBlock = ConfigFile.GetBlock(ii);
-		ASSERT(pBlock != NULL, _L("Cannot find block"));
+        ASSERT(pBlock != NULL, _L("Cannot find block"));
         cString nodeType = pBlock->GetValueByName(_L("type"))->ValueAsString();
         CPUTRenderNode *pParentNode = NULL;
 

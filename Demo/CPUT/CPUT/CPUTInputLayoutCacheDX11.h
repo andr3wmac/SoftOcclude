@@ -35,31 +35,31 @@ public:
     void ClearLayoutCache();
 
 private:
-	struct LayoutKey
-	{
-		const D3D11_INPUT_ELEMENT_DESC *layout;
-		void *vs;
-		int nElems;
-		bool layout_owned;
+    struct LayoutKey
+    {
+        const D3D11_INPUT_ELEMENT_DESC *layout;
+        void *vs;
+        int nElems;
+        bool layout_owned;
 
-		LayoutKey();
-		LayoutKey(const D3D11_INPUT_ELEMENT_DESC *pDXLayout, void *vs, bool just_ref);
-		LayoutKey(const LayoutKey &x);
-		~LayoutKey();
+        LayoutKey();
+        LayoutKey(const D3D11_INPUT_ELEMENT_DESC *pDXLayout, void *vs, bool just_ref);
+        LayoutKey(const LayoutKey &x);
+        ~LayoutKey();
 
-		LayoutKey& operator =(const LayoutKey &x);
+        LayoutKey& operator =(const LayoutKey &x);
 
-		inline bool operator <(const LayoutKey &x) const
-		{
-			if (vs != x.vs)
-				return vs < x.vs;
+        inline bool operator <(const LayoutKey &x) const
+        {
+            if (vs != x.vs)
+                return vs < x.vs;
 
-			if (nElems != x.nElems)
-				return nElems < x.nElems;
+            if (nElems != x.nElems)
+                return nElems < x.nElems;
 
-			return memcmp(layout, x.layout, sizeof(*layout) * nElems) < 0;
-		}
-	};
+            return memcmp(layout, x.layout, sizeof(*layout) * nElems) < 0;
+        }
+    };
 
     // singleton
     CPUTInputLayoutCacheDX11() { mLayoutList.clear(); }

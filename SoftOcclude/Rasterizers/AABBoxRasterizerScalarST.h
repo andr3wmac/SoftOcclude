@@ -22,13 +22,13 @@
 
 class AABBoxRasterizerScalarST : public AABBoxRasterizerScalar
 {
-	public:
-		AABBoxRasterizerScalarST();
-		~AABBoxRasterizerScalarST();
+   public:
+      AABBoxRasterizerScalarST();
+      ~AABBoxRasterizerScalarST();
 
-		void TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx);
-		void WaitForTaskToFinish(UINT idx);
-		void ReleaseTaskHandles(UINT idx);
+      void TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx);
+      void WaitForTaskToFinish(UINT idx);
+      void ReleaseTaskHandles(UINT idx);
 };
 
 #endif //AABBOXRASTERIZERSCALARST_H

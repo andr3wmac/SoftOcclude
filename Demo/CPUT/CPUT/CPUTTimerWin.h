@@ -34,8 +34,8 @@ public:
     virtual double GetElapsedTime();
     virtual void   ResetTimer();
 
-	virtual LARGE_INTEGER GetTimer();
-	virtual double GetTime(LARGE_INTEGER t1, LARGE_INTEGER t2);
+    virtual LARGE_INTEGER GetTimer();
+    virtual double GetTime(LARGE_INTEGER t1, LARGE_INTEGER t2);
 
 private:
     bool mbCounting;

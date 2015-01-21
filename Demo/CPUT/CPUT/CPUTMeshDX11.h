@@ -32,7 +32,7 @@ class CPUTModelDX11;
 
 struct Vertex
 {
-	float3 pos;
+    float3 pos;
 };
 
 //-----------------------------------------------------------------------------
@@ -55,11 +55,11 @@ class CPUTMeshDX11 : public CPUTMesh
     ID3D11ShaderResourceView *mpVertexView;
     CPUTBufferDX11           *mpVertexBufferForSRV;
 
-	// CC added 
-	void					 *mpVertexData;
-	Vertex					 *mpRawVertices;
-	unsigned int        mRawVertexCount;
-	// CC added end
+    // CC added 
+    void                     *mpVertexData;
+    Vertex                     *mpRawVertices;
+    unsigned int        mRawVertexCount;
+    // CC added end
 
     UINT                      mIndexCount;
     DXGI_FORMAT               mIndexBufferFormat;
@@ -68,12 +68,12 @@ class CPUTMeshDX11 : public CPUTMesh
     ID3D11Buffer             *mpStagingIndexBuffer;
     eCPUTMapType              mIndexBufferMappedType;
 
-	// CC added
-	unsigned int			  mIndexElementByteSize;
-	void					 *mpIndexData;
-	unsigned int			 *mpRawIndices;
-	static UINT				  mDrawCallCount;
-	// CC added end
+    // CC added
+    unsigned int              mIndexElementByteSize;
+    void                     *mpIndexData;
+    unsigned int             *mpRawIndices;
+    static UINT                  mDrawCallCount;
+    // CC added end
 
 public:
     CPUTMeshDX11();
@@ -97,17 +97,17 @@ public:
     UINT                      GetVertexCount() { return mVertexCount; }
     UINT                      GetIndexCount()  { return mIndexCount; }
 
-	// CC added
-	unsigned int			 *GetIndices() { return mpRawIndices; }
-	Vertex					 *GetVertices() { return mpRawVertices; }
-	unsigned int        GetDepthVertexCount() { return mRawVertexCount; }
-	unsigned int       *GetDepthIndices() { return mpRawIndices; }
-	Vertex           *GetDepthVertices() { return mpRawVertices; }
-	CPUTResult ExtractVerticesandIndices();
+    // CC added
+    unsigned int             *GetIndices() { return mpRawIndices; }
+    Vertex                     *GetVertices() { return mpRawVertices; }
+    unsigned int        GetDepthVertexCount() { return mRawVertexCount; }
+    unsigned int       *GetDepthIndices() { return mpRawIndices; }
+    Vertex           *GetDepthVertices() { return mpRawVertices; }
+    CPUTResult ExtractVerticesandIndices();
 
-	static void ResetDrawCallCount(){mDrawCallCount = 0;}
-	static UINT GetDrawCallCount(){return mDrawCallCount;}
-	// CC added ends 
+    static void ResetDrawCallCount(){mDrawCallCount = 0;}
+    static UINT GetDrawCallCount(){return mDrawCallCount;}
+    // CC added ends 
 
 protected:
     // Mapping vertex and index buffers is very similar.  This internal function does both
@@ -129,9 +129,9 @@ protected:
     );
     void ClearAllObjects(); // delete all allocations held by this object
     DXGI_FORMAT ConvertToDirectXFormat(CPUT_DATA_FORMAT_TYPE DataFormatElementType, int NumberDataFormatElements);
-	// CC added 
-	CPUTResult GetByteSizeFromFormat(const DXGI_FORMAT& dxgiFormat, int &sizeInBytes);
-	// CC added end
+    // CC added 
+    CPUTResult GetByteSizeFromFormat(const DXGI_FORMAT& dxgiFormat, int &sizeInBytes);
+    // CC added end
 };
 
 #endif // __CPUTMESHDX11_H__

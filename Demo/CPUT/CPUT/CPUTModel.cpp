@@ -223,13 +223,13 @@ CPUTResult CPUTModel::LoadModelPayload(const cString &File)
                 return result;
             }
 
-			// CC added
-			result = pMesh->ExtractVerticesandIndices();
-			if(CPUTFAILED(result))
-			{
-				return result;  
-			}
-			// CC added ends
+            // CC added
+            result = pMesh->ExtractVerticesandIndices();
+            if(CPUTFAILED(result))
+            {
+                return result;  
+            }
+            // CC added ends
         }
         delete [] pVertexElementInfo;
         pVertexElementInfo = NULL;

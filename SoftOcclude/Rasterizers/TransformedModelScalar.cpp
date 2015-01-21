@@ -17,13 +17,13 @@
 #include "TransformedModelScalar.h"
 
 TransformedModelScalar::TransformedModelScalar()
-	: mNumMeshes(0),
-	  mNumVertices(0),
-	  mNumTriangles(0)
+   : mNumMeshes(0),
+     mNumVertices(0),
+     mNumTriangles(0)
 {
-	mInsideViewFrustum[0] = mInsideViewFrustum[1] = false;
-	mTooSmall[0] = mTooSmall[1] = false;
-	mpXformedPos[0] = mpXformedPos[1] = NULL;
+   mInsideViewFrustum[0] = mInsideViewFrustum[1] = false;
+   mTooSmall[0] = mTooSmall[1] = false;
+   mpXformedPos[0] = mpXformedPos[1] = NULL;
 }
 
 TransformedModelScalar::~TransformedModelScalar()
@@ -32,39 +32,39 @@ TransformedModelScalar::~TransformedModelScalar()
 }
 
 void TransformedModelScalar::AddMesh(Vertex* pVertices, 
-                                     UINT pNumVertices, 
-                                     UINT* pIndices, 
-                                     UINT pNumIndices,
-                                     UINT pNumTriangles)
+                            UINT pNumVertices, 
+                            UINT* pIndices, 
+                            UINT pNumIndices,
+                            UINT pNumTriangles)
 {
-	mpMeshes[mNumMeshes].Initialize(pVertices, pNumVertices, pIndices, pNumIndices, pNumTriangles);
-	mNumVertices += mpMeshes[mNumMeshes].GetNumVertices();
-	mNumTriangles += mpMeshes[mNumMeshes].GetNumTriangles();
+   mpMeshes[mNumMeshes].Initialize(pVertices, pNumVertices, pIndices, pNumIndices, pNumTriangles);
+   mNumVertices += mpMeshes[mNumMeshes].GetNumVertices();
+   mNumTriangles += mpMeshes[mNumMeshes].GetNumTriangles();
    mNumMeshes++;
 }
 
 void TransformedModelScalar::TooSmall(const BoxTestSetupScalar &setup, UINT idx)
 {
-	if(mInsideViewFrustum[idx])
-	{
-		mCumulativeMatrix[idx] = mWorldMatrix * setup.mViewProjViewport;
-		
-		float w = mBBCenterOS.x * mCumulativeMatrix[idx].r0.w +
-				  mBBCenterOS.y * mCumulativeMatrix[idx].r1.w +
-				  mBBCenterOS.z * mCumulativeMatrix[idx].r2.w +
-				  mCumulativeMatrix[idx].r3.w; 
-	
-		if(w > 1.0f)
-		{
-			mTooSmall[idx] = mRadiusSq < w * setup.radiusThreshold; 
-		}
-		else
-		{
-			// BB center is behind the near clip plane, making screen-space radius meaningless.
-            // Assume visible.  This should be a safe assumption, as the frustum test says the bbox is visible.
-            mTooSmall[idx] = false;
-		}
-	}
+   if(mInsideViewFrustum[idx])
+   {
+      mCumulativeMatrix[idx] = mWorldMatrix * setup.mViewProjViewport;
+      
+      float w = mBBCenterOS.x * mCumulativeMatrix[idx].r0.w +
+              mBBCenterOS.y * mCumulativeMatrix[idx].r1.w +
+              mBBCenterOS.z * mCumulativeMatrix[idx].r2.w +
+              mCumulativeMatrix[idx].r3.w; 
+   
+      if(w > 1.0f)
+      {
+         mTooSmall[idx] = mRadiusSq < w * setup.radiusThreshold; 
+      }
+      else
+      {
+         // BB center is behind the near clip plane, making screen-space radius meaningless.
+         // Assume visible.  This should be a safe assumption, as the frustum test says the bbox is visible.
+         mTooSmall[idx] = false;
+      }
+   }
 }
 
 
@@ -72,32 +72,32 @@ void TransformedModelScalar::TooSmall(const BoxTestSetupScalar &setup, UINT idx)
 // Determine is the occluder model is inside view frustum
 //------------------------------------------------------------------
 void TransformedModelScalar::InsideViewFrustum(SoftFrustum* frustum,
-                                    const BoxTestSetupScalar &setup,
-											   UINT idx)
+                           const BoxTestSetupScalar &setup,
+                                    UINT idx)
 {
    // andrewmac: TODO: FIX FRUSTRUM CULLING
    mInsideViewFrustum[idx] = frustum->IsVisible(mBBCenterWS, mBBHalfWS);
 
-	if(mInsideViewFrustum[idx])
-	{
-		mCumulativeMatrix[idx] = mWorldMatrix * setup.mViewProjViewport;
-		
-		float w = mBBCenterOS.x * mCumulativeMatrix[idx].r0.w +
-				  mBBCenterOS.y * mCumulativeMatrix[idx].r1.w +
-				  mBBCenterOS.z * mCumulativeMatrix[idx].r2.w +
-				  mCumulativeMatrix[idx].r3.w; 
-	
-		if(w > 1.0f)
-		{
-			mTooSmall[idx] = mRadiusSq < w * setup.radiusThreshold; 
-		}
-		else
-		{
-			// BB center is behind the near clip plane, making screen-space radius meaningless.
-            // Assume visible.  This should be a safe assumption, as the frustum test says the bbox is visible.
-            mTooSmall[idx] = false;
-		}
-	}
+   if(mInsideViewFrustum[idx])
+   {
+      mCumulativeMatrix[idx] = mWorldMatrix * setup.mViewProjViewport;
+      
+      float w = mBBCenterOS.x * mCumulativeMatrix[idx].r0.w +
+              mBBCenterOS.y * mCumulativeMatrix[idx].r1.w +
+              mBBCenterOS.z * mCumulativeMatrix[idx].r2.w +
+              mCumulativeMatrix[idx].r3.w; 
+   
+      if(w > 1.0f)
+      {
+         mTooSmall[idx] = mRadiusSq < w * setup.radiusThreshold; 
+      }
+      else
+      {
+         // BB center is behind the near clip plane, making screen-space radius meaningless.
+         // Assume visible.  This should be a safe assumption, as the frustum test says the bbox is visible.
+         mTooSmall[idx] = false;
+      }
+   }
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -105,22 +105,22 @@ void TransformedModelScalar::InsideViewFrustum(SoftFrustum* frustum,
 // If so transform the occluder to screen space so that it can be rasterized to the cPU depth buffer
 //---------------------------------------------------------------------------------------------------
 void TransformedModelScalar::TransformMeshes(UINT start, 
-										         UINT end,
-											      UINT idx)
+                                     UINT end,
+                                      UINT idx)
 {
-	if(mInsideViewFrustum[idx] && !mTooSmall[idx])
-	{
-		UINT totalNumVertices = 0;
-		for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
-		{		
-			totalNumVertices +=  mpMeshes[meshId].GetNumVertices();
-			if(totalNumVertices < start)
-			{
-				continue;
-			}
-			mpMeshes[meshId].TransformVertices(mCumulativeMatrix[idx], start, end, idx);
-		}
-	}
+   if(mInsideViewFrustum[idx] && !mTooSmall[idx])
+   {
+      UINT totalNumVertices = 0;
+      for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
+      {      
+         totalNumVertices +=  mpMeshes[meshId].GetNumVertices();
+         if(totalNumVertices < start)
+         {
+            continue;
+         }
+         mpMeshes[meshId].TransformVertices(mCumulativeMatrix[idx], start, end, idx);
+      }
+   }
 }
 
 //------------------------------------------------------------------------------------
@@ -129,28 +129,28 @@ void TransformedModelScalar::TransformMeshes(UINT start,
 // Single threaded version
 //------------------------------------------------------------------------------------
 void TransformedModelScalar::BinTransformedTrianglesST(UINT taskId,
-													   UINT modelId,
-													   UINT start,
-													   UINT end,
-													   UINT* pBin,
-													   USHORT* pBinModel,
-													   USHORT* pBinMesh,
-													   USHORT* pNumTrisInBin,
-													   UINT idx)
+                                          UINT modelId,
+                                          UINT start,
+                                          UINT end,
+                                          UINT* pBin,
+                                          USHORT* pBinModel,
+                                          USHORT* pBinMesh,
+                                          USHORT* pNumTrisInBin,
+                                          UINT idx)
 {
-	if(mInsideViewFrustum[idx] && !mTooSmall[idx])
-	{
-		UINT totalNumTris = 0;
-		for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
-		{
-			totalNumTris += mpMeshes[meshId].GetNumTriangles();
-			if(totalNumTris < start)
-			{
-				continue;
-			}
-			mpMeshes[meshId].BinTransformedTrianglesST(taskId, modelId, meshId, start, end, pBin, pBinModel, pBinMesh, pNumTrisInBin, idx);
-		}
-	}
+   if(mInsideViewFrustum[idx] && !mTooSmall[idx])
+   {
+      UINT totalNumTris = 0;
+      for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
+      {
+         totalNumTris += mpMeshes[meshId].GetNumTriangles();
+         if(totalNumTris < start)
+         {
+            continue;
+         }
+         mpMeshes[meshId].BinTransformedTrianglesST(taskId, modelId, meshId, start, end, pBin, pBinModel, pBinMesh, pNumTrisInBin, idx);
+      }
+   }
 }
 
 //------------------------------------------------------------------------------------
@@ -159,34 +159,34 @@ void TransformedModelScalar::BinTransformedTrianglesST(UINT taskId,
 // Multi threaded version
 //------------------------------------------------------------------------------------
 void TransformedModelScalar::BinTransformedTrianglesMT(UINT taskId,
-													   UINT modelId,
-													   UINT start,
-													   UINT end,
-													   UINT* pBin,
-													   USHORT* pBinModel,
-													   USHORT* pBinMesh,
-													   USHORT* pNumTrisInBin,
-													   UINT idx)
+                                          UINT modelId,
+                                          UINT start,
+                                          UINT end,
+                                          UINT* pBin,
+                                          USHORT* pBinModel,
+                                          USHORT* pBinMesh,
+                                          USHORT* pNumTrisInBin,
+                                          UINT idx)
 {
-	if(mInsideViewFrustum[idx] && !mTooSmall[idx])
-	{
-		UINT totalNumTris = 0;
-		for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
-		{
-			totalNumTris += mpMeshes[meshId].GetNumTriangles();
-			if(totalNumTris < start)
-			{
-				continue;
-			}
-			mpMeshes[meshId].BinTransformedTrianglesMT(taskId, modelId, meshId, start, end, pBin, pBinModel, pBinMesh, pNumTrisInBin, idx);
-		}
-	}
+   if(mInsideViewFrustum[idx] && !mTooSmall[idx])
+   {
+      UINT totalNumTris = 0;
+      for(UINT meshId = 0; meshId < mNumMeshes; meshId++)
+      {
+         totalNumTris += mpMeshes[meshId].GetNumTriangles();
+         if(totalNumTris < start)
+         {
+            continue;
+         }
+         mpMeshes[meshId].BinTransformedTrianglesMT(taskId, modelId, meshId, start, end, pBin, pBinModel, pBinMesh, pNumTrisInBin, idx);
+      }
+   }
 }
 
 void TransformedModelScalar::Gather(float* xformedPos,
-									UINT meshId, 
-									UINT triId, 
-									UINT idx)
+                           UINT meshId, 
+                           UINT triId, 
+                           UINT idx)
 {
-	mpMeshes[meshId].GetOneTriangleData(xformedPos, triId, idx);
+   mpMeshes[meshId].GetOneTriangleData(xformedPos, triId, idx);
 }

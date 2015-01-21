@@ -23,94 +23,94 @@
 
 class AABBoxRasterizerScalar : public AABBoxRasterizer
 {
-	public:
-		AABBoxRasterizerScalar();
-		virtual ~AABBoxRasterizerScalar();
+   public:
+      AABBoxRasterizerScalar();
+      virtual ~AABBoxRasterizerScalar();
 
-      // andrewmac:
-      TransformedAABBoxScalar* AddOccludee();
-      bool IsVisible(UINT idx, UINT modelIdx) { return mpVisible[idx][modelIdx]; }
+     // andrewmac:
+     TransformedAABBoxScalar* AddOccludee();
+     bool IsVisible(UINT idx, UINT modelIdx) { return mpVisible[idx][modelIdx]; }
 
-		inline void ResetInsideFrustum()
-		{
-			for(UINT i = 0; i < mNumModels; i++)
-			{
-				mpInsideFrustum[0][i] = true;
-				mpInsideFrustum[1][i] = true;
-			}
-		}
+      inline void ResetInsideFrustum()
+      {
+         for(UINT i = 0; i < mNumModels; i++)
+         {
+            mpInsideFrustum[0][i] = true;
+            mpInsideFrustum[1][i] = true;
+         }
+      }
 
-		void SetViewProjMatrix(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx);
-		inline void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx)
-		{
-			mpRenderTargetPixels[idx] = pRenderTargetPixels;
-		}
-		inline void SetDepthSummaryBuffer(const float *pSummaryBuffer, UINT idx){}
-		inline void SetDepthTestTasks(UINT numTasks){mNumDepthTestTasks = numTasks;}
-		inline void SetOccludeeSizeThreshold(float occludeeSizeThreshold){mOccludeeSizeThreshold = occludeeSizeThreshold;}
-		inline void SetEnableFCulling(bool enableFCulling) {mEnableFCulling = enableFCulling;}
+      void SetViewProjMatrix(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx);
+      inline void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx)
+      {
+         mpRenderTargetPixels[idx] = pRenderTargetPixels;
+      }
+      inline void SetDepthSummaryBuffer(const float *pSummaryBuffer, UINT idx){}
+      inline void SetDepthTestTasks(UINT numTasks){mNumDepthTestTasks = numTasks;}
+      inline void SetOccludeeSizeThreshold(float occludeeSizeThreshold){mOccludeeSizeThreshold = occludeeSizeThreshold;}
+      inline void SetEnableFCulling(bool enableFCulling) {mEnableFCulling = enableFCulling;}
 
-		inline UINT GetNumOccludees() {return mNumModels;}
-		inline UINT GetNumCulled(UINT idx) {return mNumCulled[idx];}
-		inline double GetDepthTestTime()
-		{
-			double averageTime = 0.0;
-			for(UINT i = 0; i < AVG_COUNTER; i++)
-			{
-				averageTime += mDepthTestTime[i];
-			}
-			return averageTime / AVG_COUNTER;
-		}
+      inline UINT GetNumOccludees() {return mNumModels;}
+      inline UINT GetNumCulled(UINT idx) {return mNumCulled[idx];}
+      inline double GetDepthTestTime()
+      {
+         double averageTime = 0.0;
+         for(UINT i = 0; i < AVG_COUNTER; i++)
+         {
+            averageTime += mDepthTestTime[i];
+         }
+         return averageTime / AVG_COUNTER;
+      }
 
-		inline UINT GetNumTriangles()
-		{
-			UINT numTris = 0;
-			for(UINT i = 0; i < mNumModels; i++)
-			{
-				numTris += mpNumTriangles[i];
-			}
-			return numTris;
-		}
+      inline UINT GetNumTriangles()
+      {
+         UINT numTris = 0;
+         for(UINT i = 0; i < mNumModels; i++)
+         {
+            numTris += mpNumTriangles[i];
+         }
+         return numTris;
+      }
 
-		inline UINT GetNumCulledTriangles(UINT idx)
-		{
-			UINT numCulledTris = 0;
-			for(UINT i = 0; i < mNumModels; i++)
-			{
-				numCulledTris += mpVisible[idx][i] ? 0 : mpNumTriangles[i];
-			}
-			return numCulledTris;
-		}
-		
-		inline UINT GetNumTrisRendered()
-		{
-			return mNumTrisRendered;
-		}
+      inline UINT GetNumCulledTriangles(UINT idx)
+      {
+         UINT numCulledTris = 0;
+         for(UINT i = 0; i < mNumModels; i++)
+         {
+            numCulledTris += mpVisible[idx][i] ? 0 : mpNumTriangles[i];
+         }
+         return numCulledTris;
+      }
+      
+      inline UINT GetNumTrisRendered()
+      {
+         return mNumTrisRendered;
+      }
 
-		inline UINT GetNumFCullCount()
-		{
-			return mNumFCullCount;
-		}
+      inline UINT GetNumFCullCount()
+      {
+         return mNumFCullCount;
+      }
 
-	protected:
-		UINT mNumModels;
-		TransformedAABBoxScalar mpTransformedAABBox[1000];
-		bool mpInsideFrustum[2][1000];
-		UINT mpNumTriangles[1000];
-		float4x4 mViewMatrix[2];
-		float4x4 mProjMatrix[2];
-		UINT *mpRenderTargetPixels[2];
+   protected:
+      UINT mNumModels;
+      TransformedAABBoxScalar mpTransformedAABBox[1000];
+      bool mpInsideFrustum[2][1000];
+      UINT mpNumTriangles[1000];
+      float4x4 mViewMatrix[2];
+      float4x4 mProjMatrix[2];
+      UINT *mpRenderTargetPixels[2];
 
-		bool mpVisible[2][1000];
-		UINT mNumCulled[2];
-		UINT mNumTrisRendered;
-		UINT mNumFCullCount;
-		UINT mNumDepthTestTasks;
-		float mOccludeeSizeThreshold;
-		UINT mTimeCounter;
+      bool mpVisible[2][1000];
+      UINT mNumCulled[2];
+      UINT mNumTrisRendered;
+      UINT mNumFCullCount;
+      UINT mNumDepthTestTasks;
+      float mOccludeeSizeThreshold;
+      UINT mTimeCounter;
 
-		bool   mEnableFCulling;
-		double mDepthTestTime[AVG_COUNTER];
+      bool   mEnableFCulling;
+      double mDepthTestTime[AVG_COUNTER];
 };
 
 

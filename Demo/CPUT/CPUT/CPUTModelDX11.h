@@ -52,20 +52,20 @@ protected:
         SAFE_RELEASE(mpModelConstantBuffer); // TODO: This is a static.  Better to do somewhere else?
     }
 
-	static UINT				  mFCullCount;
+    static UINT                  mFCullCount;
 
 public:
     CPUTModelDX11(){}
 
-	void* operator new(size_t i)
-	{
-		return _mm_malloc(i, 16);
-	}
+    void* operator new(size_t i)
+    {
+        return _mm_malloc(i, 16);
+    }
 
-	void operator delete(void* p)
-	{
-		_mm_free(p);
-	}
+    void operator delete(void* p)
+    {
+        _mm_free(p);
+    }
 
     static void CreateModelConstantBuffer();
 
@@ -78,8 +78,8 @@ public:
     void          DrawBoundingBox(CPUTRenderParameters &renderParams);
     void          CreateBoundingBoxMesh();
 
-	static void ResetFCullCount(){mFCullCount = 0;}
-	static UINT GetFCullCount(){return mFCullCount;}
+    static void ResetFCullCount(){mFCullCount = 0;}
+    static UINT GetFCullCount(){return mFCullCount;}
 };
 
 

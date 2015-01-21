@@ -23,36 +23,36 @@
 
 class AABBoxRasterizer
 {
-	public:
-		AABBoxRasterizer();
-		virtual ~AABBoxRasterizer();
-		virtual void TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx) = 0;
-		virtual void WaitForTaskToFinish(UINT idx) = 0;
-		virtual void ReleaseTaskHandles(UINT idx) = 0;
+   public:
+      AABBoxRasterizer();
+      virtual ~AABBoxRasterizer();
+      virtual void TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx) = 0;
+      virtual void WaitForTaskToFinish(UINT idx) = 0;
+      virtual void ReleaseTaskHandles(UINT idx) = 0;
 
-		virtual void ResetInsideFrustum() = 0; 
-		virtual void SetViewProjMatrix(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx) = 0;
-		virtual void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx) = 0;
-		virtual void SetDepthSummaryBuffer(const float *pDepthSummary, UINT idx) = 0;
-		virtual void SetDepthTestTasks(UINT numTasks) = 0;
-		virtual void SetOccludeeSizeThreshold(float occludeeSizeThreshold) = 0;
-		virtual void SetEnableFCulling(bool enableFCulling) = 0;
+      virtual void ResetInsideFrustum() = 0; 
+      virtual void SetViewProjMatrix(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx) = 0;
+      virtual void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx) = 0;
+      virtual void SetDepthSummaryBuffer(const float *pDepthSummary, UINT idx) = 0;
+      virtual void SetDepthTestTasks(UINT numTasks) = 0;
+      virtual void SetOccludeeSizeThreshold(float occludeeSizeThreshold) = 0;
+      virtual void SetEnableFCulling(bool enableFCulling) = 0;
 
-		virtual UINT GetNumOccludees() = 0;
-		virtual UINT GetNumCulled(UINT idx) = 0;
-		virtual double GetDepthTestTime() = 0;
-		virtual UINT GetNumTriangles() = 0;
-		virtual UINT GetNumCulledTriangles(UINT idx) = 0;
-		virtual UINT GetNumTrisRendered() = 0;
-		virtual UINT GetNumFCullCount() = 0;
+      virtual UINT GetNumOccludees() = 0;
+      virtual UINT GetNumCulled(UINT idx) = 0;
+      virtual double GetDepthTestTime() = 0;
+      virtual UINT GetNumTriangles() = 0;
+      virtual UINT GetNumCulledTriangles(UINT idx) = 0;
+      virtual UINT GetNumTrisRendered() = 0;
+      virtual UINT GetNumFCullCount() = 0;
 
-      // andrewmac:
-      virtual TransformedAABBoxScalar* AddOccludee() = 0;
-      virtual bool IsVisible(UINT idx, UINT modelIdx) = 0;
+     // andrewmac:
+     virtual TransformedAABBoxScalar* AddOccludee() = 0;
+     virtual bool IsVisible(UINT idx, UINT modelIdx) = 0;
 
-	protected:
-		LARGE_INTEGER mStartTime[2][NUM_DT_TASKS];
-		LARGE_INTEGER mStopTime[2][NUM_DT_TASKS];
+   protected:
+      LARGE_INTEGER mStartTime[2][NUM_DT_TASKS];
+      LARGE_INTEGER mStopTime[2][NUM_DT_TASKS];
 };
 
 #endif //AABBOXRASTERIZER_H

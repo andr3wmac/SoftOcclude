@@ -56,7 +56,7 @@ CPUTGuiControllerDX11::CPUTGuiControllerDX11():CPUTGuiController(),
     mFPSBufferIndex(0),
     mpFPSDirectXBuffer(NULL),
     mpFPSTimer(NULL),
-	mFPSInst(0)
+    mFPSInst(0)
 {
     mpMirrorBuffer = new CPUTGUIVertex[CPUT_GUI_BUFFER_SIZE];
     mpTextMirrorBuffer = new  CPUTGUIVertex[CPUT_GUI_BUFFER_STRING_SIZE];
@@ -87,7 +87,7 @@ CPUTGuiControllerDX11::CPUTGuiControllerDX11():CPUTGuiController(),
 CPUTGuiControllerDX11::~CPUTGuiControllerDX11()
 {
     // delete all the controls under you
-	ReleaseResources();
+    ReleaseResources();
     DeleteAllControls();
 
     // FPS counter
@@ -123,7 +123,7 @@ CPUTResult CPUTGuiControllerDX11::DeleteController()
 //--------------------------------------------------------------------------------
 CPUTResult CPUTGuiControllerDX11::ReleaseResources()
 {
-	//Release all allocated resources
+    //Release all allocated resources
     SAFE_RELEASE(mpGUIVertexShader);
     SAFE_RELEASE(mpGUIPixelShader);
     SAFE_RELEASE(mpVertexLayout);
@@ -134,7 +134,7 @@ CPUTResult CPUTGuiControllerDX11::ReleaseResources()
     SAFE_RELEASE(mpControlTextureAtlas);
     SAFE_RELEASE(mpUberBuffer);
     
-//	SAFE_RELEASE(mpFont->mpTextAtlas);
+//    SAFE_RELEASE(mpFont->mpTextAtlas);
     SAFE_RELEASE(mpFont);
     SAFE_RELEASE(mpTextTextureAtlasView);
     SAFE_RELEASE(mpTextTextureAtlas);    
@@ -155,7 +155,7 @@ CPUTResult CPUTGuiControllerDX11::ReleaseResources()
     CPUTDropdown::UnRegisterStaticResources();
     //CPUTPane::UnRegisterStaticResources();
 
-	return CPUT_SUCCESS;
+    return CPUT_SUCCESS;
 }
 
 // Initialize the GUI controller and all it's static resources
@@ -460,18 +460,18 @@ void CPUTGuiControllerDX11::Draw(ID3D11DeviceContext *pImmediateContext)
     double fps = 1.0 / elapsed;
     mLastFPS = (float) fps;
 
-	mFPSAvg[mFPSInst] = (float) fps;
-	mFPSInst++;
-	if(mFPSInst == AVG_FRAMES)
-		mFPSInst = 0;
+    mFPSAvg[mFPSInst] = (float) fps;
+    mFPSInst++;
+    if(mFPSInst == AVG_FRAMES)
+        mFPSInst = 0;
 
-	float total = 0.0f;
-	for(int i = 0; i < AVG_FRAMES; i++)
-	{
-		total += mFPSAvg[mFPSInst];
-	}
+    float total = 0.0f;
+    for(int i = 0; i < AVG_FRAMES; i++)
+    {
+        total += mFPSAvg[mFPSInst];
+    }
 
-	// if we're drawing the FPS counter - update that
+    // if we're drawing the FPS counter - update that
     // We do this independently of uber-buffer updates since we'll have FPS updates every frame,
     // but likely not have control updates every frame
     if(mbDrawFPS)
@@ -485,7 +485,7 @@ void CPUTGuiControllerDX11::Draw(ID3D11DeviceContext *pImmediateContext)
             swprintf_s(&wcstring[0], CPUT_MAX_STRING_LENGTH, _L("FPS:%.2f  (AVG:%.2f)"), fps, total/(float)AVG_FRAMES);
             Data=wcstring;
         }
-		// build the FPS string
+        // build the FPS string
         cString FPS = Data;
         mpFPSCounter->SetText(FPS); 
 
@@ -735,7 +735,7 @@ CPUTResult CPUTGuiControllerDX11::RegisterGUIResources(ID3D11DeviceContext *pImm
 
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },		
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },        
         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     UINT numElements = ARRAYSIZE( layout );

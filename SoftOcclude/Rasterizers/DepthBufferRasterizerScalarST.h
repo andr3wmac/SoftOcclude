@@ -20,18 +20,18 @@
 
 class DepthBufferRasterizerScalarST : public DepthBufferRasterizerScalar
 {
-	public:
-		DepthBufferRasterizerScalarST();
-		~DepthBufferRasterizerScalarST();
+   public:
+      DepthBufferRasterizerScalarST();
+      ~DepthBufferRasterizerScalarST();
 
-		void TransformModelsAndRasterizeToDepthBuffer(SoftFrustum *pFrustum, float pFov, UINT idx);
-		void ComputeR2DBTime(UINT idx);
+      void TransformModelsAndRasterizeToDepthBuffer(SoftFrustum *pFrustum, float pFov, UINT idx);
+      void ComputeR2DBTime(UINT idx);
 
-	private:
-		void ActiveModels(UINT idx);
-		void TransformMeshes(UINT idx);
-		void BinTransformedMeshes(UINT idx);
-		void RasterizeBinnedTrianglesToDepthBuffer(UINT tileId, UINT idx);
+   private:
+      void ActiveModels(UINT idx);
+      void TransformMeshes(UINT idx);
+      void BinTransformedMeshes(UINT idx);
+      void RasterizeBinnedTrianglesToDepthBuffer(UINT tileId, UINT idx);
 };
 
 #endif  //DEPTHBUFFERRASTERIZERSCALARST_H

@@ -16,34 +16,34 @@
 #include "DepthBufferRasterizerScalar.h"
 
 DepthBufferRasterizerScalar::DepthBufferRasterizerScalar()
-	: DepthBufferRasterizer(),
-	  mNumModels(0),
-	  mNumVertices(0),
-	  mNumTriangles(0),
-	  mOccluderSizeThreshold(0.0f),
-	  mTimeCounter(0),
-	  mEnableFCulling(true)  
+   : DepthBufferRasterizer(),
+     mNumModels(0),
+     mNumVertices(0),
+     mNumTriangles(0),
+     mOccluderSizeThreshold(0.0f),
+     mTimeCounter(0),
+     mEnableFCulling(true)  
 {
-	mpXformedPos[0] = mpXformedPos[1] = NULL;
-	mpRenderTargetPixels[0] = NULL;
-	mpRenderTargetPixels[1] = NULL;
-	mNumRasterized[0] = mNumRasterized[1] = NULL;
+   mpXformedPos[0] = mpXformedPos[1] = NULL;
+   mpRenderTargetPixels[0] = NULL;
+   mpRenderTargetPixels[1] = NULL;
+   mNumRasterized[0] = mNumRasterized[1] = NULL;
 
-	mpBin[0] = mpBin[1] = NULL;
-	mpBinModel[0] = mpBinModel[1] = NULL;
-	mpBinMesh[0] = mpBinMesh[1] = NULL;
-	mpNumTrisInBin[0] = mpNumTrisInBin[1] = NULL;
+   mpBin[0] = mpBin[1] = NULL;
+   mpBinModel[0] = mpBinModel[1] = NULL;
+   mpBinMesh[0] = mpBinMesh[1] = NULL;
+   mpNumTrisInBin[0] = mpNumTrisInBin[1] = NULL;
 
-	for(UINT i = 0; i < AVG_COUNTER; i++)
-	{
-		mRasterizeTime[i] = 0.0;
-	}
+   for(UINT i = 0; i < AVG_COUNTER; i++)
+   {
+      mRasterizeTime[i] = 0.0;
+   }
 }
 
 DepthBufferRasterizerScalar::~DepthBufferRasterizerScalar()
 {
-	SAFE_DELETE_ARRAY(mpXformedPos[0]);
-	SAFE_DELETE_ARRAY(mpXformedPos[1]);
+   SAFE_DELETE_ARRAY(mpXformedPos[0]);
+   SAFE_DELETE_ARRAY(mpXformedPos[1]);
 }
 
 // andrewmac:
@@ -60,28 +60,28 @@ void DepthBufferRasterizerScalar::RefreshOccluders()
    mNumVertices = 0;
    mNumTriangles = 0;
    for(UINT i = 0; i < mNumModels; i++)
-	{
-      mpXformedPosOffset[i] = mpTransformedModels[i].GetNumVertices();
+   {
+     mpXformedPosOffset[i] = mpTransformedModels[i].GetNumVertices();
 
-      mpStartV[i] = mNumVertices;
-      mNumVertices += mpTransformedModels[i].GetNumVertices();
-      mpStartT[i] = mNumTriangles;
-      mNumTriangles += mpTransformedModels[i].GetNumTriangles();
+     mpStartV[i] = mNumVertices;
+     mNumVertices += mpTransformedModels[i].GetNumVertices();
+     mpStartT[i] = mNumTriangles;
+     mNumTriangles += mpTransformedModels[i].GetNumTriangles();
    }
 
    // Refresh Transforms of all Models and Meshs.
-	mpStartV[mNumModels] = mNumVertices;
-	mpStartT[mNumModels] = mNumTriangles;
+   mpStartV[mNumModels] = mNumVertices;
+   mpStartT[mNumModels] = mNumTriangles;
 
-	//multiply by 4 for x, y, z, w
-	mpXformedPos[0] =  new float[mNumVertices * 4];
-	mpXformedPos[1] =  new float[mNumVertices * 4];
-	for(UINT i = 0; i < mNumModels; i++)
-	{
-		mpTransformedModels[i].SetXformedPos((float4*)&mpXformedPos[0][mpStartV[i] * 4],
-											  (float4*)&mpXformedPos[1][mpStartV[i] * 4],
-											   mpStartV[i]);
-	}
+   //multiply by 4 for x, y, z, w
+   mpXformedPos[0] =  new float[mNumVertices * 4];
+   mpXformedPos[1] =  new float[mNumVertices * 4];
+   for(UINT i = 0; i < mNumModels; i++)
+   {
+      mpTransformedModels[i].SetXformedPos((float4*)&mpXformedPos[0][mpStartV[i] * 4],
+                                   (float4*)&mpXformedPos[1][mpStartV[i] * 4],
+                                    mpStartV[i]);
+   }
 }
 
 
@@ -90,22 +90,22 @@ void DepthBufferRasterizerScalar::RefreshOccluders()
 //--------------------------------------------------------------------
 void DepthBufferRasterizerScalar::ClearDepthTile(int startX, int startY, int endX, int endY, UINT idx)
 {
-	assert(startX % 2 == 0 && startY % 2 == 0);
-	assert(endX % 2 == 0 && endY % 2 == 0);
+   assert(startX % 2 == 0 && startY % 2 == 0);
+   assert(endX % 2 == 0 && endY % 2 == 0);
 
-	float* pDepthBuffer = (float*)mpRenderTargetPixels[idx];
-	int width = endX - startX;
+   float* pDepthBuffer = (float*)mpRenderTargetPixels[idx];
+   int width = endX - startX;
 
-	// Note we need to account for tiling pattern here
-	for(int r = startY; r < endY; r++)
-	{
-		int rowIdx = r * SCREENW + startX;
-		memset(&pDepthBuffer[rowIdx], 0, sizeof(float) * width);
-	}
+   // Note we need to account for tiling pattern here
+   for(int r = startY; r < endY; r++)
+   {
+      int rowIdx = r * SCREENW + startX;
+      memset(&pDepthBuffer[rowIdx], 0, sizeof(float) * width);
+   }
 }
 
 void DepthBufferRasterizerScalar::SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx)
 {
-	mpViewMatrix[idx] = *viewMatrix;
-	mpProjMatrix[idx] = *projMatrix;
+   mpViewMatrix[idx] = *viewMatrix;
+   mpProjMatrix[idx] = *projMatrix;
 }

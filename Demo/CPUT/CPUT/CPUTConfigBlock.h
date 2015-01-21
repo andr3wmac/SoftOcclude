@@ -50,7 +50,7 @@ public:
 
     const cString & NameAsString(void){ return  szName;};
     const cString & ValueAsString(void){ return szValue; }
-	bool IsValid(void){ return !szName.empty(); }
+    bool IsValid(void){ return !szName.empty(); }
     float ValueAsFloat(void)
     {
         float fValue=0;

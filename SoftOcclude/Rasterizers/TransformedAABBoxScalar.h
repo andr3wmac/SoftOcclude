@@ -25,37 +25,37 @@
 
 class TransformedAABBoxScalar : public HelperScalar
 {
-	public:
-		bool IsInsideViewFrustum(SoftFrustum* pFrustum);
-		bool TransformAABBox(float4 xformedPos[], const float4x4 &cumulativeMatrix);
-		bool RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, const float4 pXformedPos[], UINT idx);
+   public:
+      bool IsInsideViewFrustum(SoftFrustum* pFrustum);
+      bool TransformAABBox(float4 xformedPos[], const float4x4 &cumulativeMatrix);
+      bool RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, const float4 pXformedPos[], UINT idx);
 
-		bool IsTooSmall(const BoxTestSetupScalar &setup, float4x4 &cumulativeMatrix);
+      bool IsTooSmall(const BoxTestSetupScalar &setup, float4x4 &cumulativeMatrix);
 
-      void SetWorldMatrix(float4x4* worldMat) { mWorldMatrix = *worldMat; }
-      void SetBoundsObjectSpace(float3 center, float3 half)
-      {
-	      mBBCenter = center;
-         mBBHalf = half;
-	      mRadiusSq = half.lengthSq();
-      }
-      void SetBoundsWorldSpace(float3 center, float3 half)
-      {
-         mBBCenterWS = center;
-         mBBHalfWS = half;
-      }	      
-		
-	private:
-		float4x4 mWorldMatrix;
-			
-		float3  mBBCenter;
-		float3  mBBHalf;
-		float   mRadiusSq;
+     void SetWorldMatrix(float4x4* worldMat) { mWorldMatrix = *worldMat; }
+     void SetBoundsObjectSpace(float3 center, float3 half)
+     {
+        mBBCenter = center;
+       mBBHalf = half;
+        mRadiusSq = half.lengthSq();
+     }
+     void SetBoundsWorldSpace(float3 center, float3 half)
+     {
+       mBBCenterWS = center;
+       mBBHalfWS = half;
+     }        
+      
+   private:
+      float4x4 mWorldMatrix;
+         
+      float3  mBBCenter;
+      float3  mBBHalf;
+      float   mRadiusSq;
 
-		float3  mBBCenterWS;
-		float3  mBBHalfWS;
+      float3  mBBCenterWS;
+      float3  mBBHalfWS;
 
-		void Gather(float4 pOut[3], UINT triId, const float4 xformedPos[]);
+      void Gather(float4 pOut[3], UINT triId, const float4 xformedPos[]);
 };
 
 

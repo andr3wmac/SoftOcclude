@@ -202,9 +202,9 @@ public:
     void IncrementInstanceCount() { mInstanceCount++; }
     void DecrementInstanceCount() { mInstanceCount--; }
 
-	// CC added
-	virtual CPUTResult ExtractVerticesandIndices() = 0;
-	// CC added ends
+    // CC added
+    virtual CPUTResult ExtractVerticesandIndices() = 0;
+    // CC added ends
 };
 
 #endif //__CPUTMESH_H__

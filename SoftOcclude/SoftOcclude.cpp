@@ -24,11 +24,11 @@
 
 SoftOcclusionTest::SoftOcclusionTest()
 {
-	mpDBRScalarST = new DepthBufferRasterizerScalarST;
-	mpDBR = mpDBRScalarST;
+   mpDBRScalarST = new DepthBufferRasterizerScalarST;
+   mpDBR = mpDBRScalarST;
 
-	mpAABBScalarST = new AABBoxRasterizerScalarST;
-	mpAABB = mpAABBScalarST;
+   mpAABBScalarST = new AABBoxRasterizerScalarST;
+   mpAABB = mpAABBScalarST;
 }
 
 SoftOcclusionTest::~SoftOcclusionTest()

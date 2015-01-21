@@ -29,7 +29,7 @@ protected:
 
 public:
     CPUTTexture()              : mMappedType(CPUT_MAP_UNDEFINED) {}
-	CPUTTexture(cString &name) : mMappedType(CPUT_MAP_UNDEFINED), mName(name) {}
+    CPUTTexture(cString &name) : mMappedType(CPUT_MAP_UNDEFINED), mName(name) {}
     static CPUTTexture *CreateTexture( const cString &name, const cString absolutePathAndFilename, bool loadAsSRGB );
     virtual D3D11_MAPPED_SUBRESOURCE  MapTexture(   CPUTRenderParameters &params, eCPUTMapType type, bool wait=true ) = 0;
     virtual void                      UnmapTexture( CPUTRenderParameters &params ) =0; // TODO: Store params on Map() and don't require here.

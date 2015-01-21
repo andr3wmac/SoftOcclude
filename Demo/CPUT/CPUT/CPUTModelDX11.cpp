@@ -120,10 +120,10 @@ void CPUTModelDX11::Render(CPUTRenderParameters &renderParams)
             ((CPUTMeshDX11*)mpMesh[ii])->Draw(renderParams, this);
         }
     }
-	else
-	{
-		mFCullCount++;
-	}
+    else
+    {
+        mFCullCount++;
+    }
 }
 
 // Render - render this model (only)
@@ -211,7 +211,7 @@ CPUTResult CPUTModelDX11::LoadModel(CPUTConfigBlock *pBlock, int *pParentID, CPU
     cString resolvedPathAndFile;
     modelLocation = ((CPUTAssetLibraryDX11*)CPUTAssetLibrary::GetAssetLibrary())->GetModelDirectory();
     modelLocation = modelLocation+mName;
-    CPUTOSServices::GetOSServices()->ResolveAbsolutePathAndFilename(modelLocation, &resolvedPathAndFile);	
+    CPUTOSServices::GetOSServices()->ResolveAbsolutePathAndFilename(modelLocation, &resolvedPathAndFile);    
 
     // Get the parent ID.  Note: the caller will use this to set the parent.
     *pParentID = pBlock->GetValueByName(_L("parent"))->ValueAsInt();

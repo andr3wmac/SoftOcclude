@@ -71,14 +71,14 @@ public:
     static CPUTConfigBlock mGlobalProperties;
 
     CPUTMaterial() :
-		mpRenderStateBlock(NULL),
-		mBufferCount(0),
+        mpRenderStateBlock(NULL),
+        mBufferCount(0),
         mpMaterialNextClone(NULL),
         mpMaterialLastClone(NULL),
         mMaterialNameHash(0),
         mpModel(NULL),
         mMeshIndex(-1)
-	{
+    {
         for( UINT ii=0; ii<CPUT_MATERIAL_MAX_TEXTURE_SLOTS; ii++ )         { mpTexture[ii]       = NULL; }
         for( UINT ii=0; ii<CPUT_MATERIAL_MAX_BUFFER_SLOTS; ii++ )          { mpBuffer[ii]        = NULL; }
         for( UINT ii=0; ii<CPUT_MATERIAL_MAX_UAV_SLOTS; ii++ )             { mpUAV[ii]           = NULL; }

@@ -41,15 +41,15 @@ public:
     CPUTCamera();
     ~CPUTCamera() {}
 
-	void* operator new(size_t i)
-	{
-		return _mm_malloc(i, 16);
-	}
+    void* operator new(size_t i)
+    {
+        return _mm_malloc(i, 16);
+    }
 
-	void operator delete(void* p)
-	{
-		_mm_free(p);
-	}
+    void operator delete(void* p)
+    {
+        _mm_free(p);
+    }
 
     void Update( float deltaSeconds=0.0f ) {
         // TODO: Do only if required (i.e. if dirty)
@@ -77,7 +77,7 @@ public:
     void            SetNearPlaneDistance( const float nearPlaneDistance ) { mNearPlaneDistance = nearPlaneDistance; }
     void            SetFarPlaneDistance(  const float farPlaneDistance ) { mFarPlaneDistance = farPlaneDistance; }
     void            LookAt( float xx, float yy, float zz );
-	CPUTCamera &operator=(const CPUTCamera& camera);
+    CPUTCamera &operator=(const CPUTCamera& camera);
 };
 
 //-----------------------------------------------------------------------------

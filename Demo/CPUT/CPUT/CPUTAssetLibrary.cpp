@@ -164,8 +164,8 @@ void *CPUTAssetLibrary::FindAsset(const cString &name, CPUTAssetListEntry *pList
     {
         pServices->ResolveAbsolutePathAndFilename( mAssetSetDirectoryName + name, &absolutePathAndFilename);
     }
-	else
-	{
+    else
+    {
         absolutePathAndFilename = name;
     }
     UINT hash = CPUTComputeHash( absolutePathAndFilename );

@@ -18,7 +18,7 @@
 #include "AABBoxRasterizerScalarST.h"
 
 AABBoxRasterizerScalarST::AABBoxRasterizerScalarST()
-	: AABBoxRasterizerScalar()
+   : AABBoxRasterizerScalar()
 {
 
 }
@@ -37,42 +37,42 @@ AABBoxRasterizerScalarST::~AABBoxRasterizerScalarST()
 //-----------------------------------------------------------------------------
 void AABBoxRasterizerScalarST::TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx)
 {
-	QueryPerformanceCounter(&mStartTime[idx][0]);
+   QueryPerformanceCounter(&mStartTime[idx][0]);
 
-	if(mEnableFCulling)
-	{
-		for(UINT i = 0; i < mNumModels; i++)
-		{
-         mpInsideFrustum[idx][i] = mpTransformedAABBox[i].IsInsideViewFrustum(pFrustum);
-		}
-	}
+   if(mEnableFCulling)
+   {
+      for(UINT i = 0; i < mNumModels; i++)
+      {
+       mpInsideFrustum[idx][i] = mpTransformedAABBox[i].IsInsideViewFrustum(pFrustum);
+      }
+   }
 
-	BoxTestSetupScalar setup;
+   BoxTestSetupScalar setup;
    setup.Init(mViewMatrix[idx], mProjMatrix[idx], viewportMatrix, pFov, mOccludeeSizeThreshold);
 
-	float4 xformedPos[AABB_VERTICES];
-	float4x4 cumulativeMatrix;
+   float4 xformedPos[AABB_VERTICES];
+   float4x4 cumulativeMatrix;
 
-	for(UINT i = 0; i < mNumModels; i++)
-	{
-		mpVisible[idx][i] = false;
-		
-		if(mpInsideFrustum[idx][i] && !mpTransformedAABBox[i].IsTooSmall(setup, cumulativeMatrix))
-		{
-			if(mpTransformedAABBox[i].TransformAABBox(xformedPos, cumulativeMatrix))
-			{
-				mpVisible[idx][i] = mpTransformedAABBox[i].RasterizeAndDepthTestAABBox(mpRenderTargetPixels[idx], xformedPos, idx);
-			}
-			else
-			{
-				mpVisible[idx][i] = true;
-			}
-		}		
-	}
+   for(UINT i = 0; i < mNumModels; i++)
+   {
+      mpVisible[idx][i] = false;
+      
+      if(mpInsideFrustum[idx][i] && !mpTransformedAABBox[i].IsTooSmall(setup, cumulativeMatrix))
+      {
+         if(mpTransformedAABBox[i].TransformAABBox(xformedPos, cumulativeMatrix))
+         {
+            mpVisible[idx][i] = mpTransformedAABBox[i].RasterizeAndDepthTestAABBox(mpRenderTargetPixels[idx], xformedPos, idx);
+         }
+         else
+         {
+            mpVisible[idx][i] = true;
+         }
+      }      
+   }
 
-	QueryPerformanceCounter(&mStopTime[idx][0]);
-	mDepthTestTime[mTimeCounter++] = ((double)(mStopTime[idx][0].QuadPart - mStartTime[idx][0].QuadPart)) / ((double)glFrequency.QuadPart);
-	mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
+   QueryPerformanceCounter(&mStopTime[idx][0]);
+   mDepthTestTime[mTimeCounter++] = ((double)(mStopTime[idx][0].QuadPart - mStartTime[idx][0].QuadPart)) / ((double)glFrequency.QuadPart);
+   mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
 }
 
 void AABBoxRasterizerScalarST::WaitForTaskToFinish(UINT idx)

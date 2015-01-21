@@ -22,117 +22,117 @@
 
 class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperScalar
 {
-	public:
-		DepthBufferRasterizerScalar();
-		virtual ~DepthBufferRasterizerScalar();
+   public:
+      DepthBufferRasterizerScalar();
+      virtual ~DepthBufferRasterizerScalar();
 
       // andrewmac: 
       TransformedModelScalar* AddOccluder();
       void RefreshOccluders();
 
-		// start inclusive, end exclusive
-		void ClearDepthTile(int startX, int startY, int endX, int endY, UINT idx);
+      // start inclusive, end exclusive
+      void ClearDepthTile(int startX, int startY, int endX, int endY, UINT idx);
 
-		// Reset all models to be visible when frustum culling is disabled 
-		inline void ResetInsideFrustum()
-		{
-			for(UINT i = 0; i < mNumModels; i++)
-			{
-				mpTransformedModels[i].SetInsideFrustum(true, 0);
-				mpTransformedModels[i].SetInsideFrustum(true, 1);
-			}
-		}
+      // Reset all models to be visible when frustum culling is disabled 
+      inline void ResetInsideFrustum()
+      {
+         for(UINT i = 0; i < mNumModels; i++)
+         {
+            mpTransformedModels[i].SetInsideFrustum(true, 0);
+            mpTransformedModels[i].SetInsideFrustum(true, 1);
+         }
+      }
 
-		// Set the view and projection matrices
-		inline void SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx);
-		
-		inline void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx)
-		{
-			mpRenderTargetPixels[idx] = pRenderTargetPixels;
-		}
-		
-		inline void SetOccluderSizeThreshold(float occluderSizeThreshold) {mOccluderSizeThreshold = occluderSizeThreshold;}
+      // Set the view and projection matrices
+      inline void SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx);
+      
+      inline void SetCPURenderTargetPixels(UINT *pRenderTargetPixels, UINT idx)
+      {
+         mpRenderTargetPixels[idx] = pRenderTargetPixels;
+      }
+      
+      inline void SetOccluderSizeThreshold(float occluderSizeThreshold) {mOccluderSizeThreshold = occluderSizeThreshold;}
 
-		inline void SetEnableFCulling(bool enableFCulling) {mEnableFCulling = enableFCulling;}
+      inline void SetEnableFCulling(bool enableFCulling) {mEnableFCulling = enableFCulling;}
 
-		inline const float *GetDepthSummaryBuffer(UINT idx){return NULL;}
-		inline UINT GetNumOccluders() {return mNumModels;}
-		inline UINT GetNumOccludersR2DB(UINT idx)
-		{
-			mNumRasterized[idx] = 0;
-			for(UINT i = 0; i < mNumModels; i++)
-			{
-				mNumRasterized[idx] += mpTransformedModels[i].IsRasterized2DB(idx) ? 1 : 0;
-			}
-			return mNumRasterized[idx];
-		}
-		inline double GetRasterizeTime()
-		{
-			double averageTime = 0.0;
-			for(UINT i = 0; i < AVG_COUNTER; i++)
-			{
-				averageTime += mRasterizeTime[i];
-			}
-			return averageTime / AVG_COUNTER;
-		}
-		inline UINT GetNumTriangles(){return mNumTriangles;}
-		inline UINT GetNumRasterizedTriangles(UINT idx) 
-		{
-			UINT numRasterizedTris = 0;
-			for(UINT i = 0; i < NUM_TILES; i++)
-			{
-				numRasterizedTris += mNumRasterizedTris[idx][i];
-			}
-			return numRasterizedTris;
-		}
+      inline const float *GetDepthSummaryBuffer(UINT idx){return NULL;}
+      inline UINT GetNumOccluders() {return mNumModels;}
+      inline UINT GetNumOccludersR2DB(UINT idx)
+      {
+         mNumRasterized[idx] = 0;
+         for(UINT i = 0; i < mNumModels; i++)
+         {
+            mNumRasterized[idx] += mpTransformedModels[i].IsRasterized2DB(idx) ? 1 : 0;
+         }
+         return mNumRasterized[idx];
+      }
+      inline double GetRasterizeTime()
+      {
+         double averageTime = 0.0;
+         for(UINT i = 0; i < AVG_COUNTER; i++)
+         {
+            averageTime += mRasterizeTime[i];
+         }
+         return averageTime / AVG_COUNTER;
+      }
+      inline UINT GetNumTriangles(){return mNumTriangles;}
+      inline UINT GetNumRasterizedTriangles(UINT idx) 
+      {
+         UINT numRasterizedTris = 0;
+         for(UINT i = 0; i < NUM_TILES; i++)
+         {
+            numRasterizedTris += mNumRasterizedTris[idx][i];
+         }
+         return numRasterizedTris;
+      }
 
-		inline void ResetActive(UINT idx)
-		{
-			mNumModelsA[idx] = mNumVerticesA[idx] = mNumTrianglesA[idx] = 0;
-		}
+      inline void ResetActive(UINT idx)
+      {
+         mNumModelsA[idx] = mNumVerticesA[idx] = mNumTrianglesA[idx] = 0;
+      }
 
-		inline void Activate(UINT modelId, UINT idx)
-		{
-			UINT activeId = mNumModelsA[idx]++;
-			assert(activeId < mNumModels);
+      inline void Activate(UINT modelId, UINT idx)
+      {
+         UINT activeId = mNumModelsA[idx]++;
+         assert(activeId < mNumModels);
 
-			mpModelIndexA[idx][activeId] = modelId;
-			mNumVerticesA[idx] += mpStartV[modelId + 1] - mpStartV[modelId];
-			mNumTrianglesA[idx] += mpStartT[modelId + 1] - mpStartT[modelId];
-		}
+         mpModelIndexA[idx][activeId] = modelId;
+         mNumVerticesA[idx] += mpStartV[modelId + 1] - mpStartV[modelId];
+         mNumTrianglesA[idx] += mpStartT[modelId + 1] - mpStartT[modelId];
+      }
 
-	protected:
-		TransformedModelScalar mpTransformedModels[1000];
-		UINT mNumModels;
-      // andrewmac:
-      // TODO: CHANGE 1000 TO A CONSTANT
-		UINT mpXformedPosOffset[1000];
-		UINT mpStartV[1000];
-		UINT mpStartT[1000];
-		UINT mNumVertices;
-		UINT mNumTriangles;
+   protected:
+      TransformedModelScalar mpTransformedModels[1000];
+      UINT mNumModels;
+     // andrewmac:
+     // TODO: CHANGE 1000 TO A CONSTANT
+      UINT mpXformedPosOffset[1000];
+      UINT mpStartV[1000];
+      UINT mpStartT[1000];
+      UINT mNumVertices;
+      UINT mNumTriangles;
 
-		UINT mNumRasterizedTris[2][NUM_TILES];
-		float* mpXformedPos[2];
-		float4x4 mpViewMatrix[2];
-		float4x4 mpProjMatrix[2];
-		UINT *mpRenderTargetPixels[2];
-		UINT mNumRasterized[2];
-		UINT	*mpBin[2];				 // triangle index
-		USHORT  *mpBinModel[2];		 // model Index	
-		USHORT  *mpBinMesh[2];			 // mesh index
-		USHORT  *mpNumTrisInBin[2];     // number of triangles in the bin 
-		UINT mTimeCounter;
+      UINT mNumRasterizedTris[2][NUM_TILES];
+      float* mpXformedPos[2];
+      float4x4 mpViewMatrix[2];
+      float4x4 mpProjMatrix[2];
+      UINT *mpRenderTargetPixels[2];
+      UINT mNumRasterized[2];
+      UINT   *mpBin[2];             // triangle index
+      USHORT  *mpBinModel[2];       // model Index   
+      USHORT  *mpBinMesh[2];          // mesh index
+      USHORT  *mpNumTrisInBin[2];    // number of triangles in the bin 
+      UINT mTimeCounter;
 
-		UINT mpModelIndexA[2][1000]; // 'active' models = visible and not too small
-		UINT mNumModelsA[2];
-		UINT mNumVerticesA[2];
-		UINT mNumTrianglesA[2];
+      UINT mpModelIndexA[2][1000]; // 'active' models = visible and not too small
+      UINT mNumModelsA[2];
+      UINT mNumVerticesA[2];
+      UINT mNumTrianglesA[2];
 
-		float mOccluderSizeThreshold;
+      float mOccluderSizeThreshold;
 
-		bool   mEnableFCulling;
-		double mRasterizeTime[AVG_COUNTER];
+      bool   mEnableFCulling;
+      double mRasterizeTime[AVG_COUNTER];
 };
 
 #endif  //DEPTHBUFFERRASTERIZERSCALAR_H

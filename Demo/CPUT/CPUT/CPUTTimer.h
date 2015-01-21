@@ -19,10 +19,10 @@
 class CPUTTimer
 {
 public:
-	virtual void   StartTimer()     = 0;
+    virtual void   StartTimer()     = 0;
     virtual double StopTimer()      = 0;
-	virtual double GetTotalTime()   = 0; // In seconds
-	virtual double GetElapsedTime() = 0; // In seconds
+    virtual double GetTotalTime()   = 0; // In seconds
+    virtual double GetElapsedTime() = 0; // In seconds
     virtual void   ResetTimer()     = 0;
 };
 

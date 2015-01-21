@@ -21,118 +21,118 @@ CPUTConfigEntry  &CPUTConfigEntry::sNullConfigValue = CPUTConfigEntry(_L(""), _L
 //----------------------------------------------------------------
 static bool iswhite(char ch)
 {
-	return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
+    return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
 }
 
 template<typename T>
 static void RemoveWhitespace(T &start, T &end)
 {
-	while (start < end && iswhite(*start))
+    while (start < end && iswhite(*start))
     {
-		++start;
+        ++start;
     }
 
-	while (end > start && iswhite(*(end - 1)))
+    while (end > start && iswhite(*(end - 1)))
     {
-		--end;
+        --end;
     }
 }
 
 //----------------------------------------------------------------
 static bool ReadLine(const char **ppStart, const char **ppEnd, const char **ppCur)
 {
-	const char *pCur = *ppCur;
-	if (!*pCur) // check for EOF
+    const char *pCur = *ppCur;
+    if (!*pCur) // check for EOF
     {
-		return false;
+        return false;
     }
 
-	// We're at the start of a line now, skip leading whitespace
-	while (*pCur == ' ' || *pCur == '\t')
+    // We're at the start of a line now, skip leading whitespace
+    while (*pCur == ' ' || *pCur == '\t')
     {
-		++pCur;
+        ++pCur;
     }
 
-	*ppStart = pCur;
+    *ppStart = pCur;
 
-	// Forward to the end of the line and keep track of last non-whitespace char
-	const char *pEnd = pCur;
-	for (;;)
-	{
-		char ch = *pCur++;
-		if (!ch)
-		{
-			--pCur; // terminating NUL isn't consumed
-			break;
-		}
-		else if (ch == '\n')
+    // Forward to the end of the line and keep track of last non-whitespace char
+    const char *pEnd = pCur;
+    for (;;)
+    {
+        char ch = *pCur++;
+        if (!ch)
         {
-			break;
+            --pCur; // terminating NUL isn't consumed
+            break;
         }
-		else if (!iswhite(ch))
+        else if (ch == '\n')
         {
-			pEnd = pCur;
+            break;
         }
-	}
+        else if (!iswhite(ch))
+        {
+            pEnd = pCur;
+        }
+    }
 
-	*ppEnd = pEnd;
-	*ppCur = pCur;
-	return true;
+    *ppEnd = pEnd;
+    *ppCur = pCur;
+    return true;
 }
 
 //----------------------------------------------------------------
 static const char *FindFirst(const char *start, const char *end, char ch)
 {
-	const char *p = start;
-	while (p < end && *p != ch)
+    const char *p = start;
+    while (p < end && *p != ch)
     {
-		++p;
+        ++p;
     }
-	return p;
+    return p;
 }
 
 static const char *FindLast(const char *start, const char *end, char ch)
 {
-	const char *p = end;
-	while (--p >= start && *p != ch)
+    const char *p = end;
+    while (--p >= start && *p != ch)
     {
     }
 
-	return p;
+    return p;
 }
 
 static void AssignStr(cString &dest, const char *start, const char *end, _locale_t locale)
 {
-	dest.clear();
-	if (end <= start)
+    dest.clear();
+    if (end <= start)
     {
-		return;
+        return;
     }
 
-	static const int NBUF = 64;
-	wchar_t buf[NBUF];
-	int nb = 0;
+    static const int NBUF = 64;
+    wchar_t buf[NBUF];
+    int nb = 0;
 
-	size_t len = end - start;
-	size_t initial = len + 1; // assume most characters are 1-byte
-	dest.reserve(initial);
+    size_t len = end - start;
+    size_t initial = len + 1; // assume most characters are 1-byte
+    dest.reserve(initial);
 
-	const char *p = start;
-	while (p < end)
-	{
-		int len = _mbtowc_l(&buf[nb++], p, end - p, locale);
-		if (len < 1)
+    const char *p = start;
+    while (p < end)
+    {
+        int len = _mbtowc_l(&buf[nb++], p, end - p, locale);
+        if (len < 1)
         {
-			break;
+            break;
         }
 
-		p += len;
-		if (p >= end || nb >= NBUF)
-		{
-			dest.append(buf, nb);
-			nb = 0;
-		}
-	}
+        p += len;
+        if (p >= end || nb >= NBUF)
+        {
+            dest.append(buf, nb);
+            nb = 0;
+        }
+    }
 }
 
 //----------------------------------------------------------------
@@ -143,17 +143,17 @@ void CPUTConfigEntry::ValueAsFloatArray(float *pFloats, int count)
 
     TCHAR *szNewValue = NULL;
     TCHAR *szCurrValue = wcstok_s(szOrigValue, _L(" "), &szNewValue);
-	for(int clear = 0; clear < count; clear++)
-	{
-		pFloats[clear] = 0.0f;
-	}
+    for(int clear = 0; clear < count; clear++)
+    {
+        pFloats[clear] = 0.0f;
+    }
     for(int ii=0;ii<count;++ii)
     {
-		if(szCurrValue == NULL)
+        if(szCurrValue == NULL)
         {
             return;
         }
-		pFloats[ii] = (float) _wtof(szCurrValue);
+        pFloats[ii] = (float) _wtof(szCurrValue);
         szCurrValue = wcstok_s(NULL, _L(" "), &szNewValue);
 
     }
@@ -206,20 +206,20 @@ CPUTConfigEntry *CPUTConfigBlock::GetValueByName(const cString &szName)
 {
     for(int ii=0; ii<mnValueCount; ++ii)
     {
-		const cString &valName = mpValues[ii].szName;
-		if(valName.size() != szName.size())
+        const cString &valName = mpValues[ii].szName;
+        if(valName.size() != szName.size())
         {
-			continue;
+            continue;
         }
 
-		size_t j = 0;
-		while (j < valName.size() && tolower(szName[j]) == valName[j])
+        size_t j = 0;
+        while (j < valName.size() && tolower(szName[j]) == valName[j])
         {
-			++j;
+            ++j;
         }
 
-		if (j == valName.size()) // match
-		{
+        if (j == valName.size()) // match
+        {
             return &mpValues[ii];
         }
     }
@@ -262,34 +262,34 @@ CPUTResult CPUTConfigFile::LoadFile(const cString &szFilename)
         return result;
     }
 
-	_locale_t locale = _get_current_locale();
+    _locale_t locale = _get_current_locale();
 
-	/* Determine file size */
-	fseek(pFile, 0, SEEK_END);
-	int nBytes = ftell(pFile); // for text files, this is an overestimate
-	fseek(pFile, 0, SEEK_SET);
+    /* Determine file size */
+    fseek(pFile, 0, SEEK_END);
+    int nBytes = ftell(pFile); // for text files, this is an overestimate
+    fseek(pFile, 0, SEEK_SET);
 
-	/* Read the whole thing */
-	char *pFileContents = new char[nBytes + 1];
-	nBytes = (int)fread(pFileContents, 1, nBytes, pFile);
-	fclose(pFile);
+    /* Read the whole thing */
+    char *pFileContents = new char[nBytes + 1];
+    nBytes = (int)fread(pFileContents, 1, nBytes, pFile);
+    fclose(pFile);
 
-	pFileContents[nBytes] = 0; // add 0-terminator
+    pFileContents[nBytes] = 0; // add 0-terminator
 
-	/* Count the number of blocks */
-	const char *pCur = pFileContents;
-	const char *pStart, *pEnd;
+    /* Count the number of blocks */
+    const char *pCur = pFileContents;
+    const char *pStart, *pEnd;
 
-	while(ReadLine(&pStart, &pEnd, &pCur))
-	{
-		const char *pOpen = FindFirst(pStart, pEnd, '[');
-		const char *pClose = FindLast(pOpen + 1, pEnd, ']');
-		if (pOpen < pClose)
-		{
-			// This line is a valid block header
-			mnBlockCount++;
-		}
-	}
+    while(ReadLine(&pStart, &pEnd, &pCur))
+    {
+        const char *pOpen = FindFirst(pStart, pEnd, '[');
+        const char *pClose = FindLast(pOpen + 1, pEnd, ']');
+        if (pOpen < pClose)
+        {
+            // This line is a valid block header
+            mnBlockCount++;
+        }
+    }
 
     // For files that don't have any blocks, just add the entire file to one block
     if(mnBlockCount == 0)
@@ -297,37 +297,37 @@ CPUTResult CPUTConfigFile::LoadFile(const cString &szFilename)
         mnBlockCount   = 1;
     }
 
-	pCur = pFileContents;
+    pCur = pFileContents;
     mpBlocks = new CPUTConfigBlock[mnBlockCount];
     pCurrBlock = mpBlocks;
 
-	/* Find the first block first */
-	while(ReadLine(&pStart, &pEnd, &pCur))
-	{
-		const char *pOpen = FindFirst(pStart, pEnd, '[');
-		const char *pClose = FindLast(pOpen + 1, pEnd, ']');
-		if (pOpen < pClose)
-		{
-			// This line is a valid block header
+    /* Find the first block first */
+    while(ReadLine(&pStart, &pEnd, &pCur))
+    {
+        const char *pOpen = FindFirst(pStart, pEnd, '[');
+        const char *pClose = FindLast(pOpen + 1, pEnd, ']');
+        if (pOpen < pClose)
+        {
+            // This line is a valid block header
             pCurrBlock = mpBlocks + nCurrBlock++;
-			AssignStr(pCurrBlock->mszName, pOpen + 1, pClose, locale);
+            AssignStr(pCurrBlock->mszName, pOpen + 1, pClose, locale);
             std::transform(pCurrBlock->mszName.begin(), pCurrBlock->mszName.end(), pCurrBlock->mszName.begin(), ::tolower);
-		}
-		else if (pStart < pEnd)
-		{
-			// It's a value
-			if (pCurrBlock == NULL)
+        }
+        else if (pStart < pEnd)
+        {
+            // It's a value
+            if (pCurrBlock == NULL)
             {
-				continue;
+                continue;
             }
 
-			const char *pEquals = FindFirst(pStart, pEnd, '=');
-			if (pEquals == pEnd)
-			{
+            const char *pEquals = FindFirst(pStart, pEnd, '=');
+            if (pEquals == pEnd)
+            {
                 // No value, just a key, save it anyway
-				// Optimistically, we assume it's new
-				cString &name = pCurrBlock->mpValues[pCurrBlock->mnValueCount].szName;
-				AssignStr(name, pStart, pEnd, locale);
+                // Optimistically, we assume it's new
+                cString &name = pCurrBlock->mpValues[pCurrBlock->mnValueCount].szName;
+                AssignStr(name, pStart, pEnd, locale);
 
                 bool dup = false;
                 for(int ii=0;ii<pCurrBlock->mnValueCount;++ii)
@@ -342,21 +342,21 @@ CPUTResult CPUTConfigFile::LoadFile(const cString &szFilename)
                 {
                     pCurrBlock->mnValueCount++;
                 }
-			}
-			else
-			{
-				const char *pNameStart = pStart;
-				const char *pNameEnd = pEquals;
-				const char *pValStart = pEquals + 1;
-				const char *pValEnd = pEnd;
+            }
+            else
+            {
+                const char *pNameStart = pStart;
+                const char *pNameEnd = pEquals;
+                const char *pValStart = pEquals + 1;
+                const char *pValEnd = pEnd;
 
-				RemoveWhitespace(pNameStart, pNameEnd);
-				RemoveWhitespace(pValStart, pValEnd);
+                RemoveWhitespace(pNameStart, pNameEnd);
+                RemoveWhitespace(pValStart, pValEnd);
 
-				// Optimistically assume the name is new
-				cString &name = pCurrBlock->mpValues[pCurrBlock->mnValueCount].szName;
-				AssignStr(name, pNameStart, pNameEnd, locale);
-				std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+                // Optimistically assume the name is new
+                cString &name = pCurrBlock->mpValues[pCurrBlock->mnValueCount].szName;
+                AssignStr(name, pNameStart, pNameEnd, locale);
+                std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
                 bool dup = false;
                 for(int ii=0;ii<pCurrBlock->mnValueCount;++ii)
@@ -372,11 +372,11 @@ CPUTResult CPUTConfigFile::LoadFile(const cString &szFilename)
                     AssignStr(pCurrBlock->mpValues[pCurrBlock->mnValueCount].szValue, pValStart, pValEnd, locale);
                     pCurrBlock->mnValueCount++;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	delete[] pFileContents;
+    delete[] pFileContents;
     return CPUT_SUCCESS;
 }
 

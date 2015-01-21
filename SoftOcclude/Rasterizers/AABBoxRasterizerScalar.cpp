@@ -18,20 +18,20 @@
 #include "AABBoxRasterizerScalar.h"
 
 AABBoxRasterizerScalar::AABBoxRasterizerScalar()
-	: mNumModels(0),
-	  mOccludeeSizeThreshold(0.0f),
-	  mNumDepthTestTasks(0),
-	  mTimeCounter(0),
-	  mEnableFCulling(true)
+   : mNumModels(0),
+     mOccludeeSizeThreshold(0.0f),
+     mNumDepthTestTasks(0),
+     mTimeCounter(0),
+     mEnableFCulling(true)
 {
-	mpRenderTargetPixels[0] = NULL;
-	mpRenderTargetPixels[1] = NULL;
-	
-	mNumCulled[0] = mNumCulled[1] =NULL;
-	for(UINT i = 0; i < AVG_COUNTER; i++)
-	{
-		mDepthTestTime[i] = 0.0;
-	}
+   mpRenderTargetPixels[0] = NULL;
+   mpRenderTargetPixels[1] = NULL;
+   
+   mNumCulled[0] = mNumCulled[1] =NULL;
+   for(UINT i = 0; i < AVG_COUNTER; i++)
+   {
+      mDepthTestTime[i] = 0.0;
+   }
 }
 
 AABBoxRasterizerScalar::~AABBoxRasterizerScalar()
@@ -50,6 +50,6 @@ TransformedAABBoxScalar* AABBoxRasterizerScalar::AddOccludee()
 
 void AABBoxRasterizerScalar::SetViewProjMatrix(float4x4 *viewMatrix, float4x4 *projMatrix, UINT idx)
 {
-	mViewMatrix[idx] = *viewMatrix;
-	mProjMatrix[idx] = *projMatrix;
+   mViewMatrix[idx] = *viewMatrix;
+   mProjMatrix[idx] = *projMatrix;
 }

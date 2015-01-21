@@ -237,128 +237,128 @@ CPUTTexture *CPUTTextureDX11::CreateTexture( const cString &name, const cString 
 
 class MappedFile
 {
-	HANDLE hfile;
-	HANDLE hmapping;
-	void *view;
+    HANDLE hfile;
+    HANDLE hmapping;
+    void *view;
 
 public:
-	MappedFile() : hfile(INVALID_HANDLE_VALUE), hmapping(NULL), view(0) {}
-	~MappedFile()
-	{
-		Close();
-	}
+    MappedFile() : hfile(INVALID_HANDLE_VALUE), hmapping(NULL), view(0) {}
+    ~MappedFile()
+    {
+        Close();
+    }
 
-	void *Open(LPCWSTR filename)
-	{
-		Close();
+    void *Open(LPCWSTR filename)
+    {
+        Close();
 
-		if ((hfile = CreateFileW(filename, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)) == INVALID_HANDLE_VALUE ||
-			(hmapping = CreateFileMapping(hfile, 0, PAGE_READONLY, 0, 0, NULL)) == NULL ||
-			(view = MapViewOfFile(hmapping, FILE_MAP_READ, 0, 0, 0)) == NULL)
-			Close();
+        if ((hfile = CreateFileW(filename, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)) == INVALID_HANDLE_VALUE ||
+            (hmapping = CreateFileMapping(hfile, 0, PAGE_READONLY, 0, 0, NULL)) == NULL ||
+            (view = MapViewOfFile(hmapping, FILE_MAP_READ, 0, 0, 0)) == NULL)
+            Close();
 
-		return view;
-	}
+        return view;
+    }
 
-	void Close()
-	{
-		if (view != 0)
-		{
-			UnmapViewOfFile(view);
-			view = 0;
-		}
+    void Close()
+    {
+        if (view != 0)
+        {
+            UnmapViewOfFile(view);
+            view = 0;
+        }
 
-		if (hmapping != NULL)
-		{
-			CloseHandle(hmapping);
-			hmapping = NULL;
-		}
+        if (hmapping != NULL)
+        {
+            CloseHandle(hmapping);
+            hmapping = NULL;
+        }
 
-		if (hfile != INVALID_HANDLE_VALUE)
-		{
-			CloseHandle(hfile);
-			hfile = INVALID_HANDLE_VALUE;
-		}
-	}
+        if (hfile != INVALID_HANDLE_VALUE)
+        {
+            CloseHandle(hfile);
+            hfile = INVALID_HANDLE_VALUE;
+        }
+    }
 };
 
 static HRESULT LoadDDSFast(ID3D11Device *dev, LPCWSTR filename, D3DX11_IMAGE_LOAD_INFO *nfo, ID3D11Resource **ppTexture)
 {
-	DWORD do_srgb = nfo->Filter & D3DX11_FILTER_SRGB;
-	if (do_srgb != 0 && do_srgb != D3DX11_FILTER_SRGB)
-		return E_FAIL;
+    DWORD do_srgb = nfo->Filter & D3DX11_FILTER_SRGB;
+    if (do_srgb != 0 && do_srgb != D3DX11_FILTER_SRGB)
+        return E_FAIL;
 
-	MappedFile map;
-	DWORD *pmagic = (DWORD *) map.Open(filename);
-	if (!pmagic)
-		return E_FAIL;
+    MappedFile map;
+    DWORD *pmagic = (DWORD *) map.Open(filename);
+    if (!pmagic)
+        return E_FAIL;
 
-	if (*pmagic != 0x20534444)
-		return E_FAIL;
+    if (*pmagic != 0x20534444)
+        return E_FAIL;
 
-	DDS_HEADER *hdr = (DDS_HEADER *) (pmagic + 1);
-	if (hdr->dwSize != sizeof(DDS_HEADER) ||
-		(hdr->dwHeaderFlags & DDS_HEADER_FLAGS_TEXTURE) != DDS_HEADER_FLAGS_TEXTURE)
-		return E_FAIL;
+    DDS_HEADER *hdr = (DDS_HEADER *) (pmagic + 1);
+    if (hdr->dwSize != sizeof(DDS_HEADER) ||
+        (hdr->dwHeaderFlags & DDS_HEADER_FLAGS_TEXTURE) != DDS_HEADER_FLAGS_TEXTURE)
+        return E_FAIL;
 
-	DXGI_FORMAT fmt = DXGI_FORMAT_UNKNOWN;
-	DWORD block = 1, bpb = 0;
-	if (memcmp(&hdr->ddspf, &DDSPF_A8R8G8B8, sizeof(DDS_PIXELFORMAT)) == 0)
-	{
-		fmt = do_srgb ? DXGI_FORMAT_B8G8R8A8_UNORM_SRGB : DXGI_FORMAT_B8G8R8A8_UNORM;
-		bpb = 4;
-	}
-	else if (memcmp(&hdr->ddspf, &DDSPF_DXT1, sizeof(DDS_PIXELFORMAT)) == 0)
-	{
-		fmt = do_srgb ? DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT_BC1_UNORM;
-		block = 4;
-		bpb = 8;
-	}
+    DXGI_FORMAT fmt = DXGI_FORMAT_UNKNOWN;
+    DWORD block = 1, bpb = 0;
+    if (memcmp(&hdr->ddspf, &DDSPF_A8R8G8B8, sizeof(DDS_PIXELFORMAT)) == 0)
+    {
+        fmt = do_srgb ? DXGI_FORMAT_B8G8R8A8_UNORM_SRGB : DXGI_FORMAT_B8G8R8A8_UNORM;
+        bpb = 4;
+    }
+    else if (memcmp(&hdr->ddspf, &DDSPF_DXT1, sizeof(DDS_PIXELFORMAT)) == 0)
+    {
+        fmt = do_srgb ? DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT_BC1_UNORM;
+        block = 4;
+        bpb = 8;
+    }
 
-	if (fmt == DXGI_FORMAT_UNKNOWN)
-		return E_FAIL;
+    if (fmt == DXGI_FORMAT_UNKNOWN)
+        return E_FAIL;
 
-	D3D11_TEXTURE2D_DESC desc;
-	D3D11_SUBRESOURCE_DATA initial[16];
+    D3D11_TEXTURE2D_DESC desc;
+    D3D11_SUBRESOURCE_DATA initial[16];
 
-	desc.Width = hdr->dwWidth;
-	desc.Height = hdr->dwHeight;
-	desc.MipLevels = (hdr->dwSurfaceFlags & DDS_SURFACE_FLAGS_MIPMAP) ? hdr->dwMipMapCount : 1;
-	desc.ArraySize = 1;
-	desc.Format = fmt;
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-	desc.Usage = nfo->Usage;
-	desc.BindFlags = nfo->BindFlags;
-	desc.CPUAccessFlags = nfo->CpuAccessFlags;
-	desc.MiscFlags = nfo->MiscFlags;
+    desc.Width = hdr->dwWidth;
+    desc.Height = hdr->dwHeight;
+    desc.MipLevels = (hdr->dwSurfaceFlags & DDS_SURFACE_FLAGS_MIPMAP) ? hdr->dwMipMapCount : 1;
+    desc.ArraySize = 1;
+    desc.Format = fmt;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+    desc.Usage = nfo->Usage;
+    desc.BindFlags = nfo->BindFlags;
+    desc.CPUAccessFlags = nfo->CpuAccessFlags;
+    desc.MiscFlags = nfo->MiscFlags;
 
-	BYTE *pixels = (BYTE *) (hdr + 1);
-	for (DWORD mip=0; mip < desc.MipLevels; mip++)
-	{
-		UINT w = max(desc.Width >> mip, 1);
-		UINT h = max(desc.Height >> mip, 1);
-		UINT blkw = (w + block-1) / block;
-		UINT blkh = (h + block-1) / block;
+    BYTE *pixels = (BYTE *) (hdr + 1);
+    for (DWORD mip=0; mip < desc.MipLevels; mip++)
+    {
+        UINT w = max(desc.Width >> mip, 1);
+        UINT h = max(desc.Height >> mip, 1);
+        UINT blkw = (w + block-1) / block;
+        UINT blkh = (h + block-1) / block;
 
-		initial[mip].pSysMem = pixels;
-		initial[mip].SysMemPitch = blkw * bpb;
-		initial[mip].SysMemSlicePitch = 0;
+        initial[mip].pSysMem = pixels;
+        initial[mip].SysMemPitch = blkw * bpb;
+        initial[mip].SysMemSlicePitch = 0;
 
-		pixels += blkw * blkh * bpb;
-	}
+        pixels += blkw * blkh * bpb;
+    }
 
-	return dev->CreateTexture2D(&desc, initial, (ID3D11Texture2D **) ppTexture);
+    return dev->CreateTexture2D(&desc, initial, (ID3D11Texture2D **) ppTexture);
 }
 
 static HRESULT MyCreateTextureFromFile(ID3D11Device *dev, LPCWSTR filename, D3DX11_IMAGE_LOAD_INFO *nfo,
-	ID3DX11ThreadPump *pump, ID3D11Resource **ppTexture, HRESULT *pHResult)
+    ID3DX11ThreadPump *pump, ID3D11Resource **ppTexture, HRESULT *pHResult)
 {
-	HRESULT hr;
-	if (!pump && !pHResult && SUCCEEDED(hr = LoadDDSFast(dev, filename, nfo, ppTexture)))
-		return hr;
+    HRESULT hr;
+    if (!pump && !pHResult && SUCCEEDED(hr = LoadDDSFast(dev, filename, nfo, ppTexture)))
+        return hr;
 
-	return D3DX11CreateTextureFromFile(dev, filename, nfo, pump, ppTexture, pHResult);
+    return D3DX11CreateTextureFromFile(dev, filename, nfo, pump, ppTexture, pHResult);
 }
 
 CPUTResult CPUTTextureDX11::CreateNativeTexture(
@@ -430,7 +430,7 @@ CPUTResult CPUTTextureDX11::CreateNativeTexture(
 #endif
     }
     //hr = D3DX11CreateTextureFromFile( pD3dDevice, fileName.c_str(), &LoadInfo, NULL, ppTexture, NULL );
-	hr = MyCreateTextureFromFile( pD3dDevice, fileName.c_str(), &LoadInfo, NULL, ppTexture, NULL );
+    hr = MyCreateTextureFromFile( pD3dDevice, fileName.c_str(), &LoadInfo, NULL, ppTexture, NULL );
     ASSERT( SUCCEEDED(hr), _L("Failed to load texture: ") + fileName );
     CPUTSetDebugName( *ppTexture, fileName );
 

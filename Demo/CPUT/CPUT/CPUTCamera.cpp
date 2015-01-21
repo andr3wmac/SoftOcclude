@@ -193,34 +193,34 @@ CPUTEventHandledCode CPUTCameraControllerArcBall::HandleMouseEvent(
 
 CPUTCamera &CPUTCamera::operator=(const CPUTCamera& camera)
 {
-	mFov = camera.mFov;
-	mNearPlaneDistance = camera.mNearPlaneDistance;
-	mFarPlaneDistance = camera.mFarPlaneDistance;
-	mAspectRatio = camera.mAspectRatio;
-	mView = camera.mView;
-	mProjection = camera.mProjection;
+    mFov = camera.mFov;
+    mNearPlaneDistance = camera.mNearPlaneDistance;
+    mFarPlaneDistance = camera.mFarPlaneDistance;
+    mAspectRatio = camera.mAspectRatio;
+    mView = camera.mView;
+    mProjection = camera.mProjection;
 
-	for(int i = 0; i < 8; i++)
-	{
-		mFrustum.mpPosition[i] = camera.mFrustum.mpPosition[i]; 
-	}
+    for(int i = 0; i < 8; i++)
+    {
+        mFrustum.mpPosition[i] = camera.mFrustum.mpPosition[i]; 
+    }
 
-	for(int i = 0; i < 6; i++)
-	{
-		mFrustum.mpNormal[i] = camera.mFrustum.mpNormal[i];
-		mFrustum.mPlanes[0*8 + i] = mFrustum.mpNormal[i].x;
-		mFrustum.mPlanes[1*8 + i] = mFrustum.mpNormal[i].y;
-		mFrustum.mPlanes[2*8 + i] = mFrustum.mpNormal[i].z;
-		mFrustum.mPlanes[3*8 + i] = -dot3(mFrustum.mpNormal[i], mFrustum.mpPosition[(i < 3) ? 0 : 6]);
-	}
+    for(int i = 0; i < 6; i++)
+    {
+        mFrustum.mpNormal[i] = camera.mFrustum.mpNormal[i];
+        mFrustum.mPlanes[0*8 + i] = mFrustum.mpNormal[i].x;
+        mFrustum.mPlanes[1*8 + i] = mFrustum.mpNormal[i].y;
+        mFrustum.mPlanes[2*8 + i] = mFrustum.mpNormal[i].z;
+        mFrustum.mPlanes[3*8 + i] = -dot3(mFrustum.mpNormal[i], mFrustum.mpPosition[(i < 3) ? 0 : 6]);
+    }
 
-	for (int i=6; i < 8; i++)
-	{
-		mFrustum.mPlanes[0*8 + i] = 0;
-		mFrustum.mPlanes[1*8 + i] = 0;
-		mFrustum.mPlanes[2*8 + i] = 0;
-		mFrustum.mPlanes[3*8 + i] = -1.0f;
-	}
+    for (int i=6; i < 8; i++)
+    {
+        mFrustum.mPlanes[0*8 + i] = 0;
+        mFrustum.mPlanes[1*8 + i] = 0;
+        mFrustum.mPlanes[2*8 + i] = 0;
+        mFrustum.mPlanes[3*8 + i] = -1.0f;
+    }
 
-	return *this;
+    return *this;
 }

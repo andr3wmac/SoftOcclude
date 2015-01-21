@@ -22,37 +22,37 @@
 
 class HelperScalar
 {
-	public:
-		HelperScalar();
-		~HelperScalar();
+   public:
+      HelperScalar();
+      ~HelperScalar();
 
-	protected:
+   protected:
 
-		struct int4
-		{
-			int x, y, z, w;
+      struct int4
+      {
+         int x, y, z, w;
 
-			int4(const float4& f4)
-			{
-				x = (int)(f4.x + 0.5);
-				y = (int)(f4.y + 0.5);
-				z = (int)(f4.z + 0.5);
-				w = (int)(f4.w + 0.5);
-			}
-		};
+         int4(const float4& f4)
+         {
+            x = (int)(f4.x + 0.5);
+            y = (int)(f4.y + 0.5);
+            z = (int)(f4.z + 0.5);
+            w = (int)(f4.w + 0.5);
+         }
+      };
 
-		float4 TransformCoords(const float3& v, const float4x4& m);
-		float4 TransformCoords(const float4& v, const float4x4& m);
+      float4 TransformCoords(const float3& v, const float4x4& m);
+      float4 TransformCoords(const float4& v, const float4x4& m);
 };
 
 struct float4x4; 
 
 struct BoxTestSetupScalar : public HelperScalar
 {
-	float4x4 mViewProjViewport;
-	float radiusThreshold;
+   float4x4 mViewProjViewport;
+   float radiusThreshold;
 
-	void Init(const float4x4 &viewMatrix, const float4x4 &projMatrix, const float4x4 &viewportMatix, float fov, float sizeThreshold);
+   void Init(const float4x4 &viewMatrix, const float4x4 &projMatrix, const float4x4 &viewportMatix, float fov, float sizeThreshold);
 }; 
 
 #endif
