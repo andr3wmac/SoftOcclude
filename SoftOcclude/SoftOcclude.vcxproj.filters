@@ -49,10 +49,10 @@
     <ClInclude Include="Rasterizers\TransformedModelScalar.h">
       <Filter>Source Files\Rasterizers</Filter>
     </ClInclude>
-    <ClInclude Include="Extra\SoftFrustum.h">
+    <ClInclude Include="Common\SoftMath.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Extra\SoftMath.h">
+    <ClInclude Include="Common\SoftFrustum.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
@@ -90,7 +90,7 @@
     <ClCompile Include="Rasterizers\TransformedModelScalar.cpp">
       <Filter>Source Files\Rasterizers</Filter>
     </ClCompile>
-    <ClCompile Include="Extra\SoftFrustum.cpp">
+    <ClCompile Include="Common\SoftFrustum.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>

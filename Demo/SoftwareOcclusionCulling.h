@@ -41,7 +41,7 @@ private:
    CPUTRenderTargetDepth   *mpShadowRenderTarget;
 
    CPUTText                *mpFPSCounter;
-   CPUTCamera              mCameraCopy[2];
+   //CPUTCamera              mCameraCopy[2];
    UINT                    mNumModels;
    CPUTModelDX11*          mpModels[1000];
 
@@ -88,7 +88,7 @@ private:
     
    ID3D11Texture2D         *mpCPURenderTargetScalar[2];
    ID3D11Texture2D         *mpCPURenderTargetSSE[2];
-   ID3D11Texture2D         *mpCPURenderTarget[2];
+   ID3D11Texture2D         *mpCPURenderTarget;
 
    ID3D11ShaderResourceView      *mpCPUSRVScalar[2];
    ID3D11ShaderResourceView      *mpCPUSRVSSE[2];
@@ -122,9 +122,9 @@ private:
 
    UINT              mNumDrawCalls;
    UINT              mNumDepthTestTasks;
-   UINT              mCurrIdx;
-   UINT              mPrevIdx;
-   bool              mFirstFrame;
+   //UINT              mCurrIdx;
+   //UINT              mPrevIdx;
+   //bool              mFirstFrame;
 
 public:
    MySample() :
@@ -180,9 +180,9 @@ public:
       mPipeline(false),
       mNumDrawCalls(0),
       mNumDepthTestTasks(gDepthTestTasks),
-      mCurrIdx(0),
-      mPrevIdx(1),
-      mFirstFrame(true),
+      //mCurrIdx(0),
+      //mPrevIdx(1),
+      //mFirstFrame(true),
       mNumModels(0)
    {
       mpCPURenderTargetScalar[0] = NULL;
@@ -191,8 +191,7 @@ public:
       mpCPURenderTargetSSE[0] = NULL;
       mpCPURenderTargetSSE[1] = NULL;
 
-      mpCPURenderTarget[0] = NULL;
-      mpCPURenderTarget[1] = NULL;
+      mpCPURenderTarget = NULL;
 
       mpCPUSRVScalar[0] = mpCPUSRVScalar[1] = NULL;
       mpCPUSRVSSE[0]      = mpCPUSRVSSE[1]    = NULL;
@@ -284,19 +283,17 @@ public:
    // andrewmac:
    void RenderVisibleModels(CPUTAssetSet **pAssetSet,
                                            CPUTRenderParametersDX &renderParams,
-                                           UINT numAssetSets,
-                                           UINT idx);
+                                           UINT numAssetSets);
    void RenderModels(CPUTAssetSet **pAssetSet,
                                     CPUTRenderParametersDX &renderParams,
-                                    UINT numAssetSets, 
-                                    UINT idx);
+                                    UINT numAssetSets);
 
    virtual void Create();
    virtual void Render(double deltaSeconds);
    virtual void Update(double deltaSeconds);
    virtual void ResizeWindow(UINT width, UINT height);
    virtual void TaskCleanUp();
-   virtual void UpdateGPUDepthBuf(UINT idx);
+   virtual void UpdateGPUDepthBuf();
 
    // andrewmac:
    void CreateTransformedModels(CPUTAssetSet **mpAssetSet, UINT numAssetSets);

@@ -19,7 +19,7 @@
 #define TRANSFORMEDMODELSCALAR_H
 
 #include "TransformedMeshScalar.h"
-#include "../Extra/SoftFrustum.h"
+#include "../Common/SoftFrustum.h"
 #include "HelperScalar.h"
 
 class TransformedModelScalar : public HelperScalar

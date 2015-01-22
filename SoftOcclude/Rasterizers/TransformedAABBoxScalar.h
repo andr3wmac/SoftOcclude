@@ -20,7 +20,7 @@
 #define TRANSFORMEDAABBOXSCALAR_H
 
 #include "Constants.h"
-#include "../Extra/SoftFrustum.h"
+#include "../Common/SoftFrustum.h"
 #include "HelperScalar.h"
 
 class TransformedAABBoxScalar : public HelperScalar

@@ -254,8 +254,8 @@ void MySample::Create()
    mpShowDepthBufMtrlScalar = (CPUTMaterialDX11*)CPUTAssetLibraryDX11::GetAssetLibrary()->GetMaterial( _L("showDepthBufScalar"));
    mpShowDepthBufMtrlSSE = (CPUTMaterialDX11*)CPUTAssetLibraryDX11::GetAssetLibrary()->GetMaterial( _L("showDepthBufSSE"));
         
-   mpCPURenderTarget[0] = mpCPURenderTargetScalar[0];
-   mpCPURenderTarget[1] = mpCPURenderTargetScalar[1];
+   mpCPURenderTarget    = mpCPURenderTargetScalar[0];
+   //mpCPURenderTarget[1] = mpCPURenderTargetScalar[1];
    mpCPUSRV[0]          = mpCPUSRVScalar[0];
    mpCPUSRV[1]          = mpCPUSRVScalar[1];
    mpShowDepthBufMtrl   = mpShowDepthBufMtrlScalar;
@@ -687,12 +687,12 @@ CPUTEventHandledCode MySample::HandleKeyboardEvent(CPUTKey key)
 
 void MySample::TaskCleanUp()
 {
-    if(mEnableCulling)
-    {
-        mCurrIdx = 0;
-        mPrevIdx = 1;
-        mFirstFrame = true;
-    }
+    //if(mEnableCulling)
+    //{
+    //    mCurrIdx = 0;
+    //    mPrevIdx = 1;
+    //    mFirstFrame = true;
+    //}
 }
 
 // Handle mouse events
@@ -802,12 +802,12 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
         if(state)
         {
             mEnableCulling = true;
-            mFirstFrame = true;
+            //mFirstFrame = true;
         }
         else
         {
             mEnableCulling = false;
-            mFirstFrame = false;
+            //mFirstFrame = false;
             //memset(mpCPUDepthBuf[mCurrIdx], 0, SCREENW * SCREENH *4);
 
             mpOccludersR2DBText->SetText(         _L("\tDepth rasterized models: 0"));
@@ -823,27 +823,27 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
         }
         break;
     }
-    case ID_ENABLE_FCULLING:
-    {
-        TaskCleanUp();
-        CPUTCheckboxState state = mpFCullingCheckBox->GetCheckboxState();
-        if(state)
-        {
-            mEnableFCulling = true;
-        }
-        else
-        {
-            mEnableFCulling = false;
-            //mpDBR->ResetInsideFrustum();
-            //mpAABB->ResetInsideFrustum();
+   case ID_ENABLE_FCULLING:
+   {
+      TaskCleanUp();
+      CPUTCheckboxState state = mpFCullingCheckBox->GetCheckboxState();
+      if(state)
+      {
+         mEnableFCulling = true;
+      }
+      else
+      {
+         mEnableFCulling = false;
+         //mpDBR->ResetInsideFrustum();
+         //mpAABB->ResetInsideFrustum();
          // andrewmac:
          mOcclusionTest->ResetInsideFrustum();
-        }
-        //mpDBR->SetEnableFCulling(mEnableFCulling);
-        //mpAABB->SetEnableFCulling(mEnableFCulling);
+      }
+      //mpDBR->SetEnableFCulling(mEnableFCulling);
+      //mpAABB->SetEnableFCulling(mEnableFCulling);
       // andrewmac:
       mOcclusionTest->SetEnableFrustrumCulling(mEnableFCulling);
-        break;
+      break;
     }
     case ID_VSYNC_ON_OFF:
     {
@@ -865,7 +865,7 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
         if(state)
         {
             mPipeline = true;
-            mFirstFrame = true;
+            //mFirstFrame = true;
         }
         else
         {
@@ -898,18 +898,21 @@ void MySample::ResizeWindow(UINT width, UINT height)
     pAssetLibrary->RebindTexturesAndBuffers();
 }
 
-void MySample::UpdateGPUDepthBuf(UINT idx)
+void MySample::UpdateGPUDepthBuf()
 {
     unsigned char depth;
     float *depthfloat;
     int tmpdepth;
     int maxdepth = 0;
 
+    // andrewmac
+    char* depthBuffer = mOcclusionTest->GetDepthBuffer();
+
     for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
     {
         //depthfloat = (float*)&mpCPUDepthBuf[idx][i];
         // andrewmac:
-        depthfloat = (float*)&mOcclusionTest->GetDepthBuffer()[i];
+        depthfloat = (float*)&depthBuffer[i];
 
         tmpdepth = (int)ceil(*depthfloat * 30000);
         maxdepth = tmpdepth > maxdepth ? tmpdepth : maxdepth;
@@ -921,7 +924,7 @@ void MySample::UpdateGPUDepthBuf(UINT idx)
     {
         //depthfloat = (float*)&mpCPUDepthBuf[idx][i];
         // andrewmac:
-        depthfloat = (float*)&mOcclusionTest->GetDepthBuffer()[i];
+        depthfloat = (float*)&depthBuffer[i];
 
         tmpdepth = (int)ceil(*depthfloat * 20000);
         depth = (char)(tmpdepth * scale);
@@ -940,8 +943,7 @@ void MySample::UpdateGPUDepthBuf(UINT idx)
 //-------------------------------------------------------------------------
 void MySample::RenderVisibleModels(CPUTAssetSet **pAssetSet,
                                            CPUTRenderParametersDX &renderParams,
-                                           UINT numAssetSets,
-                                           UINT idx)
+                                           UINT numAssetSets)
 {
     int count = 0;
     for(UINT modelId = 0; modelId < mNumModels; modelId++)
@@ -953,7 +955,7 @@ void MySample::RenderVisibleModels(CPUTAssetSet **pAssetSet,
         }
     }
 
-    //mNumCulled[idx] =  mNumModels - count;
+    mNumCulled = mNumModels - count;
 }
 
 
@@ -963,46 +965,45 @@ void MySample::RenderVisibleModels(CPUTAssetSet **pAssetSet,
 //-------------------------------------------------------------------------
 void MySample::RenderModels(CPUTAssetSet **pAssetSet,
                                     CPUTRenderParametersDX &renderParams,
-                                    UINT numAssetSets, 
-                                    UINT idx)
+                                    UINT numAssetSets)
 {
-    int count = 0;
-    int triCount = 0;
+   int count = 0;
+   int triCount = 0;
 
-    CPUTModelDX11::ResetFCullCount();
+   CPUTModelDX11::ResetFCullCount();
 
-    BoxTestSetupScalar setup;
-   setup.Init(*mCameraCopy[idx].GetViewMatrix(), *mCameraCopy[idx].GetProjectionMatrix(), viewportMatrix, mCameraCopy[idx].GetFov(), mOccludeeSizeThreshold);
+   BoxTestSetupScalar setup;
+   setup.Init(*mpCamera->GetViewMatrix(), *mpCamera->GetProjectionMatrix(), viewportMatrix, mpCamera->GetFov(), mOccludeeSizeThreshold);
 
-    float4x4 cumulativeMatrix;
+   float4x4 cumulativeMatrix;
 
-    for(UINT assetId = 0, modelId = 0; assetId < numAssetSets; assetId++)
-    {
-        for(UINT nodeId = 0; nodeId< pAssetSet[assetId]->GetAssetCount(); nodeId++)
-        {
-            CPUTRenderNode* pRenderNode = NULL;
-            CPUTResult result = pAssetSet[assetId]->GetAssetByIndex(nodeId, &pRenderNode);
-            ASSERT((CPUT_SUCCESS == result), _L ("Failed getting asset by index")); 
-            if(pRenderNode->IsModel())
-            {
-                //if(!mpTransformedAABBox[modelId].IsTooSmall(setup, cumulativeMatrix))
-                //{
-                    CPUTModelDX11* model = (CPUTModelDX11*)pRenderNode;
-                    ASSERT((model != NULL), _L("model is NULL"));
+   for(UINT assetId = 0, modelId = 0; assetId < numAssetSets; assetId++)
+   {
+      for(UINT nodeId = 0; nodeId< pAssetSet[assetId]->GetAssetCount(); nodeId++)
+      {
+         CPUTRenderNode* pRenderNode = NULL;
+         CPUTResult result = pAssetSet[assetId]->GetAssetByIndex(nodeId, &pRenderNode);
+         ASSERT((CPUT_SUCCESS == result), _L ("Failed getting asset by index")); 
+         if(pRenderNode->IsModel())
+         {
+            //if(!mpTransformedAABBox[modelId].IsTooSmall(setup, cumulativeMatrix))
+            //{
+               CPUTModelDX11* model = (CPUTModelDX11*)pRenderNode;
+               ASSERT((model != NULL), _L("model is NULL"));
 
-                    model = (CPUTModelDX11*)pRenderNode;
-                    model->Render(renderParams);
-                    count++;
-                    //triCount += mpNumTriangles[modelId];
-                //}
-                modelId++;            
-            }
-            pRenderNode->Release();
-        }
-    }
-    //mNumFCullCount = CPUTModelDX11::GetFCullCount();
-    //mNumCulled[idx] =  mNumModels - count;
-    //mNumTrisRendered = triCount;
+               model = (CPUTModelDX11*)pRenderNode;
+               model->Render(renderParams);
+               count++;
+               //triCount += mpNumTriangles[modelId];
+            //}
+            modelId++;            
+         }
+         pRenderNode->Release();
+      }
+   }
+   //mNumFCullCount = CPUTModelDX11::GetFCullCount();
+   mNumCulled = mNumModels - count;
+   //mNumTrisRendered = triCount;
 }
 
 //#include "xnamath.h"
@@ -1023,6 +1024,7 @@ void MySample::Render(double deltaSeconds)
       renderParams.mShowBoundingBoxes = false;
    }    
 
+   /*
    if(mEnableCulling) 
    {
       if(!mFirstFrame)
@@ -1034,6 +1036,7 @@ void MySample::Render(double deltaSeconds)
    }
 
    mCameraCopy[mCurrIdx] = *mpCamera;
+   */
 
    // Clear back buffer
    const float clearColor[] = { 0.0993f, 0.0993f, 0.0993f, 1.0f };
@@ -1041,13 +1044,13 @@ void MySample::Render(double deltaSeconds)
    mpContext->ClearDepthStencilView( mpDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 0.0f, 0);
 
    // Set the camera transforms so that the occluders can be transformed 
-   //mpDBR->SetViewProj(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix(), mCurrIdx);
+   //mpDBR->SetViewProj(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix(), mCurrIdx);
 
    // Set the camera transforms so that the occludee abix aligned bounding boxes (AABB) can be transformed
-   //mpAABB->SetViewProjMatrix(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix(), mCurrIdx);
+   //mpAABB->SetViewProjMatrix(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix(), mCurrIdx);
 
    // andrewmac:
-   mOcclusionTest->SetViewProj(mCameraCopy[mCurrIdx].GetViewMatrix(), (float4x4*)mCameraCopy[mCurrIdx].GetProjectionMatrix());
+   mOcclusionTest->SetViewProj(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix());
 
    // If view frustum culling is enabled then determine which occluders and occludees are 
    // inside the view frustum and run the software occlusion culling on only the those models
@@ -1078,10 +1081,10 @@ void MySample::Render(double deltaSeconds)
 
       // andrewmac
       SoftFrustum viewFrustum;
-      memcpy(viewFrustum.mpPosition, mCameraCopy[mCurrIdx].mFrustum.mpPosition, sizeof(viewFrustum.mpPosition));
-      memcpy(viewFrustum.mpNormal, mCameraCopy[mCurrIdx].mFrustum.mpNormal, sizeof(viewFrustum.mpNormal));
+      memcpy(viewFrustum.mpPosition, mpCamera->mFrustum.mpPosition, sizeof(viewFrustum.mpPosition));
+      memcpy(viewFrustum.mpNormal, mpCamera->mFrustum.mpNormal, sizeof(viewFrustum.mpNormal));
 
-      mOcclusionTest->Render(&viewFrustum, mCameraCopy[mCurrIdx].GetFov(), mCurrIdx);
+      mOcclusionTest->Render(&viewFrustum, mpCamera->GetFov());
    }
     
    // If mViewDepthBuffer is enabled then blit the CPU rasterized depth buffer to the frame buffer
@@ -1090,8 +1093,8 @@ void MySample::Render(double deltaSeconds)
       mpShowDepthBufMtrl->SetRenderStates(renderParams);
 
       // Update the GPU-side depth buffer
-      UpdateGPUDepthBuf(mCurrIdx);
-      mpContext->UpdateSubresource(mpCPURenderTarget[mCurrIdx], 0, NULL, mpGPUDepthBuf, rowPitch, 0);            
+      UpdateGPUDepthBuf();
+      mpContext->UpdateSubresource(mpCPURenderTarget, 0, NULL, mpGPUDepthBuf, rowPitch, 0);            
       mpContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
       mpContext->Draw(3, 0);
    }
@@ -1105,21 +1108,23 @@ void MySample::Render(double deltaSeconds)
          // if occlusion culling is enabled then render only the visible occludees in the scene
          if(mEnableCulling)
          {
-               renderParams.mpCamera = &mCameraCopy[mCurrIdx];
-               //mpAABB->RenderVisible(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx); 
-         // andrewmac:
-         RenderVisibleModels(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx);
+            //renderParams.mpCamera = &mCameraCopy[mCurrIdx];
+            //mpAABB->RenderVisible(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx); 
+            // andrewmac:
+            renderParams.mpCamera = mpCamera;
+            RenderVisibleModels(mpAssetSetAABB, renderParams, OCCLUDEE_SETS);
          }
          // else render all the (25,000) occludee models in the scene
          else
          {
-               renderParams.mpCamera = &mCameraCopy[mCurrIdx];
-               //mpAABB->Render(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx);
-         // andrewmac:
-         RenderModels(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx);
+            //renderParams.mpCamera = &mCameraCopy[mCurrIdx];
+            //mpAABB->Render(mpAssetSetAABB, renderParams, OCCLUDEE_SETS, mCurrIdx);
+            // andrewmac:
+            renderParams.mpCamera = mpCamera;
+            RenderModels(mpAssetSetAABB, renderParams, OCCLUDEE_SETS);
          }
 
-      // Render the sky?
+         // Render the sky?
          if(mpAssetSetSky) { mpAssetSetSky->RenderRecursive(renderParams); }
       }
       mNumDrawCalls = CPUTMeshDX11::GetDrawCallCount();
@@ -1140,7 +1145,7 @@ void MySample::Render(double deltaSeconds)
       mOcclusionTest->ComputeR2DBTime();
       mNumOccludersR2DB = mOcclusionTest->GetNumOccludersR2DB();
       mNumOccluderRasterizedTris = mOcclusionTest->GetNumRasterizedTriangles();
-      mNumCulled = mOcclusionTest->GetNumCulled();
+      //mNumCulled = mOcclusionTest->GetNumCulled();
       mNumOccludeeCulledTris = mOcclusionTest->GetNumCulledTriangles();
       mRasterizeTime = mOcclusionTest->GetRasterizeTime();
         

@@ -61,7 +61,7 @@ class SoftOcclusionTest
 
       // Core Functionality
       char* GetDepthBuffer() { return mpCPUDepthBuf[mCurrIdx]; }
-      void  Render(SoftFrustum *pFrustum, float pFov, UINT idx);
+      void  Render(SoftFrustum *pFrustum, float pFov);
       bool  IsOccludeeVisible(UINT modelIdx) { return mpAABB->IsVisible(mCurrIdx, modelIdx); }
 
       // Library Statistics Functions

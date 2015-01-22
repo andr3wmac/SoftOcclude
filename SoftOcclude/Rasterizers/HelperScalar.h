@@ -18,7 +18,7 @@
 #ifndef HELPERSCALAR_H
 #define HELPERSCALAR_H
 
-#include "../Extra/SoftMath.h"
+#include "../Common/SoftMath.h"
 
 class HelperScalar
 {

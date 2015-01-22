@@ -17,7 +17,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "../Extra/SoftMath.h"
+#include "../Common/SoftMath.h"
 
 // Choose which depth buffer size to use
 // If you change depth buffer size please do a rebuilt all 

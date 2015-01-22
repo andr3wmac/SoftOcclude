@@ -77,8 +77,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Extra\SoftMath.h" />
-    <ClInclude Include="Extra\SoftFrustum.h" />
+    <ClInclude Include="Common\SoftFrustum.h" />
+    <ClInclude Include="Common\SoftMath.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizer.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizerScalar.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizerScalarST.h" />
@@ -93,7 +93,7 @@
     <ClInclude Include="SoftOcclude.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Extra\SoftFrustum.cpp" />
+    <ClCompile Include="Common\SoftFrustum.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizer.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizerScalar.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizerScalarST.cpp" />

@@ -42,17 +42,18 @@ SoftOcclusionTest::~SoftOcclusionTest()
    _aligned_free(mpCPUDepthBuf[1]);
 }
 
-void SoftOcclusionTest::Render(SoftFrustum *pFrustum, float pFov, UINT idx)
+void SoftOcclusionTest::Render(SoftFrustum *pFrustum, float pFov)
 {
-   // TODO: Perform the flip/flop internally
-   mCurrIdx = idx;
+   // Flip/Flop Buffers
+   // This is inherited from the Intel sample, I assume it's for threading.
+   mCurrIdx = !mCurrIdx ? 1 : 0;
 
-   mpDBR->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[idx], idx);
-   mpAABB->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[idx], idx);
+   mpDBR->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[mCurrIdx], mCurrIdx);
+   mpAABB->SetCPURenderTargetPixels((UINT*)mpCPUDepthBuf[mCurrIdx], mCurrIdx);
 
-   mpDBR->TransformModelsAndRasterizeToDepthBuffer(pFrustum, pFov, idx); 
-   mpAABB->SetDepthSummaryBuffer(mpDBR->GetDepthSummaryBuffer(idx), idx);
-   mpAABB->TransformAABBoxAndDepthTest(pFrustum, pFov, idx);
+   mpDBR->TransformModelsAndRasterizeToDepthBuffer(pFrustum, pFov, mCurrIdx); 
+   mpAABB->SetDepthSummaryBuffer(mpDBR->GetDepthSummaryBuffer(mCurrIdx), mCurrIdx);
+   mpAABB->TransformAABBoxAndDepthTest(pFrustum, pFov, mCurrIdx);
 }
 
 void SoftOcclusionTest::SetScreenSize(int width, int height)
