@@ -18,8 +18,8 @@
 #ifndef AABBOXRASTERIZER_H
 #define AABBOXRASTERIZER_H
 
-#include "TransformedAABBoxScalar.h"
-#include "Constants.h"
+#include "../Common/SoftOccludeeScalar.h"
+#include "../Common/Constants.h"
 
 class AABBoxRasterizer
 {
@@ -47,7 +47,7 @@ class AABBoxRasterizer
       virtual UINT GetNumFCullCount() = 0;
 
      // andrewmac:
-     virtual TransformedAABBoxScalar* AddOccludee() = 0;
+     virtual SoftOccludeeScalar* AddOccludee() = 0;
      virtual bool IsVisible(UINT idx, UINT modelIdx) = 0;
 
    protected:

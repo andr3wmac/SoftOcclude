@@ -15,17 +15,17 @@
 //
 //--------------------------------------------------------------------------------------
 
-#ifndef TRANSFORMEDMESHSCALAR_H
-#define TRANSFORMEDMESHSCALAR_H
+#ifndef SOFTOCCLUDERMESHSCALAR_H
+#define SOFTOCCLUDERMESHSCALAR_H
 
 #include "Constants.h"
 #include "HelperScalar.h"
 
-class TransformedMeshScalar : public HelperScalar
+class SoftOccluderMeshScalar : public HelperScalar
 {
    public:
-      TransformedMeshScalar();
-      ~TransformedMeshScalar();
+      SoftOccluderMeshScalar();
+      ~SoftOccluderMeshScalar();
       void Initialize(Vertex* pVertices, 
               UINT pNumVertices, 
               UINT* pIndices, 

@@ -15,7 +15,7 @@
 //
 //--------------------------------------------------------------------------------------
 
-#include "TransformedAABBoxScalar.h"
+#include "SoftOccludeeScalar.h"
 
 static const UINT sBBIndexList[AABB_INDICES] =
 {
@@ -52,7 +52,7 @@ static const UINT sBBzInd[AABB_VERTICES] = { 1, 1, 0, 0, 0, 1, 1, 0 };
 //----------------------------------------------------------------
 // Determine is model is inside view frustum
 //----------------------------------------------------------------
-bool TransformedAABBoxScalar::IsInsideViewFrustum(SoftFrustum* pFrustum)
+bool SoftOccludeeScalar::IsInsideViewFrustum(SoftFrustum* pFrustum)
 {
    return pFrustum->IsVisible(mBBCenterWS, mBBHalfWS);
 }
@@ -60,7 +60,7 @@ bool TransformedAABBoxScalar::IsInsideViewFrustum(SoftFrustum* pFrustum)
 //----------------------------------------------------------------------------
 // Determine if the occludee size is too small and if so avoid drawing it
 //----------------------------------------------------------------------------
-bool TransformedAABBoxScalar::IsTooSmall(const BoxTestSetupScalar &setup, float4x4 &cumulativeMatrix)
+bool SoftOccludeeScalar::IsTooSmall(const BoxTestSetupScalar &setup, float4x4 &cumulativeMatrix)
 {
    cumulativeMatrix = mWorldMatrix * setup.mViewProjViewport;
 
@@ -79,7 +79,7 @@ bool TransformedAABBoxScalar::IsTooSmall(const BoxTestSetupScalar &setup, float4
 //----------------------------------------------------------------
 // Trasforms the AABB vertices to screen space once every frame
 //----------------------------------------------------------------
-bool TransformedAABBoxScalar::TransformAABBox(float4 xformedPos[], const float4x4 &cumulativeMatrix)
+bool SoftOccludeeScalar::TransformAABBox(float4 xformedPos[], const float4x4 &cumulativeMatrix)
 {
    float4 vCenter = float4(mBBCenter.x, mBBCenter.y, mBBCenter.z, 1.0);
    float4 vHalf   = float4(mBBHalf.x, mBBHalf.y, mBBHalf.z, 1.0);
@@ -112,7 +112,7 @@ bool TransformedAABBoxScalar::TransformAABBox(float4 xformedPos[], const float4x
    return zAllIn;
 }
 
-void TransformedAABBoxScalar::Gather(float4 pOut[3], UINT triId, const float4 xformedPos[])
+void SoftOccludeeScalar::Gather(float4 pOut[3], UINT triId, const float4 xformedPos[])
 {
    for(UINT i = 0; i < 3; i++)
    {
@@ -126,7 +126,7 @@ void TransformedAABBoxScalar::Gather(float4 pOut[3], UINT triId, const float4 xf
 // If any of the rasterized AABB pixels passes the depth test exit early and mark the occludee
 // as visible. If all rasterized AABB pixels are occluded then the occludee is culled
 //-----------------------------------------------------------------------------------------
-bool TransformedAABBoxScalar::RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, const float4 pXformedPos[], UINT idx)
+bool SoftOccludeeScalar::RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, const float4 pXformedPos[], UINT idx)
 {
    float* pDepthBuffer = (float*)pRenderTargetPixels; 
    

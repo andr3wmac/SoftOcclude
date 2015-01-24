@@ -16,8 +16,8 @@
 #ifndef DEPTHBUFFERRASTERIZER_H
 #define DEPTHBUFFERRASTERIZER_H
 
-#include "TransformedModelScalar.h"
-#include "Constants.h"
+#include "../Common/SoftOccluderScalar.h"
+#include "../Common/Constants.h"
 
 class DepthBufferRasterizer
 {
@@ -41,7 +41,7 @@ class DepthBufferRasterizer
       virtual UINT GetNumRasterizedTriangles(UINT idx) = 0;
 
      // andrewmac: 
-     virtual TransformedModelScalar* AddOccluder() = 0;
+     virtual SoftOccluderScalar* AddOccluder() = 0;
      virtual void RefreshOccluders() = 0;
 
    protected:

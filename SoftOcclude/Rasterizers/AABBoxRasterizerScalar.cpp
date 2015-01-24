@@ -40,9 +40,9 @@ AABBoxRasterizerScalar::~AABBoxRasterizerScalar()
 }
 
 // andrewmac:
-TransformedAABBoxScalar* AABBoxRasterizerScalar::AddOccludee()
+SoftOccludeeScalar* AABBoxRasterizerScalar::AddOccludee()
 {
-   TransformedAABBoxScalar* result = &mpTransformedAABBox[mNumModels];
+   SoftOccludeeScalar* result = &mpTransformedAABBox[mNumModels];
    mNumModels++;
 
    return result;

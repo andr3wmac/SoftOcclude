@@ -16,14 +16,14 @@
 //--------------------------------------------------------------------------------------
 
 
-#ifndef TRANSFORMEDAABBOXSCALAR_H
-#define TRANSFORMEDAABBOXSCALAR_H
+#ifndef SOFTOCCLUDEESCALAR_H
+#define SOFTOCCLUDEESCALAR_H
 
 #include "Constants.h"
 #include "../Common/SoftFrustum.h"
 #include "HelperScalar.h"
 
-class TransformedAABBoxScalar : public HelperScalar
+class SoftOccludeeScalar : public HelperScalar
 {
    public:
       bool IsInsideViewFrustum(SoftFrustum* pFrustum);

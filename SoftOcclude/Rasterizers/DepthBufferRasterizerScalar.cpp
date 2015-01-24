@@ -47,9 +47,9 @@ DepthBufferRasterizerScalar::~DepthBufferRasterizerScalar()
 }
 
 // andrewmac:
-TransformedModelScalar* DepthBufferRasterizerScalar::AddOccluder()
+SoftOccluderScalar* DepthBufferRasterizerScalar::AddOccluder()
 {
-   TransformedModelScalar* result = &mpTransformedModels[mNumModels];
+   SoftOccluderScalar* result = &mpTransformedModels[mNumModels];
    mNumModels++;
 
    return result;

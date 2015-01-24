@@ -14,9 +14,9 @@
 // responsibility to update it.
 //
 //--------------------------------------------------------------------------------------
-#include "TransformedModelScalar.h"
+#include "SoftOccluderScalar.h"
 
-TransformedModelScalar::TransformedModelScalar()
+SoftOccluderScalar::SoftOccluderScalar()
    : mNumMeshes(0),
      mNumVertices(0),
      mNumTriangles(0)
@@ -26,12 +26,12 @@ TransformedModelScalar::TransformedModelScalar()
    mpXformedPos[0] = mpXformedPos[1] = NULL;
 }
 
-TransformedModelScalar::~TransformedModelScalar()
+SoftOccluderScalar::~SoftOccluderScalar()
 {
 
 }
 
-void TransformedModelScalar::AddMesh(Vertex* pVertices, 
+void SoftOccluderScalar::AddMesh(Vertex* pVertices, 
                             UINT pNumVertices, 
                             UINT* pIndices, 
                             UINT pNumIndices,
@@ -43,7 +43,7 @@ void TransformedModelScalar::AddMesh(Vertex* pVertices,
    mNumMeshes++;
 }
 
-void TransformedModelScalar::TooSmall(const BoxTestSetupScalar &setup, UINT idx)
+void SoftOccluderScalar::TooSmall(const BoxTestSetupScalar &setup, UINT idx)
 {
    if(mInsideViewFrustum[idx])
    {
@@ -71,7 +71,7 @@ void TransformedModelScalar::TooSmall(const BoxTestSetupScalar &setup, UINT idx)
 //------------------------------------------------------------------
 // Determine is the occluder model is inside view frustum
 //------------------------------------------------------------------
-void TransformedModelScalar::InsideViewFrustum(SoftFrustum* frustum,
+void SoftOccluderScalar::InsideViewFrustum(SoftFrustum* frustum,
                            const BoxTestSetupScalar &setup,
                                     UINT idx)
 {
@@ -104,7 +104,7 @@ void TransformedModelScalar::InsideViewFrustum(SoftFrustum* frustum,
 // Determine if the occluder size is sufficiently large enough to occlude other object sin the scene
 // If so transform the occluder to screen space so that it can be rasterized to the cPU depth buffer
 //---------------------------------------------------------------------------------------------------
-void TransformedModelScalar::TransformMeshes(UINT start, 
+void SoftOccluderScalar::TransformMeshes(UINT start, 
                                      UINT end,
                                       UINT idx)
 {
@@ -128,7 +128,7 @@ void TransformedModelScalar::TransformMeshes(UINT start,
 // bin the triangles that make up the occluder into tiles to speed up rateraization
 // Single threaded version
 //------------------------------------------------------------------------------------
-void TransformedModelScalar::BinTransformedTrianglesST(UINT taskId,
+void SoftOccluderScalar::BinTransformedTrianglesST(UINT taskId,
                                           UINT modelId,
                                           UINT start,
                                           UINT end,
@@ -158,7 +158,7 @@ void TransformedModelScalar::BinTransformedTrianglesST(UINT taskId,
 // bin the triangles that make up the occluder into tiles to speed up rateraization
 // Multi threaded version
 //------------------------------------------------------------------------------------
-void TransformedModelScalar::BinTransformedTrianglesMT(UINT taskId,
+void SoftOccluderScalar::BinTransformedTrianglesMT(UINT taskId,
                                           UINT modelId,
                                           UINT start,
                                           UINT end,
@@ -183,7 +183,7 @@ void TransformedModelScalar::BinTransformedTrianglesMT(UINT taskId,
    }
 }
 
-void TransformedModelScalar::Gather(float* xformedPos,
+void SoftOccluderScalar::Gather(float* xformedPos,
                            UINT meshId, 
                            UINT triId, 
                            UINT idx)

@@ -25,9 +25,6 @@
     <ClInclude Include="Rasterizers\AABBoxRasterizerScalarST.h">
       <Filter>Source Files\Rasterizers</Filter>
     </ClInclude>
-    <ClInclude Include="Rasterizers\Constants.h">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClInclude>
     <ClInclude Include="Rasterizers\DepthBufferRasterizer.h">
       <Filter>Source Files\Rasterizers</Filter>
     </ClInclude>
@@ -37,22 +34,25 @@
     <ClInclude Include="Rasterizers\DepthBufferRasterizerScalarST.h">
       <Filter>Source Files\Rasterizers</Filter>
     </ClInclude>
-    <ClInclude Include="Rasterizers\HelperScalar.h">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClInclude>
-    <ClInclude Include="Rasterizers\TransformedAABBoxScalar.h">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClInclude>
-    <ClInclude Include="Rasterizers\TransformedMeshScalar.h">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClInclude>
-    <ClInclude Include="Rasterizers\TransformedModelScalar.h">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClInclude>
     <ClInclude Include="Common\SoftMath.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="Common\SoftFrustum.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SoftOccludeeScalar.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SoftOccluderMeshScalar.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SoftOccluderScalar.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Constants.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\HelperScalar.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,19 +78,19 @@
     <ClCompile Include="Rasterizers\DepthBufferRasterizerScalarST.cpp">
       <Filter>Source Files\Rasterizers</Filter>
     </ClCompile>
-    <ClCompile Include="Rasterizers\HelperScalar.cpp">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClCompile>
-    <ClCompile Include="Rasterizers\TransformedAABBoxScalar.cpp">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClCompile>
-    <ClCompile Include="Rasterizers\TransformedMeshScalar.cpp">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClCompile>
-    <ClCompile Include="Rasterizers\TransformedModelScalar.cpp">
-      <Filter>Source Files\Rasterizers</Filter>
-    </ClCompile>
     <ClCompile Include="Common\SoftFrustum.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\SoftOccludeeScalar.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\SoftOccluderMeshScalar.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\SoftOccluderScalar.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\HelperScalar.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,9 +15,9 @@
 //
 //--------------------------------------------------------------------------------------
 
-#include "TransformedMeshScalar.h"
+#include "SoftOccluderMeshScalar.h"
 
-TransformedMeshScalar::TransformedMeshScalar()
+SoftOccluderMeshScalar::SoftOccluderMeshScalar()
    : mNumVertices(0),
      mNumIndices(0),
      mNumTriangles(0),
@@ -27,12 +27,12 @@ TransformedMeshScalar::TransformedMeshScalar()
    mpXformedPos[0] = mpXformedPos[1] = NULL;
 }
 
-TransformedMeshScalar::~TransformedMeshScalar()
+SoftOccluderMeshScalar::~SoftOccluderMeshScalar()
 {
 
 }
 
-void TransformedMeshScalar::Initialize(
+void SoftOccluderMeshScalar::Initialize(
    Vertex* pVertices, UINT pNumVertices, 
    UINT* pIndices, UINT pNumIndices,
    UINT pNumTriangles)
@@ -47,7 +47,7 @@ void TransformedMeshScalar::Initialize(
 //-------------------------------------------------------------------
 // Trasforms the occluder vertices to screen space once every frame
 //-------------------------------------------------------------------
-void TransformedMeshScalar::TransformVertices(const float4x4 &cumulativeMatrix, 
+void SoftOccluderMeshScalar::TransformVertices(const float4x4 &cumulativeMatrix, 
                                    UINT start, 
                                    UINT end,
                                    UINT idx)
@@ -62,7 +62,7 @@ void TransformedMeshScalar::TransformVertices(const float4x4 &cumulativeMatrix,
    }
 }
 
-void TransformedMeshScalar::Gather(float4 pOut[3], UINT triId, UINT idx)
+void SoftOccluderMeshScalar::Gather(float4 pOut[3], UINT triId, UINT idx)
 {
    for(UINT i = 0; i < 3; i++)
    {
@@ -74,7 +74,7 @@ void TransformedMeshScalar::Gather(float4 pOut[3], UINT triId, UINT idx)
 //--------------------------------------------------------------------------------
 // Bin the screen space transformed triangles into tiles. For single threaded version
 //--------------------------------------------------------------------------------
-void TransformedMeshScalar::BinTransformedTrianglesST(UINT taskId,
+void SoftOccluderMeshScalar::BinTransformedTrianglesST(UINT taskId,
                                          UINT modelId,
                                          UINT meshId,
                                          UINT start,
@@ -146,7 +146,7 @@ void TransformedMeshScalar::BinTransformedTrianglesST(UINT taskId,
 //--------------------------------------------------------------------------------
 // Bin the screen space transformed triangles into tiles. For multi threaded version
 //--------------------------------------------------------------------------------
-void TransformedMeshScalar::BinTransformedTrianglesMT(UINT taskId,
+void SoftOccluderMeshScalar::BinTransformedTrianglesMT(UINT taskId,
                                          UINT modelId,
                                          UINT meshId,
                                          UINT start,
@@ -216,7 +216,7 @@ void TransformedMeshScalar::BinTransformedTrianglesMT(UINT taskId,
    }
 }
 
-void TransformedMeshScalar::GetOneTriangleData(float* xformedPos, UINT triId, UINT idx)
+void SoftOccluderMeshScalar::GetOneTriangleData(float* xformedPos, UINT triId, UINT idx)
 {
    float4* pOut = (float4*) xformedPos;
    for(int i = 0; i < 3; i++)

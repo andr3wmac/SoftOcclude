@@ -77,33 +77,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\Constants.h" />
+    <ClInclude Include="Common\HelperScalar.h" />
     <ClInclude Include="Common\SoftFrustum.h" />
     <ClInclude Include="Common\SoftMath.h" />
+    <ClInclude Include="Common\SoftOccludeeScalar.h" />
+    <ClInclude Include="Common\SoftOccluderMeshScalar.h" />
+    <ClInclude Include="Common\SoftOccluderScalar.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizer.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizerScalar.h" />
     <ClInclude Include="Rasterizers\AABBoxRasterizerScalarST.h" />
-    <ClInclude Include="Rasterizers\Constants.h" />
     <ClInclude Include="Rasterizers\DepthBufferRasterizer.h" />
     <ClInclude Include="Rasterizers\DepthBufferRasterizerScalar.h" />
     <ClInclude Include="Rasterizers\DepthBufferRasterizerScalarST.h" />
-    <ClInclude Include="Rasterizers\HelperScalar.h" />
-    <ClInclude Include="Rasterizers\TransformedAABBoxScalar.h" />
-    <ClInclude Include="Rasterizers\TransformedMeshScalar.h" />
-    <ClInclude Include="Rasterizers\TransformedModelScalar.h" />
     <ClInclude Include="SoftOcclude.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Common\HelperScalar.cpp" />
     <ClCompile Include="Common\SoftFrustum.cpp" />
+    <ClCompile Include="Common\SoftOccludeeScalar.cpp" />
+    <ClCompile Include="Common\SoftOccluderMeshScalar.cpp" />
+    <ClCompile Include="Common\SoftOccluderScalar.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizer.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizerScalar.cpp" />
     <ClCompile Include="Rasterizers\AABBoxRasterizerScalarST.cpp" />
     <ClCompile Include="Rasterizers\DepthBufferRasterizer.cpp" />
     <ClCompile Include="Rasterizers\DepthBufferRasterizerScalar.cpp" />
     <ClCompile Include="Rasterizers\DepthBufferRasterizerScalarST.cpp" />
-    <ClCompile Include="Rasterizers\HelperScalar.cpp" />
-    <ClCompile Include="Rasterizers\TransformedAABBoxScalar.cpp" />
-    <ClCompile Include="Rasterizers\TransformedMeshScalar.cpp" />
-    <ClCompile Include="Rasterizers\TransformedModelScalar.cpp" />
     <ClCompile Include="SoftOcclude.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

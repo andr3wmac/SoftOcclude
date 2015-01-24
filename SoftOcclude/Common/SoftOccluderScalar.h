@@ -15,18 +15,18 @@
 //
 //--------------------------------------------------------------------------------------
 
-#ifndef TRANSFORMEDMODELSCALAR_H
-#define TRANSFORMEDMODELSCALAR_H
+#ifndef SOFTOCCLUDERSCALAR_H
+#define SOFTOCCLUDERSCALAR_H
 
-#include "TransformedMeshScalar.h"
+#include "SoftOccluderMeshScalar.h"
 #include "../Common/SoftFrustum.h"
 #include "HelperScalar.h"
 
-class TransformedModelScalar : public HelperScalar
+class SoftOccluderScalar : public HelperScalar
 {
    public:
-      TransformedModelScalar();
-      ~TransformedModelScalar();
+      SoftOccluderScalar();
+      ~SoftOccluderScalar();
 
      // andrewmac:
      void AddMesh(Vertex* pVertices, UINT pNumVertices, UINT* pIndices, UINT pNumIndices, UINT pNumTriangles);
@@ -122,7 +122,7 @@ class TransformedModelScalar : public HelperScalar
       float3 mBBCenterOS;
       float mRadiusSq;
      // andrewmac: TODO: CHANGE 1000 TO CONSTANT
-      TransformedMeshScalar mpMeshes[1000];
+      SoftOccluderMeshScalar mpMeshes[1000];
       float4 *mpXformedPos[2];
 };
 

@@ -22,7 +22,7 @@
 
 #include "Rasterizers/AABBoxRasterizerScalarST.h"
 #include "Rasterizers/DepthBufferRasterizerScalarST.h"
-#include "Rasterizers/TransformedModelScalar.h"
+#include "Common/SoftOccluderScalar.h"
 
 class SoftOcclusionTest
 {
@@ -51,12 +51,12 @@ class SoftOcclusionTest
       void ResetInsideFrustum();
 
       // Occluder Management
-      TransformedModelScalar* AddOccluder() { return mpDBR->AddOccluder(); }
+      SoftOccluderScalar* AddOccluder() { return mpDBR->AddOccluder(); }
       void RefreshOccluders() { mpDBR->RefreshOccluders(); }
       void SetOccluderSizeThreshold(float occluderSizeThreshold){ mpDBR->SetOccluderSizeThreshold(occluderSizeThreshold); }
       
       // Occludee Management
-      TransformedAABBoxScalar* AddOccludee() { return mpAABB->AddOccludee(); }
+      SoftOccludeeScalar* AddOccludee() { return mpAABB->AddOccludee(); }
       void SetOccludeeSizeThreshold(float occludeeSizeThreshold){ mpAABB->SetOccludeeSizeThreshold(occludeeSizeThreshold); }
 
       // Core Functionality

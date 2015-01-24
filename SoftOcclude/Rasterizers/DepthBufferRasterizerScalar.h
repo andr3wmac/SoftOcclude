@@ -17,8 +17,8 @@
 #define DEPTHBUFFERRASTERIZERSCALAR_H
 
 #include "DepthBufferRasterizer.h"
-#include "TransformedModelScalar.h"
-#include "HelperScalar.h"
+#include "../Common/SoftOccluderScalar.h"
+#include "../Common/HelperScalar.h"
 
 class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperScalar
 {
@@ -27,7 +27,7 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
       virtual ~DepthBufferRasterizerScalar();
 
       // andrewmac: 
-      TransformedModelScalar* AddOccluder();
+      SoftOccluderScalar* AddOccluder();
       void RefreshOccluders();
 
       // start inclusive, end exclusive
@@ -102,7 +102,7 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
       }
 
    protected:
-      TransformedModelScalar mpTransformedModels[1000];
+      SoftOccluderScalar mpTransformedModels[1000];
       UINT mNumModels;
      // andrewmac:
      // TODO: CHANGE 1000 TO A CONSTANT

@@ -297,9 +297,9 @@ public:
 
    // andrewmac:
    void CreateTransformedModels(CPUTAssetSet **mpAssetSet, UINT numAssetSets);
-   void CreateTransformedMeshes(TransformedModelScalar* pTransformedModel, CPUTModelDX11 *pModel);
+   void CreateTransformedMeshes(SoftOccluderScalar* pTransformedModel, CPUTModelDX11 *pModel);
    void CreateTransformedAABBoxes(CPUTAssetSet **pAssetSet, UINT numAssetSets);
-   void CreateAABBVertexIndexList(TransformedAABBoxScalar* pTransformedBox, CPUTModelDX11 *pModel);
+   void CreateAABBVertexIndexList(SoftOccludeeScalar* pTransformedBox, CPUTModelDX11 *pModel);
 
    // define some controls1
    static const CPUTControlID ID_MAIN_PANEL = 10;

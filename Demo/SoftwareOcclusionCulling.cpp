@@ -1255,7 +1255,7 @@ void MySample::CreateTransformedModels(CPUTAssetSet **mpAssetSet, UINT numAssetS
             ASSERT((model != NULL), _L("model is NULL"));
 
             model = (CPUTModelDX11*)pRenderNode;
-            TransformedModelScalar* occluder = mOcclusionTest->AddOccluder();
+            SoftOccluderScalar* occluder = mOcclusionTest->AddOccluder();
             CreateTransformedMeshes(occluder, model);
          }
          pRenderNode->Release();
@@ -1265,7 +1265,7 @@ void MySample::CreateTransformedModels(CPUTAssetSet **mpAssetSet, UINT numAssetS
    mOcclusionTest->RefreshOccluders();
 }
 
-void MySample::CreateTransformedMeshes(TransformedModelScalar* pTransformedModel, CPUTModelDX11 *pModel)
+void MySample::CreateTransformedMeshes(SoftOccluderScalar* pTransformedModel, CPUTModelDX11 *pModel)
 {
    float4x4* mWorldMatrix = pModel->GetWorldMatrix();
    pTransformedModel->SetWorldMatrix(mWorldMatrix);
@@ -1323,7 +1323,7 @@ void MySample::CreateTransformedAABBoxes(CPUTAssetSet **pAssetSet, UINT numAsset
             CPUTModelDX11 *pModel = (CPUTModelDX11*)pRenderNode;
             pModel = (CPUTModelDX11*)pRenderNode;
         
-            TransformedAABBoxScalar* occludee = mOcclusionTest->AddOccludee();
+            SoftOccludeeScalar* occludee = mOcclusionTest->AddOccludee();
             CreateAABBVertexIndexList(occludee, pModel);
 
             mpModels[modelId] = pModel;
@@ -1347,7 +1347,7 @@ void MySample::CreateTransformedAABBoxes(CPUTAssetSet **pAssetSet, UINT numAsset
 // Get the bounding box center and half vector
 // Create the vertex and index list for the triangles that make up the bounding box
 //--------------------------------------------------------------------------
-void MySample::CreateAABBVertexIndexList(TransformedAABBoxScalar* pTransformedBox, CPUTModelDX11 *pModel)
+void MySample::CreateAABBVertexIndexList(SoftOccludeeScalar* pTransformedBox, CPUTModelDX11 *pModel)
 {
    pTransformedBox->SetWorldMatrix(pModel->GetWorldMatrix());
 

@@ -19,7 +19,7 @@
 #define AABBOXRASTERIZERSCALAR_H
 
 #include "AABBoxRasterizer.h"
-#include "TransformedAABBoxScalar.h"
+#include "../Common/SoftOccludeeScalar.h"
 
 class AABBoxRasterizerScalar : public AABBoxRasterizer
 {
@@ -28,7 +28,7 @@ class AABBoxRasterizerScalar : public AABBoxRasterizer
       virtual ~AABBoxRasterizerScalar();
 
      // andrewmac:
-     TransformedAABBoxScalar* AddOccludee();
+     SoftOccludeeScalar* AddOccludee();
      bool IsVisible(UINT idx, UINT modelIdx) { return mpVisible[idx][modelIdx]; }
 
       inline void ResetInsideFrustum()
@@ -94,7 +94,7 @@ class AABBoxRasterizerScalar : public AABBoxRasterizer
 
    protected:
       UINT mNumModels;
-      TransformedAABBoxScalar mpTransformedAABBox[1000];
+      SoftOccludeeScalar mpTransformedAABBox[1000];
       bool mpInsideFrustum[2][1000];
       UINT mpNumTriangles[1000];
       float4x4 mViewMatrix[2];
