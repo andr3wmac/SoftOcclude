@@ -45,7 +45,6 @@ class SoftOcclusionTest
 
       // Configuration
       void SetScreenSize(int width, int height);
-      void SetViewProj(float4x4 *viewMatrix, float4x4 *projMatrix);
       void SetEnableFrustrumCulling(bool value);
       void SetDepthTestTasks(UINT numTasks) { mpAABB->SetDepthTestTasks(numTasks); }
       void ResetInsideFrustum();
@@ -61,7 +60,7 @@ class SoftOcclusionTest
 
       // Core Functionality
       char* GetDepthBuffer() { return mpCPUDepthBuf[mCurrIdx]; }
-      void  Render(SoftFrustum *pFrustum, float pFov);
+      void  Render(float4x4 *viewMatrix, float4x4 *projMatrix, SoftFrustum *pFrustum);
       bool  IsOccludeeVisible(UINT modelIdx) { return mpAABB->IsVisible(mCurrIdx, modelIdx); }
 
       // Library Statistics Functions

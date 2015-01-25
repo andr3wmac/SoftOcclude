@@ -23,6 +23,7 @@ class SoftFrustum
 public:
    float3 mpPosition[8];
    float3 mpNormal[6];
+   float mFov;
 
    float *mPlanes;
 

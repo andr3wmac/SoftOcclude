@@ -38,6 +38,9 @@ void SoftFrustum::InitializeFrustum
    const float3 &up
 )
 {
+   // andrewmac: Store FOV for later usage.
+   mFov = fov;
+
    // ******************************
    // This function computes the position of each of the frustum's eight points.
    // It also computes the normal of each of the frustum's six planes.

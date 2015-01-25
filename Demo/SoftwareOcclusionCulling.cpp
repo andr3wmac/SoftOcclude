@@ -1049,9 +1049,6 @@ void MySample::Render(double deltaSeconds)
    // Set the camera transforms so that the occludee abix aligned bounding boxes (AABB) can be transformed
    //mpAABB->SetViewProjMatrix(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix(), mCurrIdx);
 
-   // andrewmac:
-   mOcclusionTest->SetViewProj(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix());
-
    // If view frustum culling is enabled then determine which occluders and occludees are 
    // inside the view frustum and run the software occlusion culling on only the those models
    if(mEnableFCulling)
@@ -1083,8 +1080,9 @@ void MySample::Render(double deltaSeconds)
       SoftFrustum viewFrustum;
       memcpy(viewFrustum.mpPosition, mpCamera->mFrustum.mpPosition, sizeof(viewFrustum.mpPosition));
       memcpy(viewFrustum.mpNormal, mpCamera->mFrustum.mpNormal, sizeof(viewFrustum.mpNormal));
+      viewFrustum.mFov = mpCamera->GetFov();
 
-      mOcclusionTest->Render(&viewFrustum, mpCamera->GetFov());
+      mOcclusionTest->Render(mpCamera->GetViewMatrix(), (float4x4*)mpCamera->GetProjectionMatrix(), &viewFrustum);
    }
     
    // If mViewDepthBuffer is enabled then blit the CPU rasterized depth buffer to the frame buffer
