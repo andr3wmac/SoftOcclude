@@ -20,9 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "Rasterizers/AABBoxRasterizerScalarST.h"
-#include "Rasterizers/DepthBufferRasterizerScalarST.h"
-#include "Common/SoftOccluderScalar.h"
+#include "../src/rasterizers/AABBoxRasterizerScalarST.h"
+#include "../src/rasterizers/DepthBufferRasterizerScalarST.h"
+#include "../src/common/SoftOccluderScalar.h"
 
 class SoftOcclusionTest
 {
@@ -46,7 +46,6 @@ class SoftOcclusionTest
       // Configuration
       void SetScreenSize(int width, int height);
       void SetEnableFrustrumCulling(bool value);
-      void SetDepthTestTasks(UINT numTasks) { mpAABB->SetDepthTestTasks(numTasks); }
       void ResetInsideFrustum();
 
       // Occluder Management

@@ -19,7 +19,7 @@
 #define AABBOXRASTERIZERSCALAR_H
 
 #include "AABBoxRasterizer.h"
-#include "../Common/SoftOccludeeScalar.h"
+#include "../common/SoftOccludeeScalar.h"
 
 class AABBoxRasterizerScalar : public AABBoxRasterizer
 {

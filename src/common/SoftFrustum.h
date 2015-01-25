@@ -16,7 +16,7 @@
 #ifndef _SOFTFRUSTUM_H
 #define _SOFTFRUSTUM_H
 
-#include "../Common/SoftMath.h"
+#include "../common/SoftMath.h"
 
 class SoftFrustum
 {

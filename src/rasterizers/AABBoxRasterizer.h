@@ -18,8 +18,8 @@
 #ifndef AABBOXRASTERIZER_H
 #define AABBOXRASTERIZER_H
 
-#include "../Common/SoftOccludeeScalar.h"
-#include "../Common/Constants.h"
+#include "../common/SoftOccludeeScalar.h"
+#include "../common/Constants.h"
 
 class AABBoxRasterizer
 {

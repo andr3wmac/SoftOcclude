@@ -19,7 +19,7 @@
 #define SOFTOCCLUDERSCALAR_H
 
 #include "SoftOccluderMeshScalar.h"
-#include "../Common/SoftFrustum.h"
+#include "../common/SoftFrustum.h"
 #include "HelperScalar.h"
 
 class SoftOccluderScalar : public HelperScalar

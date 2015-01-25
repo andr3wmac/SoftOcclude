@@ -180,7 +180,7 @@ CPUTResult CPUTRenderStateBlockDX11::LoadRenderStateBlock(const cString &fileNam
     }
     ReadProperties( file, _L("BlendStateDX11"),        pBlendDescMap,        &mStateDesc.BlendDesc );
     ReadProperties( file, _L("DepthStencilStateDX11"), pDepthStencilDescMap, &mStateDesc.DepthStencilDesc);
-    ReadProperties( file, _L("RasterizerStateDX11"),   pRasterizerDescMap,   &mStateDesc.RasterizerDesc);
+    ReadProperties( file, _L("rasterizerstateDX11"),   pRasterizerDescMap,   &mStateDesc.RasterizerDesc);
 
     mNumSamplers = 0;
     for( ii=0; ii<D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; ii++ )

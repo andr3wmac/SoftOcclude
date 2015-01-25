@@ -17,8 +17,8 @@
 #define DEPTHBUFFERRASTERIZERSCALAR_H
 
 #include "DepthBufferRasterizer.h"
-#include "../Common/SoftOccluderScalar.h"
-#include "../Common/HelperScalar.h"
+#include "../common/SoftOccluderScalar.h"
+#include "../common/HelperScalar.h"
 
 class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperScalar
 {

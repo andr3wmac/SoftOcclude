@@ -20,7 +20,7 @@
 #define SOFTOCCLUDEESCALAR_H
 
 #include "Constants.h"
-#include "../Common/SoftFrustum.h"
+#include "../common/SoftFrustum.h"
 #include "HelperScalar.h"
 
 class SoftOccludeeScalar : public HelperScalar

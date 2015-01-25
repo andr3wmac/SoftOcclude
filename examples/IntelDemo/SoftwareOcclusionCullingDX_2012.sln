@@ -8,7 +8,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftwareOcclusionCullingDX_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPUT-DX11_2012", "CPUT\CPUT-DX11_2012.vcxproj", "{8B2DDEDC-A574-4B24-AEC5-03949B5F57BD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftOcclude", "..\SoftOcclude\SoftOcclude.vcxproj", "{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftOcclude", "SoftOcclude\SoftOcclude.vcxproj", "{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

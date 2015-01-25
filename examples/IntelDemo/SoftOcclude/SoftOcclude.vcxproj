@@ -10,6 +10,36 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\SoftOcclude.h" />
+    <ClInclude Include="..\..\..\src\common\Constants.h" />
+    <ClInclude Include="..\..\..\src\common\HelperScalar.h" />
+    <ClInclude Include="..\..\..\src\common\SoftFrustum.h" />
+    <ClInclude Include="..\..\..\src\common\SoftMath.h" />
+    <ClInclude Include="..\..\..\src\common\SoftOccludeeScalar.h" />
+    <ClInclude Include="..\..\..\src\common\SoftOccluderMeshScalar.h" />
+    <ClInclude Include="..\..\..\src\common\SoftOccluderScalar.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizer.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizerScalar.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizerScalarST.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizer.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalar.h" />
+    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalarST.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\common\HelperScalar.cpp" />
+    <ClCompile Include="..\..\..\src\common\SoftFrustum.cpp" />
+    <ClCompile Include="..\..\..\src\common\SoftOccludeeScalar.cpp" />
+    <ClCompile Include="..\..\..\src\common\SoftOccluderMeshScalar.cpp" />
+    <ClCompile Include="..\..\..\src\common\SoftOccluderScalar.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizer.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizerScalar.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizerScalarST.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizer.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalar.cpp" />
+    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalarST.cpp" />
+    <ClCompile Include="..\..\..\src\SoftOcclude.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}</ProjectGuid>
     <RootNamespace>SoftOcclude</RootNamespace>
@@ -39,14 +69,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include\;</IncludePath>
-    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\Lib\x86\;</LibraryPath>
+    <IncludePath>..\..\..\include;$(IncludePath);</IncludePath>
+    <LibraryPath>$(LibraryPath);</LibraryPath>
     <TargetName>$(ProjectName)_32D</TargetName>
     <OutDir>$(SolutionDir)\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include\;</IncludePath>
-    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\Lib\x86\;</LibraryPath>
+    <IncludePath>..\..\..\include;$(IncludePath);</IncludePath>
+    <LibraryPath>$(LibraryPath);</LibraryPath>
     <TargetName>$(ProjectName)_32R</TargetName>
     <OutDir>$(SolutionDir)\lib\</OutDir>
   </PropertyGroup>
@@ -76,36 +106,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Common\Constants.h" />
-    <ClInclude Include="Common\HelperScalar.h" />
-    <ClInclude Include="Common\SoftFrustum.h" />
-    <ClInclude Include="Common\SoftMath.h" />
-    <ClInclude Include="Common\SoftOccludeeScalar.h" />
-    <ClInclude Include="Common\SoftOccluderMeshScalar.h" />
-    <ClInclude Include="Common\SoftOccluderScalar.h" />
-    <ClInclude Include="Rasterizers\AABBoxRasterizer.h" />
-    <ClInclude Include="Rasterizers\AABBoxRasterizerScalar.h" />
-    <ClInclude Include="Rasterizers\AABBoxRasterizerScalarST.h" />
-    <ClInclude Include="Rasterizers\DepthBufferRasterizer.h" />
-    <ClInclude Include="Rasterizers\DepthBufferRasterizerScalar.h" />
-    <ClInclude Include="Rasterizers\DepthBufferRasterizerScalarST.h" />
-    <ClInclude Include="SoftOcclude.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Common\HelperScalar.cpp" />
-    <ClCompile Include="Common\SoftFrustum.cpp" />
-    <ClCompile Include="Common\SoftOccludeeScalar.cpp" />
-    <ClCompile Include="Common\SoftOccluderMeshScalar.cpp" />
-    <ClCompile Include="Common\SoftOccluderScalar.cpp" />
-    <ClCompile Include="Rasterizers\AABBoxRasterizer.cpp" />
-    <ClCompile Include="Rasterizers\AABBoxRasterizerScalar.cpp" />
-    <ClCompile Include="Rasterizers\AABBoxRasterizerScalarST.cpp" />
-    <ClCompile Include="Rasterizers\DepthBufferRasterizer.cpp" />
-    <ClCompile Include="Rasterizers\DepthBufferRasterizerScalar.cpp" />
-    <ClCompile Include="Rasterizers\DepthBufferRasterizerScalarST.cpp" />
-    <ClCompile Include="SoftOcclude.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

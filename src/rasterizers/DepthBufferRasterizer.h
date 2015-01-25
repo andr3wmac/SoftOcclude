@@ -16,8 +16,8 @@
 #ifndef DEPTHBUFFERRASTERIZER_H
 #define DEPTHBUFFERRASTERIZER_H
 
-#include "../Common/SoftOccluderScalar.h"
-#include "../Common/Constants.h"
+#include "../common/SoftOccluderScalar.h"
+#include "../common/Constants.h"
 
 class DepthBufferRasterizer
 {

@@ -127,7 +127,6 @@ void MySample::Create()
 
    // andrewmac: 
    mOcclusionTest->SetScreenSize(SCREENW, SCREENH);
-   mOcclusionTest->SetDepthTestTasks(mNumDepthTestTasks);
 
    //
    // Create Static text
@@ -790,8 +789,6 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
         swprintf_s(&string[0], CPUT_MAX_STRING_LENGTH, _L("Depth Test Task: \t\t%d"), mNumDepthTestTasks);
         mpDepthTestTaskSlider->SetText(string);
         //mpAABB->SetDepthTestTasks(mNumDepthTestTasks);
-        // andrewmac: 
-      mOcclusionTest->SetDepthTestTasks(mNumDepthTestTasks);
       break;
     }
 

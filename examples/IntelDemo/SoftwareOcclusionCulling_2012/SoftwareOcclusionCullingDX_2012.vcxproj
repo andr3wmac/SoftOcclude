@@ -97,7 +97,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\SoftOcclude;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;</IncludePath>
+    <IncludePath>..\..\..\include;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\lib;$(LibraryPath);</LibraryPath>
     <OutDir>$(ProjectDir)$(Platform)\</OutDir>
     <TargetName>$(ProjectName)_D32</TargetName>
@@ -112,7 +112,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\SoftOcclude;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;</IncludePath>
+    <IncludePath>..\..\..\include;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\lib;$(LibraryPath);</LibraryPath>
     <OutDir>$(ProjectDir)$(Platform)\</OutDir>
     <TargetName>$(ProjectName)_R32</TargetName>
@@ -120,7 +120,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\SoftOcclude;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;$(GPA_INCLUDE_DIR)</IncludePath>
+    <IncludePath>..\..\..\include;$(IncludePath);$(DXSDK_DIR)\Include;..\CPUT\CPUT;;$(GPA_INCLUDE_DIR)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\lib;$(LibraryPath);$(GPA_LIBRARY_DIR)\x86</LibraryPath>
     <OutDir>$(ProjectDir)$(Platform)\</OutDir>
     <TargetName>$(ProjectName)_P32</TargetName>
@@ -161,7 +161,8 @@
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command></Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -209,7 +210,8 @@
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\SampleComponentsDLL\Middleware\TBB\bin\ia32\vc11\tbb.dll"  "$(ProjectDir)$(Platform)\." /F /R /Y </Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
