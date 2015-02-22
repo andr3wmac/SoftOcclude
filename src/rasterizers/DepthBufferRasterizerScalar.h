@@ -66,15 +66,6 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
          }
          return mNumRasterized[idx];
       }
-      inline double GetRasterizeTime()
-      {
-         double averageTime = 0.0;
-         for(UINT i = 0; i < AVG_COUNTER; i++)
-         {
-            averageTime += mRasterizeTime[i];
-         }
-         return averageTime / AVG_COUNTER;
-      }
       inline UINT GetNumTriangles(){return mNumTriangles;}
       inline UINT GetNumRasterizedTriangles(UINT idx) 
       {
@@ -132,7 +123,6 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
       float mOccluderSizeThreshold;
 
       bool   mEnableFCulling;
-      double mRasterizeTime[AVG_COUNTER];
 };
 
 #endif  //DEPTHBUFFERRASTERIZERSCALAR_H

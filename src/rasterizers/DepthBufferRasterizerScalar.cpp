@@ -33,11 +33,6 @@ DepthBufferRasterizerScalar::DepthBufferRasterizerScalar()
    mpBinModel[0] = mpBinModel[1] = NULL;
    mpBinMesh[0] = mpBinMesh[1] = NULL;
    mpNumTrisInBin[0] = mpNumTrisInBin[1] = NULL;
-
-   for(UINT i = 0; i < AVG_COUNTER; i++)
-   {
-      mRasterizeTime[i] = 0.0;
-   }
 }
 
 DepthBufferRasterizerScalar::~DepthBufferRasterizerScalar()

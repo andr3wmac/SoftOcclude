@@ -126,6 +126,8 @@ private:
    //UINT              mPrevIdx;
    //bool              mFirstFrame;
 
+   bool              mExportedDepth;
+
 public:
    MySample() :
       mpCameraController(NULL),
@@ -183,7 +185,8 @@ public:
       //mCurrIdx(0),
       //mPrevIdx(1),
       //mFirstFrame(true),
-      mNumModels(0)
+      mNumModels(0),
+      mExportedDepth(false)
    {
       mpCPURenderTargetScalar[0] = NULL;
       mpCPURenderTargetScalar[1] = NULL;

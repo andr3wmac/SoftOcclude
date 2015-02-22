@@ -36,7 +36,6 @@ class DepthBufferRasterizer
 
       virtual UINT GetNumOccluders() = 0;
       virtual UINT GetNumOccludersR2DB(UINT idx) = 0;
-      virtual double GetRasterizeTime() = 0;
       virtual UINT GetNumTriangles() = 0;
       virtual UINT GetNumRasterizedTriangles(UINT idx) = 0;
 

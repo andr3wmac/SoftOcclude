@@ -40,7 +40,6 @@ class AABBoxRasterizer
 
       virtual UINT GetNumOccludees() = 0;
       virtual UINT GetNumCulled(UINT idx) = 0;
-      virtual double GetDepthTestTime() = 0;
       virtual UINT GetNumTriangles() = 0;
       virtual UINT GetNumCulledTriangles(UINT idx) = 0;
       virtual UINT GetNumTrisRendered() = 0;

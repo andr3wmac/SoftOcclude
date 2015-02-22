@@ -71,7 +71,6 @@ void AABBoxRasterizerScalarST::TransformAABBoxAndDepthTest(SoftFrustum *pFrustum
    }
 
    QueryPerformanceCounter(&mStopTime[idx][0]);
-   mDepthTestTime[mTimeCounter++] = ((double)(mStopTime[idx][0].QuadPart - mStartTime[idx][0].QuadPart)) / ((double)glFrequency.QuadPart);
    mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
 }
 

@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include "SoftOcclude.h"
+#include "common/Bitmap.h"
 
 SoftOcclusionTest::SoftOcclusionTest()
 {
@@ -31,6 +32,9 @@ SoftOcclusionTest::SoftOcclusionTest()
 
    mpAABBScalarST = new AABBoxRasterizerScalarST;
    mpAABB = mpAABBScalarST;
+
+   mpCPUDepthBuf[0] = NULL;
+   mpCPUDepthBuf[1] = NULL;
 }
 
 SoftOcclusionTest::~SoftOcclusionTest()
@@ -38,8 +42,10 @@ SoftOcclusionTest::~SoftOcclusionTest()
    SAFE_DELETE(mpDBR);
    SAFE_DELETE(mpAABB);
 
-   _aligned_free(mpCPUDepthBuf[0]);
-   _aligned_free(mpCPUDepthBuf[1]);
+   if ( mpCPUDepthBuf[0] )
+      _aligned_free(mpCPUDepthBuf[0]);
+   if ( mpCPUDepthBuf[1] )
+      _aligned_free(mpCPUDepthBuf[1]);
 }
 
 void SoftOcclusionTest::Render(float4x4 *viewMatrix, float4x4 *projMatrix, SoftFrustum *pFrustum)
@@ -66,6 +72,9 @@ void SoftOcclusionTest::Render(float4x4 *viewMatrix, float4x4 *projMatrix, SoftF
 
 void SoftOcclusionTest::SetScreenSize(int width, int height)
 {
+   mWidth = width;
+   mHeight = height;
+
    // TODO: Destroy old buffer
    //       Store width/height to replace SCREENW and SCREENH constants
    mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
@@ -86,4 +95,41 @@ void SoftOcclusionTest::ResetInsideFrustum()
 {
    mpDBR->ResetInsideFrustum();
    mpAABB->ResetInsideFrustum();
+}
+
+void SoftOcclusionTest::SaveDepthBuffer(const char* filename)
+{
+   unsigned char depth;
+   float *depthfloat;
+   int tmpdepth;
+   int maxdepth = 0;
+   char* depthBuffer = GetDepthBuffer();
+   unsigned char* outputRGB = new unsigned char[SCREENW * SCREENH * 3];
+
+   for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
+   {
+      depthfloat = (float*)&depthBuffer[i];
+
+      tmpdepth = (int)ceil(*depthfloat * 30000);
+      maxdepth = tmpdepth > maxdepth ? tmpdepth : maxdepth;
+   }
+
+   float scale = 255.0f / maxdepth;
+
+   int pos = 0;
+   for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
+   {
+      depthfloat = (float*)&depthBuffer[i];
+
+      tmpdepth = (int)ceil(*depthfloat * 20000);
+      depth = (char)(tmpdepth * scale);
+      depth = depth > 255 ? 255 : depth;
+
+      outputRGB[pos] = depth;
+      outputRGB[pos + 1] = depth;
+      outputRGB[pos + 2] = depth;
+      pos += 3;
+   }
+
+   writeBMP(filename, outputRGB, SCREENW, SCREENH);
 }

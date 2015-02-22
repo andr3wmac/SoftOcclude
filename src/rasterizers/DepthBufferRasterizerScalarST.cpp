@@ -82,7 +82,6 @@ void DepthBufferRasterizerScalarST::TransformModelsAndRasterizeToDepthBuffer(Sof
    }
 
    QueryPerformanceCounter(&mStopTime[idx][0]);
-   mRasterizeTime[mTimeCounter++] = ((double)(mStopTime[idx][0].QuadPart - mStartTime[idx].QuadPart)) / ((double)glFrequency.QuadPart);
    mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
 }
 

@@ -28,10 +28,6 @@ AABBoxRasterizerScalar::AABBoxRasterizerScalar()
    mpRenderTargetPixels[1] = NULL;
    
    mNumCulled[0] = mNumCulled[1] =NULL;
-   for(UINT i = 0; i < AVG_COUNTER; i++)
-   {
-      mDepthTestTime[i] = 0.0;
-   }
 }
 
 AABBoxRasterizerScalar::~AABBoxRasterizerScalar()

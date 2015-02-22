@@ -10,55 +10,23 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\include\SoftOcclude.h" />
-    <ClInclude Include="..\..\..\src\common\Bitmap.h" />
-    <ClInclude Include="..\..\..\src\common\Constants.h" />
-    <ClInclude Include="..\..\..\src\common\HelperScalar.h" />
-    <ClInclude Include="..\..\..\src\common\SoftFrustum.h" />
-    <ClInclude Include="..\..\..\src\common\SoftMath.h" />
-    <ClInclude Include="..\..\..\src\common\SoftOccludeeScalar.h" />
-    <ClInclude Include="..\..\..\src\common\SoftOccluderMeshScalar.h" />
-    <ClInclude Include="..\..\..\src\common\SoftOccluderScalar.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizer.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizerScalar.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\AABBoxRasterizerScalarST.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizer.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalar.h" />
-    <ClInclude Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalarST.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\common\Bitmap.cpp" />
-    <ClCompile Include="..\..\..\src\common\HelperScalar.cpp" />
-    <ClCompile Include="..\..\..\src\common\SoftFrustum.cpp" />
-    <ClCompile Include="..\..\..\src\common\SoftOccludeeScalar.cpp" />
-    <ClCompile Include="..\..\..\src\common\SoftOccluderMeshScalar.cpp" />
-    <ClCompile Include="..\..\..\src\common\SoftOccluderScalar.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizer.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizerScalar.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\AABBoxRasterizerScalarST.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizer.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalar.cpp" />
-    <ClCompile Include="..\..\..\src\rasterizers\DepthBufferRasterizerScalarST.cpp" />
-    <ClCompile Include="..\..\..\src\SoftOcclude.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}</ProjectGuid>
-    <RootNamespace>SoftOcclude</RootNamespace>
+    <ProjectGuid>{1BC03F56-B950-4D33-BA8A-DB0040165AC8}</ProjectGuid>
+    <RootNamespace>Minimal</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -71,26 +39,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\include;$(IncludePath);</IncludePath>
-    <LibraryPath>$(LibraryPath);</LibraryPath>
-    <TargetName>$(ProjectName)_32D</TargetName>
-    <OutDir>$(SolutionDir)\lib\</OutDir>
+    <LibraryPath>$(SolutionDir)\lib\;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\include;$(IncludePath);</IncludePath>
-    <LibraryPath>$(LibraryPath);</LibraryPath>
-    <TargetName>$(ProjectName)_32R</TargetName>
-    <OutDir>$(SolutionDir)\lib\</OutDir>
+    <LibraryPath>$(SolutionDir)\lib\;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SoftOcclude_32D.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -99,15 +62,18 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SoftOcclude_32D.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

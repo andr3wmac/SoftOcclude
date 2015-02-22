@@ -52,15 +52,6 @@ class AABBoxRasterizerScalar : public AABBoxRasterizer
 
       inline UINT GetNumOccludees() {return mNumModels;}
       inline UINT GetNumCulled(UINT idx) {return mNumCulled[idx];}
-      inline double GetDepthTestTime()
-      {
-         double averageTime = 0.0;
-         for(UINT i = 0; i < AVG_COUNTER; i++)
-         {
-            averageTime += mDepthTestTime[i];
-         }
-         return averageTime / AVG_COUNTER;
-      }
 
       inline UINT GetNumTriangles()
       {
@@ -110,7 +101,6 @@ class AABBoxRasterizerScalar : public AABBoxRasterizer
       UINT mTimeCounter;
 
       bool   mEnableFCulling;
-      double mDepthTestTime[AVG_COUNTER];
 };
 
 

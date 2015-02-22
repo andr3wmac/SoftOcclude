@@ -29,8 +29,6 @@ extern float gOccluderSizeThreshold;
 extern float gOccludeeSizeThreshold;
 extern UINT  gDepthTestTasks;
 
-extern LARGE_INTEGER glFrequency;
-
 #define PI 3.1415926535f
 
 #if defined(DP_LARGE)

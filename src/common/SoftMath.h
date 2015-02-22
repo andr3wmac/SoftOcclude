@@ -1566,6 +1566,13 @@ inline float4 operator*(const float4 &v, const float4x4 &m)
 struct Vertex
 {
    float3 pos;
+
+   Vertex(float x, float y, float z)
+   {
+      pos.x = x;
+      pos.y = y;
+      pos.z = z;
+   }
 };
 
 #endif // #ifndef __SoftMath_h__

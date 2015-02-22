@@ -437,8 +437,10 @@ void MySample::Create()
 
    mpCamera->SetFov(XMConvertToRadians(60.0f)); // TODO: Fix converter's FOV bug (Maya generates cameras for which fbx reports garbage for fov)
    mpCamera->SetFarPlaneDistance(gFarClipDistance);
-   mpCamera->SetPosition(27.0f, 2.0f, 47.0f);
-   mpCamera->LookAt(41.0f, 8.0f, -50.0f);
+   mpCamera->SetPosition(0, 0, 0);
+   mpCamera->LookAt(0, 0, 10);
+   //mpCamera->SetPosition(27.0f, 2.0f, 47.0f);
+   //mpCamera->LookAt(41.0f, 8.0f, -50.0f);
    mpCamera->Update();
 
    // Set up the shadow camera (a camera that sees what the light sees)
@@ -626,9 +628,9 @@ CPUTEventHandledCode MySample::HandleKeyboardEvent(CPUTKey key)
             //mpAABB->CreateTransformedAABBoxes(mpAssetSetAABB, OCCLUDEE_SETS);
             //mpAABB->SetOccludeeSizeThreshold(mOccludeeSizeThreshold);
 
-         // andrewmac: 
-         mOcclusionTest = new SoftOcclusionTest;
-         CreateTransformedModels(mpAssetSetDBR, OCCLUDER_SETS);
+            // andrewmac: 
+            mOcclusionTest = new SoftOcclusionTest;
+            CreateTransformedModels(mpAssetSetDBR, OCCLUDER_SETS);
             mOcclusionTest->SetOccluderSizeThreshold(mOccluderSizeThreshold);
             CreateTransformedAABBoxes(mpAssetSetAABB, OCCLUDEE_SETS);
             mOcclusionTest->SetOccludeeSizeThreshold(mOccludeeSizeThreshold);
@@ -897,6 +899,12 @@ void MySample::ResizeWindow(UINT width, UINT height)
 
 void MySample::UpdateGPUDepthBuf()
 {
+   if ( !mExportedDepth )
+   {
+      mOcclusionTest->SaveDepthBuffer("depth_out.bmp");
+      mExportedDepth = true;
+   }
+
     unsigned char depth;
     float *depthfloat;
     int tmpdepth;
@@ -1142,14 +1150,14 @@ void MySample::Render(double deltaSeconds)
       mNumOccluderRasterizedTris = mOcclusionTest->GetNumRasterizedTriangles();
       //mNumCulled = mOcclusionTest->GetNumCulled();
       mNumOccludeeCulledTris = mOcclusionTest->GetNumCulledTriangles();
-      mRasterizeTime = mOcclusionTest->GetRasterizeTime();
+      mRasterizeTime = 0;
         
       mNumVisible = mNumOccludees - mNumCulled;
       mNumOccludeeVisibleTris = mNumOccludeeTris - mNumOccludeeCulledTris;
         
       //mDepthTestTime = mpAABB->GetDepthTestTime();
       // andrewmac:
-      mDepthTestTime = mOcclusionTest->GetDepthTestTime();
+      mDepthTestTime = 0;
       mTotalCullTime = mRasterizeTime + mDepthTestTime;
         
       swprintf_s(&string[0], CPUT_MAX_STRING_LENGTH, _L("\tDepth rasterized models: %d"), mNumOccludersR2DB);

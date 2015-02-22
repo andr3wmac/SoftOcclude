@@ -7,3 +7,11 @@ Demo/lib/
 Demo/SoftwareOcclusionCulling_2012/Win32/
 Demo/
 SoftOcclude/Debug/
+examples/IntelDemo/CPUT/Debug/
+examples/IntelDemo/lib/
+examples/IntelDemo/SoftOcclude/Debug/
+examples/IntelDemo/SoftwareOcclusionCulling_2012/Win32/
+examples/Minimal/Debug/
+examples/Minimal/lib/
+examples/Minimal/SoftOcclude/Debug/
+*.sdf

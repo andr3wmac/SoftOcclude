@@ -23,6 +23,7 @@
 #include "../src/rasterizers/AABBoxRasterizerScalarST.h"
 #include "../src/rasterizers/DepthBufferRasterizerScalarST.h"
 #include "../src/common/SoftOccluderScalar.h"
+#include "../src/common/SoftMath.h"
 
 class SoftOcclusionTest
 {
@@ -38,6 +39,10 @@ class SoftOcclusionTest
       // Depth Buffer
       UINT                             mCurrIdx;
       char                             *mpCPUDepthBuf[2];
+
+      // Screen Size
+      int                              mWidth;
+      int                              mHeight;
 
    public:
       SoftOcclusionTest();
@@ -61,6 +66,7 @@ class SoftOcclusionTest
       char* GetDepthBuffer() { return mpCPUDepthBuf[mCurrIdx]; }
       void  Render(float4x4 *viewMatrix, float4x4 *projMatrix, SoftFrustum *pFrustum);
       bool  IsOccludeeVisible(UINT modelIdx) { return mpAABB->IsVisible(mCurrIdx, modelIdx); }
+      void  SaveDepthBuffer(const char* filename);
 
       // Library Statistics Functions
       UINT     GetNumOccluders()             { return mpDBR->GetNumOccluders(); }
@@ -70,10 +76,8 @@ class SoftOcclusionTest
       void     ComputeR2DBTime()             { mpDBR->ComputeR2DBTime(mCurrIdx); }
       UINT     GetNumOccludersR2DB()         { return mpDBR->GetNumOccludersR2DB(mCurrIdx); }
       UINT     GetNumRasterizedTriangles()   { return mpDBR->GetNumRasterizedTriangles(mCurrIdx); } 
-      double   GetRasterizeTime()            { return mpDBR->GetRasterizeTime(); }
       UINT     GetNumCulled()                { return mpAABB->GetNumCulled(mCurrIdx); } 
       UINT     GetNumCulledTriangles()       { return mpAABB->GetNumCulledTriangles(mCurrIdx); }
-      double   GetDepthTestTime()            { return mpAABB->GetDepthTestTime(); }
       UINT     GetNumFCullCount()            { return mpAABB->GetNumFCullCount(); }
       UINT     GetNumTrisRendered()          { return mpAABB->GetNumTrisRendered(); }
 };
