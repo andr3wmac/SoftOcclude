@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{33f1c038-2877-420e-9846-fdb6ac087017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{de64a388-047d-46e5-a06b-3afcbc9613a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rasterizers">
+      <UniqueIdentifier>{5e88ebc2-850c-4325-ad78-4e9927a09de4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\SoftOcclude.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\AABBoxRasterizerScalarST.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\AABBoxRasterizer.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\AABBoxRasterizerScalar.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\DepthBufferRasterizerScalarST.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\DepthBufferRasterizer.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rasterizers\DepthBufferRasterizerScalar.h">
+      <Filter>src\rasterizers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\SoftOccluderScalar.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\Bitmap.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\Common.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\HelperScalar.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\SoftFrustum.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\SoftMath.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\SoftOccludeeScalar.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\SoftOccluderMeshScalar.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\SoftOcclude.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\AABBoxRasterizerScalarST.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\AABBoxRasterizer.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\AABBoxRasterizerScalar.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\DepthBufferRasterizerScalarST.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\DepthBufferRasterizer.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rasterizers\DepthBufferRasterizerScalar.cpp">
+      <Filter>src\rasterizers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\Bitmap.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\HelperScalar.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\SoftFrustum.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\SoftOccludeeScalar.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\SoftOccluderMeshScalar.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\SoftOccluderScalar.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

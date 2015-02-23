@@ -17,9 +17,9 @@
 
 #include "AABBoxRasterizer.h"
 
-AABBoxRasterizer::AABBoxRasterizer()
+AABBoxRasterizer::AABBoxRasterizer(RasterizerData* rasterData)
 {
-
+   mRasterData = rasterData;
 }
 
 AABBoxRasterizer::~AABBoxRasterizer()

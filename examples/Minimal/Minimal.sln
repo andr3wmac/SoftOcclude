@@ -2,8 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minimal", "Minimal.vcxproj", "{1BC03F56-B950-4D33-BA8A-DB0040165AC8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{11546652-D8B3-44D8-8E88-F7CC1F4BC37C} = {11546652-D8B3-44D8-8E88-F7CC1F4BC37C}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftOcclude", "SoftOcclude\SoftOcclude.vcxproj", "{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftOcclude", "..\..\build\Visual Studio 2012\SoftOcclude.vcxproj", "{11546652-D8B3-44D8-8E88-F7CC1F4BC37C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

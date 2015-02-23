@@ -23,7 +23,7 @@
 class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperScalar
 {
    public:
-      DepthBufferRasterizerScalar();
+      DepthBufferRasterizerScalar(RasterizerData* rasterData);
       virtual ~DepthBufferRasterizerScalar();
 
       // andrewmac: 
@@ -67,15 +67,6 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
          return mNumRasterized[idx];
       }
       inline UINT GetNumTriangles(){return mNumTriangles;}
-      inline UINT GetNumRasterizedTriangles(UINT idx) 
-      {
-         UINT numRasterizedTris = 0;
-         for(UINT i = 0; i < NUM_TILES; i++)
-         {
-            numRasterizedTris += mNumRasterizedTris[idx][i];
-         }
-         return numRasterizedTris;
-      }
 
       inline void ResetActive(UINT idx)
       {
@@ -95,34 +86,33 @@ class DepthBufferRasterizerScalar : public DepthBufferRasterizer, public HelperS
    protected:
       SoftOccluderScalar mpTransformedModels[1000];
       UINT mNumModels;
-     // andrewmac:
-     // TODO: CHANGE 1000 TO A CONSTANT
+
+      // andrewmac:
+      // TODO: CHANGE 1000 TO A CONSTANT
       UINT mpXformedPosOffset[1000];
       UINT mpStartV[1000];
       UINT mpStartT[1000];
       UINT mNumVertices;
       UINT mNumTriangles;
 
-      UINT mNumRasterizedTris[2][NUM_TILES];
-      float* mpXformedPos[2];
+      float*   mpXformedPos[2];
       float4x4 mpViewMatrix[2];
       float4x4 mpProjMatrix[2];
-      UINT *mpRenderTargetPixels[2];
-      UINT mNumRasterized[2];
-      UINT   *mpBin[2];             // triangle index
-      USHORT  *mpBinModel[2];       // model Index   
-      USHORT  *mpBinMesh[2];          // mesh index
-      USHORT  *mpNumTrisInBin[2];    // number of triangles in the bin 
-      UINT mTimeCounter;
+      UINT*    mpRenderTargetPixels[2];
+      UINT     mNumRasterized[2];
+      UINT*    mpBin[2];            // triangle index
+      USHORT*  mpBinModel[2];       // model Index   
+      USHORT*  mpBinMesh[2];        // mesh index
+      USHORT*  mpNumTrisInBin[2];   // number of triangles in the bin 
+      UINT     mTimeCounter;
 
-      UINT mpModelIndexA[2][1000]; // 'active' models = visible and not too small
+      UINT mpModelIndexA[2][1000];  // 'active' models = visible and not too small
       UINT mNumModelsA[2];
       UINT mNumVerticesA[2];
       UINT mNumTrianglesA[2];
 
-      float mOccluderSizeThreshold;
-
-      bool   mEnableFCulling;
+      float    mOccluderSizeThreshold;
+      bool     mEnableFCulling;
 };
 
 #endif  //DEPTHBUFFERRASTERIZERSCALAR_H

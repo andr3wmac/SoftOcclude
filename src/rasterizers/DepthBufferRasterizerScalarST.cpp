@@ -17,10 +17,10 @@
 
 #include "DepthBufferRasterizerScalarST.h"
 
-DepthBufferRasterizerScalarST::DepthBufferRasterizerScalarST()
-   : DepthBufferRasterizerScalar()
+DepthBufferRasterizerScalarST::DepthBufferRasterizerScalarST(RasterizerData* rasterData)
+   : DepthBufferRasterizerScalar(rasterData)
 {
-   int size = SCREENH_IN_TILES * SCREENW_IN_TILES;
+   int size = mRasterData->mScreenHeightInTiles * mRasterData->mScreenWidthInTiles;
    mpBin[0] = new UINT[size * MAX_TRIS_IN_BIN_ST];
    mpBinModel[0] = new USHORT[size * MAX_TRIS_IN_BIN_ST];
    mpBinMesh[0] = new USHORT[size * MAX_TRIS_IN_BIN_ST];
@@ -53,10 +53,10 @@ DepthBufferRasterizerScalarST::~DepthBufferRasterizerScalarST()
 //-------------------------------------------------------------------------------
 void DepthBufferRasterizerScalarST::TransformModelsAndRasterizeToDepthBuffer(SoftFrustum *pFrustum, float pFov, UINT idx)
 {
-   QueryPerformanceCounter(&mStartTime[idx]);
+   //QueryPerformanceCounter(&mStartTime[idx]);
 
    BoxTestSetupScalar setup;
-   setup.Init(mpViewMatrix[idx], mpProjMatrix[idx], viewportMatrix, pFov, mOccluderSizeThreshold); 
+   setup.Init(mpViewMatrix[idx], mpProjMatrix[idx], mRasterData->mViewportMatrix, pFov, mOccluderSizeThreshold); 
 
    if(mEnableFCulling)
    {
@@ -76,12 +76,12 @@ void DepthBufferRasterizerScalarST::TransformModelsAndRasterizeToDepthBuffer(Sof
    ActiveModels(idx);
    TransformMeshes(idx);
    BinTransformedMeshes(idx);
-   for(UINT i = 0; i < NUM_TILES; i++)
+   for(int i = 0; i < mRasterData->mNumTiles; i++)
    {
       RasterizeBinnedTrianglesToDepthBuffer(i, idx);
    }
 
-   QueryPerformanceCounter(&mStopTime[idx][0]);
+   //QueryPerformanceCounter(&mStopTime[idx][0]);
    mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
 }
 
@@ -120,12 +120,12 @@ void DepthBufferRasterizerScalarST::BinTransformedMeshes(UINT idx)
    // Reset the bin count.  Note the data layout makes this traversal a bit awkward.
    // We can't just use memset() because the last array index isn't what's varying.
    // However, this should make the real use of this structure go faster.
-   for(UINT yy = 0; yy < SCREENH_IN_TILES; yy++)
+   for(int yy = 0; yy < mRasterData->mScreenHeightInTiles; yy++)
    {
-      UINT offset = YOFFSET1_ST * yy;
-      for(UINT xx = 0; xx < SCREENW_IN_TILES; xx++)
+      UINT offset = mRasterData->mYOffset1_ST * yy;
+      for(int xx = 0; xx < mRasterData->mScreenWidthInTiles; xx++)
       {
-         UINT index = offset + (XOFFSET1_ST * xx);
+         UINT index = offset + (mRasterData->mXOffset1_ST * xx);
          mpNumTrisInBin[idx][index] = 0;
       }
    }
@@ -149,20 +149,20 @@ void DepthBufferRasterizerScalarST::RasterizeBinnedTrianglesToDepthBuffer(UINT t
    float* pDepthBuffer = (float*)mpRenderTargetPixels[idx]; 
 
    // Based on TaskId determine which tile to process
-   UINT screenWidthInTiles = SCREENW/TILE_WIDTH_IN_PIXELS;
+   UINT screenWidthInTiles = mRasterData->mScreenWidth/mRasterData->mTileWidthInPixels;
    UINT tileX = tileId % screenWidthInTiles;
    UINT tileY = tileId / screenWidthInTiles;
 
-   int tileStartX = tileX * TILE_WIDTH_IN_PIXELS;
-   int tileEndX   = min(tileStartX + TILE_WIDTH_IN_PIXELS - 1, SCREENW - 1);
+   int tileStartX = tileX * mRasterData->mTileWidthInPixels;
+   int tileEndX   = min(tileStartX + mRasterData->mTileWidthInPixels - 1, mRasterData->mScreenWidth - 1);
    
-   int tileStartY = tileY * TILE_HEIGHT_IN_PIXELS;
-   int tileEndY   = min(tileStartY + TILE_HEIGHT_IN_PIXELS - 1, SCREENH - 1);
+   int tileStartY = tileY * mRasterData->mTileHeightInPixels;
+   int tileEndY   = min(tileStartY + mRasterData->mTileHeightInPixels - 1, mRasterData->mScreenHeight - 1);
 
    UINT bin = 0;
    UINT binIndex = 0;
-   UINT offset1 = YOFFSET1_ST * tileY + XOFFSET1_ST * tileX;
-   UINT offset2 = YOFFSET2_ST * tileY + XOFFSET2_ST * tileX;
+   UINT offset1 = mRasterData->mYOffset1_ST * tileY + mRasterData->mXOffset1_ST * tileX;
+   UINT offset2 = mRasterData->mYOffset2_ST * tileY + mRasterData->mXOffset2_ST * tileX;
    UINT numTrisInBin = mpNumTrisInBin[idx][offset1 + bin];
 
    ClearDepthTile(tileStartX, tileStartY, tileEndX + 1, tileEndY + 1, idx);
@@ -170,7 +170,7 @@ void DepthBufferRasterizerScalarST::RasterizeBinnedTrianglesToDepthBuffer(UINT t
    float4 xformedPos[3];
    bool done = false;
    bool allBinsEmpty = true;
-   mNumRasterizedTris[idx][tileId] = numTrisInBin;
+   //mNumRasterizedTris[idx][tileId] = numTrisInBin;
 
    while(!done)
    {
@@ -183,7 +183,7 @@ void DepthBufferRasterizerScalarST::RasterizeBinnedTrianglesToDepthBuffer(UINT t
             break;
          }
          numTrisInBin = mpNumTrisInBin[idx][offset1 + bin];
-         mNumRasterizedTris[idx][tileId] += numTrisInBin;
+         //mNumRasterizedTris[idx][tileId] += numTrisInBin;
          binIndex = 0; // Slightly inefficient.  We set it every time through this loop.  Could do only once.
       }
       if(!numTrisInBin)
@@ -247,7 +247,7 @@ void DepthBufferRasterizerScalarST::RasterizeBinnedTrianglesToDepthBuffer(UINT t
       int startY = max(min(min(fxPtY[0], fxPtY[1]), fxPtY[2]), tileStartY) & int(0xFFFFFFFE);
       int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), tileEndY+1);
 
-      int rowIdx = (startY * SCREENW + startX);
+      int rowIdx = (startY * mRasterData->mScreenWidth + startX);
       int col = startX;
       int row = startY;
       
@@ -260,7 +260,7 @@ void DepthBufferRasterizerScalarST::RasterizeBinnedTrianglesToDepthBuffer(UINT t
 
       for(int r = startY; r < endY; r++,
                              row++,
-                             rowIdx = rowIdx + SCREENW,
+                             rowIdx = rowIdx + mRasterData->mScreenWidth,
                              alpha0 += B0,
                              beta0 += B1,
                              gama0 += B2)                            

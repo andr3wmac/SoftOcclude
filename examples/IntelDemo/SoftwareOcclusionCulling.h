@@ -26,6 +26,9 @@
 
 #include "SoftOcclude.h"
 
+#define SCREENW 1280
+#define SCREENH 720
+
 //-----------------------------------------------------------------------------
 class MySample : public CPUT_DX11
 {
@@ -166,14 +169,14 @@ public:
       mNumOccluderTris(0),
       mNumOccluderRasterizedTris(0),
       mRasterizeTime(0.0),
-      mOccluderSizeThreshold(gOccluderSizeThreshold),
+      mOccluderSizeThreshold(0.0),
       mNumCulled(0),
       mNumVisible(0),
       mNumOccludeeTris(0),
       mNumOccludeeCulledTris(0),
       mNumOccludeeVisibleTris(0),
       mDepthTestTime(0.0),
-      mOccludeeSizeThreshold(gOccludeeSizeThreshold),
+      mOccludeeSizeThreshold(0.0),
       mTotalCullTime(0.0),
       mEnableCulling(true),
       mEnableFCulling(true),
@@ -181,7 +184,7 @@ public:
       mViewBoundingBox(false),
       mPipeline(false),
       mNumDrawCalls(0),
-      mNumDepthTestTasks(gDepthTestTasks),
+      mNumDepthTestTasks(0),
       //mCurrIdx(0),
       //mPrevIdx(1),
       //mFirstFrame(true),
@@ -215,7 +218,7 @@ public:
       mpShowDepthBufMtrlScalar = mpShowDepthBufMtrlSSE = mpShowDepthBufMtrl = NULL;
 
       // andrewmac:
-      mOcclusionTest = new SoftOcclusionTest;
+      mOcclusionTest = new SoftOcclusionTest(SCREENW, SCREENH);
     }
 
    virtual ~MySample()

@@ -17,12 +17,11 @@
 #define DEPTHBUFFERRASTERIZER_H
 
 #include "../common/SoftOccluderScalar.h"
-#include "../common/Constants.h"
 
 class DepthBufferRasterizer
 {
    public:
-      DepthBufferRasterizer();
+      DepthBufferRasterizer(RasterizerData* rasterData);
       virtual ~DepthBufferRasterizer();
       virtual void TransformModelsAndRasterizeToDepthBuffer(SoftFrustum *pFrustum, float pFov, UINT idx) = 0;
 
@@ -37,15 +36,14 @@ class DepthBufferRasterizer
       virtual UINT GetNumOccluders() = 0;
       virtual UINT GetNumOccludersR2DB(UINT idx) = 0;
       virtual UINT GetNumTriangles() = 0;
-      virtual UINT GetNumRasterizedTriangles(UINT idx) = 0;
+      //virtual UINT GetNumRasterizedTriangles(UINT idx) = 0;
 
-     // andrewmac: 
-     virtual SoftOccluderScalar* AddOccluder() = 0;
-     virtual void RefreshOccluders() = 0;
+      // andrewmac: 
+      virtual SoftOccluderScalar* AddOccluder() = 0;
+      virtual void RefreshOccluders() = 0;
 
    protected:
-      LARGE_INTEGER mStartTime[2];
-      LARGE_INTEGER mStopTime[2][NUM_TILES];
+      RasterizerData* mRasterData;
 };
 
 #endif //DEPTHBUFFERRASTERIZER

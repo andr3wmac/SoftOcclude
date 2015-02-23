@@ -171,10 +171,10 @@ bool SoftOccludeeScalar::RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, 
 
       // Use bounding box traversal strategy to determine which pixels to rasterize 
       int startX = max(min(min(fxPtX[0], fxPtX[1]), fxPtX[2]), 0) & int(0xFFFFFFFE);
-      int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), SCREENW-1);
+      int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), mRasterData->mScreenWidth-1);
 
       int startY = max(min(min(fxPtY[0], fxPtY[1]), fxPtY[2]), 0) & int(0xFFFFFFFE);
-      int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), SCREENH-1);
+      int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), mRasterData->mScreenHeight-1);
 
       //Skip triangle if area is zero 
       if(triArea <= 0)
@@ -182,7 +182,7 @@ bool SoftOccludeeScalar::RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, 
          continue;
       }
 
-      int rowIdx = (startY * SCREENW + startX);
+      int rowIdx = (startY * mRasterData->mScreenWidth + startX);
       int col = startX;
       int row = startY;
       
@@ -195,7 +195,7 @@ bool SoftOccludeeScalar::RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, 
       // Incrementally compute Fab(x, y) for all the pixels inside the bounding box formed by (startX, endX) and (startY, endY)
       for(int r = startY; r < endY; r++,
                              row++,
-                             rowIdx = rowIdx + SCREENW,
+                             rowIdx = rowIdx + mRasterData->mScreenWidth,
                              alpha0 += B0,
                              beta0 += B1,
                              gama0 += B2)                            

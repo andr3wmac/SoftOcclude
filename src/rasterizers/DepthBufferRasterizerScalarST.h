@@ -21,7 +21,7 @@
 class DepthBufferRasterizerScalarST : public DepthBufferRasterizerScalar
 {
    public:
-      DepthBufferRasterizerScalarST();
+      DepthBufferRasterizerScalarST(RasterizerData* rasterData);
       ~DepthBufferRasterizerScalarST();
 
       void TransformModelsAndRasterizeToDepthBuffer(SoftFrustum *pFrustum, float pFov, UINT idx);

@@ -19,33 +19,36 @@
 #ifndef SOFTOCCLUDEESCALAR_H
 #define SOFTOCCLUDEESCALAR_H
 
-#include "Constants.h"
+#include "Common.h"
 #include "../common/SoftFrustum.h"
 #include "HelperScalar.h"
 
 class SoftOccludeeScalar : public HelperScalar
 {
    public:
+      RasterizerData* mRasterData;
+
       bool IsInsideViewFrustum(SoftFrustum* pFrustum);
       bool TransformAABBox(float4 xformedPos[], const float4x4 &cumulativeMatrix);
       bool RasterizeAndDepthTestAABBox(UINT *pRenderTargetPixels, const float4 pXformedPos[], UINT idx);
 
       bool IsTooSmall(const BoxTestSetupScalar &setup, float4x4 &cumulativeMatrix);
 
-     void SetWorldMatrix(float4x4* worldMat) { mWorldMatrix = *worldMat; }
-     void SetBoundsObjectSpace(float3 center, float3 half)
-     {
-        mBBCenter = center;
-       mBBHalf = half;
-        mRadiusSq = half.lengthSq();
-     }
-     void SetBoundsWorldSpace(float3 center, float3 half)
-     {
-       mBBCenterWS = center;
-       mBBHalfWS = half;
-     }        
+      void SetWorldMatrix(float4x4* worldMat) { mWorldMatrix = *worldMat; }
+      void SetBoundsObjectSpace(float3 center, float3 half)
+      {
+         mBBCenter = center;
+         mBBHalf = half;
+         mRadiusSq = half.lengthSq();
+      }
+      void SetBoundsWorldSpace(float3 center, float3 half)
+      {
+         mBBCenterWS = center;
+         mBBHalfWS = half;
+      }        
       
    private:
+
       float4x4 mWorldMatrix;
          
       float3  mBBCenter;

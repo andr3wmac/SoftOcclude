@@ -41,15 +41,16 @@ class SoftOcclusionTest
       char                             *mpCPUDepthBuf[2];
 
       // Screen Size
-      int                              mWidth;
-      int                              mHeight;
+      int                              mScreenWidth;
+      int                              mScreenHeight;
 
    public:
-      SoftOcclusionTest();
+      RasterizerData                   mRasterData;
+
+      SoftOcclusionTest(int width, int height);
       ~SoftOcclusionTest();
 
       // Configuration
-      void SetScreenSize(int width, int height);
       void SetEnableFrustrumCulling(bool value);
       void ResetInsideFrustum();
 
@@ -75,7 +76,6 @@ class SoftOcclusionTest
       UINT     GetNumOccludeeTris()          { return mpDBR->GetNumTriangles(); }
       void     ComputeR2DBTime()             { mpDBR->ComputeR2DBTime(mCurrIdx); }
       UINT     GetNumOccludersR2DB()         { return mpDBR->GetNumOccludersR2DB(mCurrIdx); }
-      UINT     GetNumRasterizedTriangles()   { return mpDBR->GetNumRasterizedTriangles(mCurrIdx); } 
       UINT     GetNumCulled()                { return mpAABB->GetNumCulled(mCurrIdx); } 
       UINT     GetNumCulledTriangles()       { return mpAABB->GetNumCulledTriangles(mCurrIdx); }
       UINT     GetNumFCullCount()            { return mpAABB->GetNumFCullCount(); }

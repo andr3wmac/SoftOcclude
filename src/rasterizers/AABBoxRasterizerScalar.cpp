@@ -17,8 +17,9 @@
 
 #include "AABBoxRasterizerScalar.h"
 
-AABBoxRasterizerScalar::AABBoxRasterizerScalar()
-   : mNumModels(0),
+AABBoxRasterizerScalar::AABBoxRasterizerScalar(RasterizerData* rasterData)
+   : AABBoxRasterizer(rasterData), 
+     mNumModels(0),
      mOccludeeSizeThreshold(0.0f),
      mNumDepthTestTasks(0),
      mTimeCounter(0),
@@ -39,6 +40,7 @@ AABBoxRasterizerScalar::~AABBoxRasterizerScalar()
 SoftOccludeeScalar* AABBoxRasterizerScalar::AddOccludee()
 {
    SoftOccludeeScalar* result = &mpTransformedAABBox[mNumModels];
+   result->mRasterData = mRasterData;
    mNumModels++;
 
    return result;

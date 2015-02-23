@@ -17,8 +17,8 @@
 
 #include "AABBoxRasterizerScalarST.h"
 
-AABBoxRasterizerScalarST::AABBoxRasterizerScalarST()
-   : AABBoxRasterizerScalar()
+AABBoxRasterizerScalarST::AABBoxRasterizerScalarST(RasterizerData* rasterData)
+   : AABBoxRasterizerScalar(rasterData)
 {
 
 }
@@ -37,7 +37,7 @@ AABBoxRasterizerScalarST::~AABBoxRasterizerScalarST()
 //-----------------------------------------------------------------------------
 void AABBoxRasterizerScalarST::TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx)
 {
-   QueryPerformanceCounter(&mStartTime[idx][0]);
+   //QueryPerformanceCounter(&mStartTime[idx][0]);
 
    if(mEnableFCulling)
    {
@@ -48,7 +48,7 @@ void AABBoxRasterizerScalarST::TransformAABBoxAndDepthTest(SoftFrustum *pFrustum
    }
 
    BoxTestSetupScalar setup;
-   setup.Init(mViewMatrix[idx], mProjMatrix[idx], viewportMatrix, pFov, mOccludeeSizeThreshold);
+   setup.Init(mViewMatrix[idx], mProjMatrix[idx], mRasterData->mViewportMatrix, pFov, mOccludeeSizeThreshold);
 
    float4 xformedPos[AABB_VERTICES];
    float4x4 cumulativeMatrix;
@@ -70,8 +70,8 @@ void AABBoxRasterizerScalarST::TransformAABBoxAndDepthTest(SoftFrustum *pFrustum
       }      
    }
 
-   QueryPerformanceCounter(&mStopTime[idx][0]);
-   mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
+   //QueryPerformanceCounter(&mStopTime[idx][0]);
+   //mTimeCounter = mTimeCounter >= AVG_COUNTER ? 0 : mTimeCounter;
 }
 
 void AABBoxRasterizerScalarST::WaitForTaskToFinish(UINT idx)

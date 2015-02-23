@@ -18,12 +18,14 @@
 #ifndef SOFTOCCLUDERMESHSCALAR_H
 #define SOFTOCCLUDERMESHSCALAR_H
 
-#include "Constants.h"
+#include "Common.h"
 #include "HelperScalar.h"
 
 class SoftOccluderMeshScalar : public HelperScalar
 {
    public:
+      RasterizerData* mRasterData;
+
       SoftOccluderMeshScalar();
       ~SoftOccluderMeshScalar();
       void Initialize(Vertex* pVertices, 
@@ -70,6 +72,7 @@ class SoftOccluderMeshScalar : public HelperScalar
       }
    
    private:
+
       UINT mNumVertices;
       UINT mNumIndices;
       UINT mNumTriangles;

@@ -103,10 +103,10 @@ void SoftOccluderMeshScalar::BinTransformedTrianglesST(UINT taskId,
             
       // Find bounding box for screen space triangle in terms of pixels
       int startX = max(min(min(fxPtX[0], fxPtX[1]), fxPtX[2]), 0); 
-     int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), SCREENW - 1);
+      int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), mRasterData->mScreenWidth - 1);
 
-     int startY = max(min(min(fxPtY[0], fxPtY[1]), fxPtY[2]), 0 );
-     int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), SCREENH - 1);
+      int startY = max(min(min(fxPtY[0], fxPtY[1]), fxPtY[2]), 0 );
+      int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), mRasterData->mScreenHeight - 1);
 
       // Skip triangle if area is zero 
       if(triArea <= 0) continue;
@@ -117,22 +117,22 @@ void SoftOccluderMeshScalar::BinTransformedTrianglesST(UINT taskId,
       if(xformedPos[0].w > 0.0f && xformedPos[1].w > 0.0f && xformedPos[2].w > 0.0f) 
       {
          // Convert bounding box in terms of pixels to bounding box in terms of tiles
-         int startXx = max(startX/TILE_WIDTH_IN_PIXELS, 0);
-         int endXx   = min(endX/TILE_WIDTH_IN_PIXELS, SCREENW_IN_TILES-1);
+         int startXx = max(startX/mRasterData->mTileWidthInPixels, 0);
+         int endXx   = min(endX/mRasterData->mTileWidthInPixels, mRasterData->mScreenWidthInTiles-1);
       
-         int startYy = max(startY/TILE_HEIGHT_IN_PIXELS, 0);
-         int endYy   = min(endY/TILE_HEIGHT_IN_PIXELS, SCREENH_IN_TILES-1);
+         int startYy = max(startY/mRasterData->mTileHeightInPixels, 0);
+         int endYy   = min(endY/mRasterData->mTileHeightInPixels, mRasterData->mScreenHeightInTiles-1);
 
          // Add triangle to the tiles or bins that the bounding box covers
          int row, col;
          for(row = startYy; row <= endYy; row++)
          {
-            int offset1 = YOFFSET1_ST * row;
-            int offset2 = YOFFSET2_ST * row;
+            int offset1 = mRasterData->mYOffset1_ST * row;
+            int offset2 = mRasterData->mYOffset2_ST * row;
             for(col = startXx; col <= endXx; col++)
             {
-               int idx1 = offset1 + (XOFFSET1_ST * col) + taskId;
-               int idx2 = offset2 + (XOFFSET2_ST * col) + (taskId * MAX_TRIS_IN_BIN_ST) + pNumTrisInBin[idx1];
+               int idx1 = offset1 + (mRasterData->mXOffset1_ST * col) + taskId;
+               int idx2 = offset2 + (mRasterData->mXOffset2_ST * col) + (taskId * MAX_TRIS_IN_BIN_ST) + pNumTrisInBin[idx1];
                pBin[idx2] = index;
                pBinModel[idx2] = modelId;
                pBinMesh[idx2] = meshId;
@@ -178,10 +178,10 @@ void SoftOccluderMeshScalar::BinTransformedTrianglesMT(UINT taskId,
       
       // Find bounding box for screen space triangle in terms of pixels
       int startX = max(min(min(fxPtX[0], fxPtX[1]), fxPtX[2]), 0);
-     int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), SCREENW-1 );
+     int endX   = min(max(max(fxPtX[0], fxPtX[1]), fxPtX[2]), mRasterData->mScreenWidth-1 );
 
      int startY = max(min(min(fxPtY[0], fxPtY[1]), fxPtY[2]), 0);
-     int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), SCREENH-1);
+     int endY   = min(max(max(fxPtY[0], fxPtY[1]), fxPtY[2]), mRasterData->mScreenHeight-1);
 
       // Dont bin screen-clipped triangles
       if(endX < startX || endY < startY) continue;
@@ -190,22 +190,22 @@ void SoftOccluderMeshScalar::BinTransformedTrianglesMT(UINT taskId,
       if(xformedPos[0].w > 0.0f && xformedPos[1].w > 0.0f && xformedPos[2].w > 0.0f) 
       {
          // Convert bounding box in terms of pixels to bounding box in terms of tiles
-         int startXx = max(startX/TILE_WIDTH_IN_PIXELS, 0);
-         int endXx   = min(endX/TILE_WIDTH_IN_PIXELS, SCREENW_IN_TILES-1);
+         int startXx = max(startX/mRasterData->mTileWidthInPixels, 0);
+         int endXx   = min(endX/mRasterData->mTileWidthInPixels, mRasterData->mScreenWidthInTiles-1);
 
-         int startYy = max(startY/TILE_HEIGHT_IN_PIXELS, 0);
-         int endYy   = min(endY/TILE_HEIGHT_IN_PIXELS, SCREENH_IN_TILES-1);
+         int startYy = max(startY/mRasterData->mTileHeightInPixels, 0);
+         int endYy   = min(endY/mRasterData->mTileHeightInPixels, mRasterData->mScreenHeightInTiles-1);
 
          // Add triangle to the tiles or bins that the bounding box covers
          int row, col;
          for(row = startYy; row <= endYy; row++)
          {
-            int offset1 = YOFFSET1_MT * row;
-            int offset2 = YOFFSET2_MT * row;
+            int offset1 = mRasterData->mYOffset1_MT * row;
+            int offset2 = mRasterData->mYOffset2_MT * row;
             for(col = startXx; col <= endXx; col++)
             {
-               int idx1 = offset1 + (XOFFSET1_MT * col) + (TOFFSET1_MT * taskId);
-               int idx2 = offset2 + (XOFFSET2_MT * col) + (taskId * MAX_TRIS_IN_BIN_MT) + pNumTrisInBin[idx1];
+               int idx1 = offset1 + (mRasterData->mXOffset1_MT * col) + (mRasterData->mTOffset1_MT * taskId);
+               int idx2 = offset2 + (mRasterData->mXOffset2_MT * col) + (taskId * MAX_TRIS_IN_BIN_MT) + pNumTrisInBin[idx1];
                pBin[idx2] = index;
                pBinModel[idx2] = modelId;
                pBinMesh[idx2] = meshId;

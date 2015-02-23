@@ -25,58 +25,60 @@
 class SoftOccluderScalar : public HelperScalar
 {
    public:
+      RasterizerData* mRasterData;
+
       SoftOccluderScalar();
       ~SoftOccluderScalar();
 
-     // andrewmac:
-     void AddMesh(Vertex* pVertices, UINT pNumVertices, UINT* pIndices, UINT pNumIndices, UINT pNumTriangles);
-     void SetBoundsObjectSpace(float3 center, float3 half)
-     {
-        mBBCenterOS = center;
-        mRadiusSq = half.lengthSq();
-     }
-     void SetBoundsWorldSpace(float3 center, float3 half)
-     {
-       mBBCenterWS = center;
-       mBBHalfWS = half;
-     }          
-     void SetWorldMatrix(float4x4* worldMatrix) { mWorldMatrix = *worldMatrix; }
+      // andrewmac:
+      void AddMesh(Vertex* pVertices, UINT pNumVertices, UINT* pIndices, UINT pNumIndices, UINT pNumTriangles);
+      void SetBoundsObjectSpace(float3 center, float3 half)
+      {
+         mBBCenterOS = center;
+         mRadiusSq = half.lengthSq();
+      }
+      void SetBoundsWorldSpace(float3 center, float3 half)
+      {
+         mBBCenterWS = center;
+         mBBHalfWS = half;
+      }          
+      void SetWorldMatrix(float4x4* worldMatrix) { mWorldMatrix = *worldMatrix; }
 
       void InsideViewFrustum(SoftFrustum* frustum,
-                  const BoxTestSetupScalar &setup,
-                        UINT idx);
+                             const BoxTestSetupScalar &setup,
+                             UINT idx);
 
       void TooSmall(const BoxTestSetupScalar &setup,
-                 UINT idx);
+                    UINT idx);
 
       void TransformMeshes(UINT start, 
-                      UINT end,
-                      UINT idx);
+                           UINT end,
+                           UINT idx);
 
       void BinTransformedTrianglesST(UINT taskId,
-                             UINT modelId,
-                              UINT start,
-                              UINT end,
-                              UINT* pBin,
-                              USHORT* pBinModel,
-                              USHORT* pBinMesh,
-                              USHORT* pNumTrisInBin,
-                              UINT idx);
+                                     UINT modelId,
+                                     UINT start,
+                                     UINT end,
+                                     UINT* pBin,
+                                     USHORT* pBinModel,
+                                     USHORT* pBinMesh,
+                                     USHORT* pNumTrisInBin,
+                                     UINT idx);
 
       void BinTransformedTrianglesMT(UINT taskId,
-                             UINT modelId,
-                              UINT start,
-                              UINT end,
-                              UINT* pBin,
-                              USHORT* pBinModel,
-                              USHORT* pBinMesh,
-                              USHORT* pNumTrisInBin,
-                              UINT idx);
+                                     UINT modelId,
+                                     UINT start,
+                                     UINT end,
+                                     UINT* pBin,
+                                     USHORT* pBinModel,
+                                     USHORT* pBinMesh,
+                                     USHORT* pNumTrisInBin,
+                                     UINT idx);
 
       void Gather(float* xformedPos,
-               UINT meshId, 
-               UINT triId, 
-               UINT idx);
+                  UINT meshId, 
+                  UINT triId, 
+                  UINT idx);
 
       inline UINT GetNumVertices(){return mNumVertices;}
 

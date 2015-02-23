@@ -14,9 +14,10 @@
 // responsibility to update it.
 //-------------------------------------------------------------------------------------
 #include "DepthBufferRasterizerScalar.h"
+#include "../common/Common.h"
 
-DepthBufferRasterizerScalar::DepthBufferRasterizerScalar()
-   : DepthBufferRasterizer(),
+DepthBufferRasterizerScalar::DepthBufferRasterizerScalar(RasterizerData* rasterData)
+   : DepthBufferRasterizer(rasterData),
      mNumModels(0),
      mNumVertices(0),
      mNumTriangles(0),
@@ -45,6 +46,7 @@ DepthBufferRasterizerScalar::~DepthBufferRasterizerScalar()
 SoftOccluderScalar* DepthBufferRasterizerScalar::AddOccluder()
 {
    SoftOccluderScalar* result = &mpTransformedModels[mNumModels];
+   result->mRasterData = mRasterData;
    mNumModels++;
 
    return result;
@@ -94,7 +96,7 @@ void DepthBufferRasterizerScalar::ClearDepthTile(int startX, int startY, int end
    // Note we need to account for tiling pattern here
    for(int r = startY; r < endY; r++)
    {
-      int rowIdx = r * SCREENW + startX;
+      int rowIdx = r * mRasterData->mScreenWidth + startX;
       memset(&pDepthBuffer[rowIdx], 0, sizeof(float) * width);
    }
 }

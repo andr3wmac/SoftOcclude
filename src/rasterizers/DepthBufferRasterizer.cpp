@@ -15,9 +15,9 @@
 //-------------------------------------------------------------------------------------
 #include "DepthBufferRasterizer.h"
 
-DepthBufferRasterizer::DepthBufferRasterizer()
+DepthBufferRasterizer::DepthBufferRasterizer(RasterizerData* rasterData)
 {
-
+   mRasterData = rasterData;
 }
 
 DepthBufferRasterizer::~DepthBufferRasterizer()

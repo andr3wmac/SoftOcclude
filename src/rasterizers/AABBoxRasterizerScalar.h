@@ -24,7 +24,7 @@
 class AABBoxRasterizerScalar : public AABBoxRasterizer
 {
    public:
-      AABBoxRasterizerScalar();
+      AABBoxRasterizerScalar(RasterizerData* rasterData);
       virtual ~AABBoxRasterizerScalar();
 
      // andrewmac:

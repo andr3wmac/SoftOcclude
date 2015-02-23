@@ -21,7 +21,7 @@ void ParseCommandLine()
    int numArgs = 0;
    LPWSTR* argv = CommandLineToArgvW(commandLine, &numArgs);
 
-   for(int i = 1; i < numArgs; i += 2) 
+   /*for(int i = 1; i < numArgs; i += 2) 
    {
       if(!_wcsicmp(argv[i], L"-slider1"))
       {
@@ -35,7 +35,7 @@ void ParseCommandLine()
       {
          gDepthTestTasks = wcstoul(argv[i+1], NULL, 10);
       }
-   }
+   }*/
 }
 
 // Application entry point.  Execution begins here.

@@ -23,18 +23,26 @@
 #include "SoftOcclude.h"
 #include "common/Bitmap.h"
 
-SoftOcclusionTest::SoftOcclusionTest()
+SoftOcclusionTest::SoftOcclusionTest(int width, int height)
 {
    mCurrIdx = 0;
 
-   mpDBRScalarST = new DepthBufferRasterizerScalarST;
+   mScreenWidth = width;
+   mScreenHeight = height;
+   mRasterData.setScreenSize(width, height);
+
+   mpDBRScalarST = new DepthBufferRasterizerScalarST(&mRasterData);
    mpDBR = mpDBRScalarST;
 
-   mpAABBScalarST = new AABBoxRasterizerScalarST;
+   mpAABBScalarST = new AABBoxRasterizerScalarST(&mRasterData);
    mpAABB = mpAABBScalarST;
 
-   mpCPUDepthBuf[0] = NULL;
-   mpCPUDepthBuf[1] = NULL;
+   mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
+   mpCPUDepthBuf[1] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
+   
+   // Clear buffers to zero.
+   memset(mpCPUDepthBuf[0], 0, width * height *4);
+   memset(mpCPUDepthBuf[1], 0, width * height *4);
 }
 
 SoftOcclusionTest::~SoftOcclusionTest()
@@ -70,21 +78,6 @@ void SoftOcclusionTest::Render(float4x4 *viewMatrix, float4x4 *projMatrix, SoftF
    mpAABB->TransformAABBoxAndDepthTest(pFrustum, pFrustum->mFov, mCurrIdx);
 }
 
-void SoftOcclusionTest::SetScreenSize(int width, int height)
-{
-   mWidth = width;
-   mHeight = height;
-
-   // TODO: Destroy old buffer
-   //       Store width/height to replace SCREENW and SCREENH constants
-   mpCPUDepthBuf[0] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
-   mpCPUDepthBuf[1] = (char*)_aligned_malloc(sizeof(char) * width*height*4, 16);
-   
-   // Clear buffers to zero.
-   memset(mpCPUDepthBuf[0], 0, width * height *4);
-   memset(mpCPUDepthBuf[1], 0, width * height *4);
-}
-
 void SoftOcclusionTest::SetEnableFrustrumCulling(bool value)
 {
    mpDBR->SetEnableFCulling(value);
@@ -104,9 +97,9 @@ void SoftOcclusionTest::SaveDepthBuffer(const char* filename)
    int tmpdepth;
    int maxdepth = 0;
    char* depthBuffer = GetDepthBuffer();
-   unsigned char* outputRGB = new unsigned char[SCREENW * SCREENH * 3];
+   unsigned char* outputRGB = new unsigned char[mScreenWidth * mScreenHeight * 3];
 
-   for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
+   for(int i = 0; i < mScreenWidth * mScreenHeight * 4; i += 4)
    {
       depthfloat = (float*)&depthBuffer[i];
 
@@ -117,7 +110,7 @@ void SoftOcclusionTest::SaveDepthBuffer(const char* filename)
    float scale = 255.0f / maxdepth;
 
    int pos = 0;
-   for(int i = 0; i < SCREENW * SCREENH * 4; i += 4)
+   for(int i = 0; i < mScreenWidth * mScreenHeight * 4; i += 4)
    {
       depthfloat = (float*)&depthBuffer[i];
 
@@ -131,5 +124,5 @@ void SoftOcclusionTest::SaveDepthBuffer(const char* filename)
       pos += 3;
    }
 
-   writeBMP(filename, outputRGB, SCREENW, SCREENH);
+   writeBMP(filename, outputRGB, mScreenWidth, mScreenHeight);
 }

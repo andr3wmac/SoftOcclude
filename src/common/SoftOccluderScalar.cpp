@@ -32,12 +32,13 @@ SoftOccluderScalar::~SoftOccluderScalar()
 }
 
 void SoftOccluderScalar::AddMesh(Vertex* pVertices, 
-                            UINT pNumVertices, 
-                            UINT* pIndices, 
-                            UINT pNumIndices,
-                            UINT pNumTriangles)
+                                 UINT pNumVertices, 
+                                 UINT* pIndices, 
+                                 UINT pNumIndices,
+                                 UINT pNumTriangles)
 {
    mpMeshes[mNumMeshes].Initialize(pVertices, pNumVertices, pIndices, pNumIndices, pNumTriangles);
+   mpMeshes[mNumMeshes].mRasterData = mRasterData;
    mNumVertices += mpMeshes[mNumMeshes].GetNumVertices();
    mNumTriangles += mpMeshes[mNumMeshes].GetNumTriangles();
    mNumMeshes++;

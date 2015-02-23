@@ -23,7 +23,7 @@
 class AABBoxRasterizerScalarST : public AABBoxRasterizerScalar
 {
    public:
-      AABBoxRasterizerScalarST();
+      AABBoxRasterizerScalarST(RasterizerData* rasterData);
       ~AABBoxRasterizerScalarST();
 
       void TransformAABBoxAndDepthTest(SoftFrustum *pFrustum, float pFov, UINT idx);

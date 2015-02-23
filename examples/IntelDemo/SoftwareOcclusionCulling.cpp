@@ -125,9 +125,6 @@ void MySample::Create()
    mpDepthTestTaskSlider->SetTickDrawing(false);
    //mpAABB->SetDepthTestTasks(mNumDepthTestTasks);
 
-   // andrewmac: 
-   mOcclusionTest->SetScreenSize(SCREENW, SCREENH);
-
    //
    // Create Static text
    //
@@ -629,7 +626,7 @@ CPUTEventHandledCode MySample::HandleKeyboardEvent(CPUTKey key)
             //mpAABB->SetOccludeeSizeThreshold(mOccludeeSizeThreshold);
 
             // andrewmac: 
-            mOcclusionTest = new SoftOcclusionTest;
+            mOcclusionTest = new SoftOcclusionTest(SCREENW, SCREENH);
             CreateTransformedModels(mpAssetSetDBR, OCCLUDER_SETS);
             mOcclusionTest->SetOccluderSizeThreshold(mOccluderSizeThreshold);
             CreateTransformedAABBoxes(mpAssetSetAABB, OCCLUDEE_SETS);
@@ -978,7 +975,7 @@ void MySample::RenderModels(CPUTAssetSet **pAssetSet,
    CPUTModelDX11::ResetFCullCount();
 
    BoxTestSetupScalar setup;
-   setup.Init(*mpCamera->GetViewMatrix(), *mpCamera->GetProjectionMatrix(), viewportMatrix, mpCamera->GetFov(), mOccludeeSizeThreshold);
+   setup.Init(*mpCamera->GetViewMatrix(), *mpCamera->GetProjectionMatrix(), mOcclusionTest->mRasterData.mViewportMatrix, mpCamera->GetFov(), mOccludeeSizeThreshold);
 
    float4x4 cumulativeMatrix;
 
@@ -1147,7 +1144,7 @@ void MySample::Render(double deltaSeconds)
       // andrewmac:
       mOcclusionTest->ComputeR2DBTime();
       mNumOccludersR2DB = mOcclusionTest->GetNumOccludersR2DB();
-      mNumOccluderRasterizedTris = mOcclusionTest->GetNumRasterizedTriangles();
+      mNumOccluderRasterizedTris = 0;
       //mNumCulled = mOcclusionTest->GetNumCulled();
       mNumOccludeeCulledTris = mOcclusionTest->GetNumCulledTriangles();
       mRasterizeTime = 0;
@@ -1281,7 +1278,7 @@ void MySample::CreateTransformedMeshes(SoftOccluderScalar* pTransformedModel, CP
    pModel->GetBoundsWorldSpace(&ws_center, &ws_half);
    pTransformedModel->SetBoundsWorldSpace(ws_center, ws_half);
 
-   for(UINT i = 0; i < pModel->GetMeshCount(); i++)
+   for(int i = 0; i < pModel->GetMeshCount(); i++)
    {
       CPUTMeshDX11* pMesh = (CPUTMeshDX11*)pModel->GetMesh(i);
       ASSERT((pMesh != NULL), _L("pMesh is NULL"));

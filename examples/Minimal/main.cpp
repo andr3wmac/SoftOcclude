@@ -35,11 +35,6 @@ float4x4 projMatrix(1.73205090f, 0.0f, 0.0f, 0.0f,
 	                 0.0f, 0.0f, 0.000500250142f, 1.0f,
 	                 0.0f, 0.0f, 1.00050032f, 0.0f);
 
-float4x4 viewPortMatrix(640.0f, 0.0f, 0.0f, 0.0f,
-	                     0.0f, -360.0f, 0.0f, 0.0f,
-	                     0.0f, 0.0f, 1.0f, 0.0f,
-	                     640.0f, 360.0f, 0.0f, 1.0f);
-
 float fov = 1.04719758f;
 
 // Model Data
@@ -52,11 +47,18 @@ UINT cubeIndices[6] = {2, 1, 0, 1, 2, 3};
 
 int main()
 {
-   SoftOcclusionTest* mOcclusionTest = new SoftOcclusionTest();
-   mOcclusionTest->SetScreenSize(1280, 720);
+   float width = 640.0f;
+   float height = 360.0f;
+
+   SoftOcclusionTest* mOcclusionTest = new SoftOcclusionTest(width, height);
 
    SoftFrustum frustum;
-   frustum.InitializeFrustum(1, 1000, (1280.0f / 720.0f), fov, float3(0, 0, 0), float3(0, 0, 1), float3(0, 1, 0));
+   frustum.InitializeFrustum(1, 1000, width / height, fov, float3(0, 0, 0), float3(0, 0, 1), float3(0, 1, 0));
+
+   float4x4 viewPortMatrix(width * 0.5f, 0.0f, 0.0f, 0.0f,
+	                        0.0f, height * -0.5f, 0.0f, 0.0f,
+	                        0.0f, 0.0f, 1.0f, 0.0f,
+	                        width * 0.5f, height * 0.5f, 0.0f, 1.0f);
 
    // Add a 2x2x2 cube at (0, 0, 10) as an occluder.
    SoftOccluderScalar* occluder = mOcclusionTest->AddOccluder();
