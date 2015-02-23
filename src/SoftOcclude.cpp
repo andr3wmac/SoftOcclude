@@ -82,12 +82,12 @@ void SoftOcclusionTest::SetEnableFrustrumCulling(bool value)
 {
    mpDBR->SetEnableFCulling(value);
    mpAABB->SetEnableFCulling(value);
-}
 
-void SoftOcclusionTest::ResetInsideFrustum()
-{
-   mpDBR->ResetInsideFrustum();
-   mpAABB->ResetInsideFrustum();
+   if ( !value )
+   {
+      mpDBR->ResetInsideFrustum();
+      mpAABB->ResetInsideFrustum();
+   }
 }
 
 void SoftOcclusionTest::SaveDepthBuffer(const char* filename)

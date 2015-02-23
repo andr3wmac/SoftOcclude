@@ -55,11 +55,6 @@ int main()
    SoftFrustum frustum;
    frustum.InitializeFrustum(1, 1000, width / height, fov, float3(0, 0, 0), float3(0, 0, 1), float3(0, 1, 0));
 
-   float4x4 viewPortMatrix(width * 0.5f, 0.0f, 0.0f, 0.0f,
-	                        0.0f, height * -0.5f, 0.0f, 0.0f,
-	                        0.0f, 0.0f, 1.0f, 0.0f,
-	                        width * 0.5f, height * 0.5f, 0.0f, 1.0f);
-
    // Add a 2x2x2 cube at (0, 0, 10) as an occluder.
    SoftOccluderScalar* occluder = mOcclusionTest->AddOccluder();
 
@@ -88,7 +83,6 @@ int main()
    occludee->SetBoundsWorldSpace(float3(0, 0, 20.0f), float3(1, 1, 1));
 
    // Perform the rendering/testing.
-   mOcclusionTest->ResetInsideFrustum();
    mOcclusionTest->SetEnableFrustrumCulling(true);
    mOcclusionTest->Render(&viewMatrix, &projMatrix, &frustum);
 

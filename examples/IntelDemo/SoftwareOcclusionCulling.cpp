@@ -563,8 +563,6 @@ CPUTEventHandledCode MySample::HandleKeyboardEvent(CPUTKey key)
                 state = CPUT_CHECKBOX_UNCHECKED;
                 //mpDBR->ResetInsideFrustum();
                 //mpAABB->ResetInsideFrustum();
-            // andrewmac:
-            mOcclusionTest->ResetInsideFrustum();
             }
             mpFCullingCheckBox->SetCheckboxState(state);
             break;            
@@ -832,8 +830,6 @@ void MySample::HandleCallbackEvent( CPUTEventID Event, CPUTControlID ControlID, 
          mEnableFCulling = false;
          //mpDBR->ResetInsideFrustum();
          //mpAABB->ResetInsideFrustum();
-         // andrewmac:
-         mOcclusionTest->ResetInsideFrustum();
       }
       //mpDBR->SetEnableFCulling(mEnableFCulling);
       //mpAABB->SetEnableFCulling(mEnableFCulling);

@@ -52,7 +52,6 @@ class SoftOcclusionTest
 
       // Configuration
       void SetEnableFrustrumCulling(bool value);
-      void ResetInsideFrustum();
 
       // Occluder Management
       SoftOccluderScalar* AddOccluder() { return mpDBR->AddOccluder(); }
