@@ -14,3 +14,19 @@ examples/Minimal/Debug/
 examples/Minimal/lib/
 build/Visual Studio 2012/Debug/
 *.sdf
+build/Visual Studio 2012/*
+build/*
+build/*
+build/Visual Studio 2012/SoftOcclude.vcxproj
+examples/Minimal/.vs/*
+examples/Minimal/Release/*
+examples/Minimal/Minimal.vcxproj
+*.vcxproj
+.vs/*
+build/*
+bin/*
+*.vcxproj.filters
+*.vcxproj.user
+*.opensdf
+*.sln
+*.vcxproj.user

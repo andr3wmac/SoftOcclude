@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
-#include "SoftOcclude.h"
+#include "intel/include/SoftOcclude.h"
 
 // Camera Data
 float4x4 viewMatrix(1, 0, 0, 0,
