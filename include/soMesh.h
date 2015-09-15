@@ -2,7 +2,7 @@
 #ifndef __SOMESH_H__
 #define __SOMESH_H__
 
-#include "common/types.h"
+#include "core/common/types.h"
 
 enum class SoGeometryType
 {

@@ -1,101 +1,94 @@
-//-----------------------------------------------------------------------------
-// Copyright (c) 2015 Andrew Mac
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to
-// deal in the Software without restriction, including without limitation the
-// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-// sell copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-// IN THE SOFTWARE.
-//-----------------------------------------------------------------------------
+#include "core/common/types.h"
+#include "core/meshRasterizer.h"
+#include "core/depthBuffer.h"
+#include "math/util/memory/stackAlign.h"
 
-#include <iostream>
-#include "intel/include/SoftOcclude.h"
+#include "math/simd/sse41.h"
 
-// Camera Data
-float4x4 viewMatrix(1, 0, 0, 0,
-                    0, 1, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1);
+#include "core/common/Bitmap.h"
+
+#define SSE41_RASTERIZER MeshRasterizer< SSE4_1SimdTraits<F32>, SSE4_1SimdTraits<S32> > 
 
 
-float4x4 projMatrix(1.73205090f, 0.0f, 0.0f, 0.0f,
-	                 0.0f, 3.07920146f, 0.0f, 0.0f,
-	                 0.0f, 0.0f, 0.000500250142f, 1.0f,
-	                 0.0f, 0.0f, 1.00050032f, 0.0f);
+void SaveDepthBuffer(const char* filename, SimdDepthBuffer &depthBufferStruct)
+{
+    U32 pixels = depthBufferStruct.GetWidth() * depthBufferStruct.GetHeight();
 
-float fov = 1.04719758f;
+    U8 *colorData = new U8[pixels * 3];
 
-// Model Data
-Vertex cubeVerts[4] = {Vertex(-1, -1, 1),
-                                    Vertex( 1, -1, 1),
-                                    Vertex(-1,  1, 1),
-                                    Vertex( 1,  1, 1)};
+    F32* ddd = depthBufferStruct.GetDepthSequence(0);
+    
+    U32 idx = 0;
 
-UINT cubeIndices[6] = {2, 1, 0, 1, 2, 3};
+    //For each 2x2 tile row
+    for (U32 h = 0; h < depthBufferStruct.GetHeight(); h+=2)
+    {
+        // for each 2x2 row cells
+        for (U32 w = 0; w < depthBufferStruct.GetWidth(); w += 2)
+        {
+            for (U32 row = 0; row < 2; ++row)
+            {
+                for (U32 col = 0; col < 2; ++col)
+                {
+                    F32 depth = ddd[idx];
+
+                    U8 color = depth > 0.1 ? 255 : 0;
+
+                    U32 pos = ( (h + row) * depthBufferStruct.GetWidth() + (w + col) ) * 3;
+
+                    colorData[pos] = color;
+                    colorData[pos + 1] = color;
+                    colorData[pos + 2] = color;
+
+                    idx++;
+                }
+            }
+        }
+    }
+
+    writeBMP(filename, colorData, depthBufferStruct.GetWidth(), depthBufferStruct.GetHeight());
+}
 
 int main()
 {
-   float width = 640.0f;
-   float height = 360.0f;
+    F32 StackAlign(64) tv1_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
+    F32 StackAlign(64) tv1_y[4] = { 129.613052, 129.613052, 129.613052, 129.613052 };
+    F32 StackAlign(64) tv1_z[4] = { 0.3, 0.4, 0.5, 0.6 };
 
-   SoftOcclusionTest* mOcclusionTest = new SoftOcclusionTest(width, height);
+    F32 StackAlign(64) tv2_x[4] = { 370.386932, 370.386932, 370.386932, 370.386932 };
+    F32 StackAlign(64) tv2_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+    F32 StackAlign(64) tv2_z[4] = { 0.4, 0.5, 0.6, 0.7 };
 
-   SoftFrustum frustum;
-   frustum.InitializeFrustum(1, 1000, width / height, fov, float3(0, 0, 0), float3(0, 0, 1), float3(0, 1, 0));
+    F32 StackAlign(64) tv3_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
+    F32 StackAlign(64) tv3_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+    F32 StackAlign(64) tv3_z[4] = { 0.8, 0.9, 1.0, 1.1 };
 
-   // Add a 2x2x2 cube at (0, 0, 10) as an occluder.
-   SoftOccluderScalar* occluder = mOcclusionTest->AddOccluder();
+    SSE41_RASTERIZER::SimdTriangleSet triangles(
+        SSE41_RASTERIZER::SimdVertexSet(tv1_x, tv1_y, tv1_z),
+        SSE41_RASTERIZER::SimdVertexSet(tv2_x, tv2_y, tv2_z),
+        SSE41_RASTERIZER::SimdVertexSet(tv3_x, tv3_y, tv3_z)
+        );
+    
 
-   occluder->AddMesh(cubeVerts, 4, cubeIndices, 6, 2);
-   float4x4 cubeWorldMatrix(1.0f, 0.0f, 0.0f, 0.0f,
-                            0.0f, 1.0f, 0.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f, 0.0f,
-                            0.0f, 0.0f, 10.0f, 1.0f);
+    SimdDepthBuffer depthBuffer(800, 600);
+    depthBuffer.Clear();
 
-   occluder->SetWorldMatrix(&cubeWorldMatrix);
-   occluder->SetBoundsObjectSpace(float3(0, 0, 0), float3(2, 2, 2));
-   occluder->SetBoundsWorldSpace(float3(0, 0, 10.0f), float3(2, 2, 2));
+    SSE4_1SimdTraits<S32>::vec_type pixelPatternX, pixelPatternY;
 
-   // Perform this whenever occluders are dirty.
-   mOcclusionTest->RefreshOccluders();
+    S32 StackAlign(64) patternX[4] = { 0, 1, 0, 1 };
+    S32 StackAlign(64) patternY[4] = { 0, 0, 1, 1 };
 
-   // Add a 2x2x2 AABB at (0, 0, 20) as an occludee
-   SoftOccludeeScalar* occludee = mOcclusionTest->AddOccludee();
-   float4x4 occludeeWorldMatrix(1.0f, 0.0f, 0.0f, 0.0f,
-                                0.0f, 1.0f, 0.0f, 0.0f,
-                                0.0f, 0.0f, 1.0f, 0.0f,
-                                0.0f, 0.0f, 20.0f, 1.0f);
+    pixelPatternX.LoadAligned(patternX);
+    pixelPatternY.LoadAligned(patternY);
 
-   occludee->SetWorldMatrix(&occludeeWorldMatrix);
-   occludee->SetBoundsObjectSpace(float3(0, 0, 0), float3(1, 1, 1));
-   occludee->SetBoundsWorldSpace(float3(0, 0, 20.0f), float3(1, 1, 1));
+    SSE41_RASTERIZER::RasterizeToDepthBuffer(DepthBufferTile(   800,600,
+                                                                0,800,
+                                                                0,600),
+                                             pixelPatternX,
+                                             pixelPatternY,
+                                             depthBuffer, triangles);
 
-   // Perform the rendering/testing.
-   mOcclusionTest->SetEnableFrustrumCulling(true);
-   mOcclusionTest->Render(&viewMatrix, &projMatrix, &frustum);
+    SaveDepthBuffer("firstTriangle.bmp", depthBuffer);
 
-   // Check if our occludee is visible or not.
-   if ( !mOcclusionTest->IsOccludeeVisible(0) )
-      std::cout << "Occludee is not visible!" << std::endl;
-
-   std::cout << "Render complete. Press enter to output depth buffer." << std::endl;
-   std::cin.ignore();
-
-   // Save a bmp copy of depth buffer.
-   mOcclusionTest->SaveDepthBuffer("depth_buffer.bmp");
-
-   // Clean up
-   delete mOcclusionTest;
+    return 0;
 }

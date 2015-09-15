@@ -46,18 +46,19 @@ solution "SoftOcclude"
 		optimize "Speed"
 				
 	configuration {}
-			
-	project "SoftOcclude-Minimal"
 	
-		location(  root .. "examples/minimal" )
+	project "SoftOcclude-Minimal"
 		
-		links "IntelOcclu"
+		location(  root .. "examples/minimal" )
+	
+		links "SoftOccludeCore"
 		
 		kind "ConsoleApp"
 		flags "WinMain"
 		defines "GTEST_HAS_TR1_TUPLE=0"
 		
 		includedirs {
+			root .. "external/math-library/math/include/",
 			root .. "include/",
 			root .. "external/"
 			}	
@@ -86,13 +87,14 @@ solution "SoftOcclude"
 		kind "StaticLib"
 		
 		includedirs {
+			root .. "external/math-library/math/include/",
 			root .. "include/",
 			root .. "src/",
 			}	
 		
 		files { 
-			root .. "src/**.h",
-			root .. "src/**.cpp"
+			root .. "include/**.h",
+			root .. "include/**.cpp"
 			}
 			
 	project "IntelOcclu"
@@ -111,3 +113,35 @@ solution "SoftOcclude"
 			root .. "external/intel/src/**.h",
 			root .. "external/intel/src/**.cpp"
 			}
+			
+	project "Intel-SoftOcclude-Minimal"
+	
+		location(  root .. "external/intel/example/minimal" )
+		
+		links "IntelOcclu"
+		
+		kind "ConsoleApp"
+		flags "WinMain"
+		defines "GTEST_HAS_TR1_TUPLE=0"
+		
+		includedirs {
+			root .. "include/",
+			root .. "external/"
+			}	
+		
+		files { 
+			root .. "external/intel/example/minimal/**.h",
+			root .. "external/intel/example/minimal/*.cpp"
+			}
+			
+		configuration { "Debug", "x32" }
+			defines "PREFIX=X32D_"
+		
+		configuration { "Debug", "x64" }
+			defines "PREFIX=X64D_"
+		
+		configuration { "Release", "x32" }
+			defines "PREFIX=X32R_"
+		
+		configuration { "Release", "x64" }
+			defines "PREFIX=X64R_"

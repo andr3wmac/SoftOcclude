@@ -2,7 +2,7 @@
 #ifndef __SOMESHREFERENCE_H__
 #define __SOMESHREFERENCE_H__
 
-#include "common/types.h"
+#include "core/common/types.h"
 
 typedef U32 SoGeometryID;
 typedef U32 SoOccluderID;
