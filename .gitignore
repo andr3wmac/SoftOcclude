@@ -30,3 +30,4 @@ bin/*
 *.opensdf
 *.sln
 *.vcxproj.user
+SoftOcclude.v11.suo
