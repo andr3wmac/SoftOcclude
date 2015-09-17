@@ -83,7 +83,7 @@ private:
     U32 mWidth;
     U32 mHeight;
 
-    //Align to page line
+    //Align to cache line
     std::vector< F32, AlignedAllocator< Real, 64 > > mDepthSequence;
 };
 

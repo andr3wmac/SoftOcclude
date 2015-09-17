@@ -25,19 +25,41 @@
 */
 
 #pragma once
-#ifndef __SIMD_BASE_TRAITS_H__
-#define __SIMD_BASE_TRAITS_H__
+#ifndef __SSE2_VEC4IB_H__
+#define __SSE2_VEC4IB_H__
 
-template< typename VALUE_TYPE >
-struct AvxSimdTraits;
+#include "math/types.h"
 
-template< typename VALUE_TYPE >
-struct SSE4_1SimdTraits;
+#include "math/simd/vectorize.h"
+#include "math/simd/generic/simdVectorBoolBase.h"
 
-template< typename VALUE_TYPE >
-struct FpuSimdTraits;
+#include <emmintrin.h>
+#include <limits>
 
-template< typename VALUE_TYPE >
-struct SSE2SimdTraits;
+class SSE2Vec4i_b : public SimdVectorBoolBase< SSE2Vec4i_b >
+{
+public:
+
+    inline SSE2Vec4i_b(const __m128i &rhs) :
+        mValue(rhs)
+    {
+    }
+
+    inline SSE2Vec4i_b &operator=(const __m128i &rhs)
+    {
+        mValue = rhs;
+
+        return *this;
+    }
+
+    inline operator __m128i() const
+    {
+        return mValue;
+    }
+
+private:
+
+    __m128i mValue;
+};
 
 #endif

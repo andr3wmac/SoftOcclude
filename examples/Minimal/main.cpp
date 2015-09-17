@@ -4,11 +4,13 @@
 #include "math/util/memory/stackAlign.h"
 
 #include "math/simd/sse41.h"
+#include "math/simd/sse2.h"
 
 #include "core/common/Bitmap.h"
 
 #define SSE41_RASTERIZER MeshRasterizer< SSE4_1SimdTraits<F32>, SSE4_1SimdTraits<S32> > 
-
+#define SSE2_RASTERIZER MeshRasterizer< SSE2SimdTraits<F32>, SSE2SimdTraits<S32> > 
+#define SIMD_RASTERIZER SSE2_RASTERIZER
 
 void SaveDepthBuffer(const char* filename, SimdDepthBuffer &depthBufferStruct)
 {
@@ -51,42 +53,12 @@ void SaveDepthBuffer(const char* filename, SimdDepthBuffer &depthBufferStruct)
 
 int main()
 {
-    F32 StackAlign(64) tv1_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
-    F32 StackAlign(64) tv1_y[4] = { 129.613052, 129.613052, 129.613052, 129.613052 };
-    F32 StackAlign(64) tv1_z[4] = { 0.3, 0.4, 0.5, 0.6 };
-
-    F32 StackAlign(64) tv2_x[4] = { 370.386932, 370.386932, 370.386932, 370.386932 };
-    F32 StackAlign(64) tv2_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
-    F32 StackAlign(64) tv2_z[4] = { 0.4, 0.5, 0.6, 0.7 };
-
-    F32 StackAlign(64) tv3_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
-    F32 StackAlign(64) tv3_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
-    F32 StackAlign(64) tv3_z[4] = { 0.8, 0.9, 1.0, 1.1 };
-
-    SSE41_RASTERIZER::SimdTriangleSet triangles(
-        SSE41_RASTERIZER::SimdVertexSet(tv1_x, tv1_y, tv1_z),
-        SSE41_RASTERIZER::SimdVertexSet(tv2_x, tv2_y, tv2_z),
-        SSE41_RASTERIZER::SimdVertexSet(tv3_x, tv3_y, tv3_z)
-        );
     
 
     SimdDepthBuffer depthBuffer(800, 600);
     depthBuffer.Clear();
 
-    SSE4_1SimdTraits<S32>::vec_type pixelPatternX, pixelPatternY;
-
-    S32 StackAlign(64) patternX[4] = { 0, 1, 0, 1 };
-    S32 StackAlign(64) patternY[4] = { 0, 0, 1, 1 };
-
-    pixelPatternX.LoadAligned(patternX);
-    pixelPatternY.LoadAligned(patternY);
-
-    SSE41_RASTERIZER::RasterizeToDepthBuffer(DepthBufferTile(   800,600,
-                                                                0,800,
-                                                                0,600),
-                                             pixelPatternX,
-                                             pixelPatternY,
-                                             depthBuffer, triangles);
+    SIMD_RASTERIZER::RasterizeTileData(0, 0, 800, 600, depthBuffer);
 
     SaveDepthBuffer("firstTriangle.bmp", depthBuffer);
 

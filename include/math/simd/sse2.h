@@ -1,3 +1,4 @@
+#pragma once
 /**
 * @cond ___LICENSE___
 *
@@ -25,19 +26,10 @@
 */
 
 #pragma once
-#ifndef __SIMD_BASE_TRAITS_H__
-#define __SIMD_BASE_TRAITS_H__
+#ifndef __SSE2_H__
+#define __SSE2_H__
 
-template< typename VALUE_TYPE >
-struct AvxSimdTraits;
-
-template< typename VALUE_TYPE >
-struct SSE4_1SimdTraits;
-
-template< typename VALUE_TYPE >
-struct FpuSimdTraits;
-
-template< typename VALUE_TYPE >
-struct SSE2SimdTraits;
+#include "math/simd/sse2/sse2_vec4i.h"
+#include "math/simd/sse2/sse2_vec4f.h"
 
 #endif

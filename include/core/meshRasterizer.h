@@ -213,9 +213,9 @@ struct MeshRasterizer
 
                 for (U32 x = ac_min_x, xend = ac_max_x; x < xend; x += 2)
                 {
-                    simd_veci coverageMask = w0 | w1 | w2;
+                    simd_veci iCoverageMask = w0 | w1 | w2;
 
-                    if (coverageMask.IsEmpty())
+                    if (iCoverageMask.IsEmpty())
                     {
                         continue;
                     }
@@ -229,7 +229,9 @@ struct MeshRasterizer
                     simd_vec prevDepth;
                     prevDepth.LoadAligned(depthLink);
 
-                    simd_bool depthMask = (pixelDepth >= prevDepth) & simd_bool(coverageMask);
+                    simd_bool depthComp = (pixelDepth >= prevDepth);
+                    simd_bool coverageMask = simd_bool(iCoverageMask);
+                    simd_bool depthMask = depthComp & coverageMask;
 
                     pixelDepth = SIMD_Select(depthMask, prevDepth, pixelDepth);
                     pixelDepth.StoreAligned(depthLink);
@@ -249,15 +251,42 @@ struct MeshRasterizer
     }
 
     static void RasterizeTileData(  U32 tileShiftX, U32 tileShiftY,
-                                    U32 tileSizeX, U32 tileSizeY )
+                                    U32 tileSizeX, U32 tileSizeY,
+                                    SimdDepthBuffer &depthBuffer)
     {
-        SSE4_1SimdTraits<S32>::vec_type pixelPatternX, pixelPatternY;
+
+        F32 StackAlign(64) tv1_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
+        F32 StackAlign(64) tv1_y[4] = { 129.613052, 129.613052, 129.613052, 129.613052 };
+        F32 StackAlign(64) tv1_z[4] = { 0.3, 0.4, 0.5, 0.6 };
+
+        F32 StackAlign(64) tv2_x[4] = { 370.386932, 370.386932, 370.386932, 370.386932 };
+        F32 StackAlign(64) tv2_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+        F32 StackAlign(64) tv2_z[4] = { 0.4, 0.5, 0.6, 0.7 };
+
+        F32 StackAlign(64) tv3_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
+        F32 StackAlign(64) tv3_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+        F32 StackAlign(64) tv3_z[4] = { 0.8, 0.9, 1.0, 1.1 };
+
+        SimdTriangleSet triangles(
+            SimdVertexSet(tv1_x, tv1_y, tv1_z),
+            SimdVertexSet(tv2_x, tv2_y, tv2_z),
+            SimdVertexSet(tv3_x, tv3_y, tv3_z)
+            );
+
+        simd_veci pixelPatternX, pixelPatternY;
 
         S32 StackAlign(64) patternX[4] = { 0, 1, 0, 1 };
         S32 StackAlign(64) patternY[4] = { 0, 0, 1, 1 };
 
         pixelPatternX.LoadAligned(patternX);
         pixelPatternY.LoadAligned(patternY);
+
+        RasterizeToDepthBuffer(DepthBufferTile(800, 600,
+                                               0, 800,
+                                               0, 600),
+                                               pixelPatternX,
+                                               pixelPatternY,
+                                               depthBuffer, triangles);
     }
 
 

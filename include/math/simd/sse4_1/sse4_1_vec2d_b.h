@@ -133,11 +133,4 @@ inline SSE41Vec2d_b operator!=( const SSE41Vec2d_b &lhs, const SSE41Vec2d_b &rhs
     return _mm_cmpneq_pd( lhs, rhs );
 }
 
-inline bool SIMD_Hadd( const SSE41Vec2d_b &lhs )
-{
-    __m128d tmp0 = _mm_hadd_pd( lhs, lhs );
-    
-    return (bool)_mm_cvtsd_si32( tmp0 );
-}
-
 #endif
