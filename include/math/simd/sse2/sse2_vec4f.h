@@ -29,6 +29,7 @@
 #define __SSE2_VEC4f_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -69,10 +70,16 @@ public:
 
     }
 
+    inline SSE2Vec4f(const SSE2Vec4f &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
     inline SSE2Vec4f(const __m128i &rhs) : mValue(_mm_cvtepi32_ps(rhs))
     {
 
     }
+
 
     inline SSE2Vec4f &operator=( const __m128 &rhs )
     {
@@ -115,6 +122,26 @@ public:
     inline SSE2Vec4f RoundToNearest() const
     {
         return  _mm_cvtepi32_ps( _mm_cvtps_epi32( mValue ) );
+    }
+
+    template< U32 i >
+    inline SSE2Vec4f BroadcastIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_shuffle_ps(mValue, mValue, select);
+    }
+
+    template< U32 i >
+    inline F32 ExtractIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_cvtss_f32(_mm_shuffle_ps(mValue, mValue, select));
     }
 
 private:

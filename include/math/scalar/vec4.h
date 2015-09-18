@@ -70,7 +70,7 @@ public:
     }
     
     template< class TYPE2 >
-    inline Vec4( const PrimaryVectorBase< TYPE2, 4 > &v1 )
+    FORCE_INLINE Vec4( const PrimaryVectorBase< TYPE2, 4 > &v1 )
     {
         SetValues( (Real) v1[0], (Real) v1[1], (Real) v1[2], (Real) v1[3] );
     }
@@ -106,11 +106,11 @@ class Vec4
 
 public:
 
-    inline Vec4()
+    FORCE_INLINE Vec4()
     {
     }
     
-    inline Vec4( const Real x, const Real y, const Real z, const Real w )
+    FORCE_INLINE Vec4( const Real x, const Real y, const Real z, const Real w )
     {
         mValues[0] = x;
         mValues[1] = y;
@@ -118,7 +118,7 @@ public:
         mValues[3] = w;
     }
     
-    inline Vec4( const Vec4 &v )
+    FORCE_INLINE Vec4( const Vec4 &v )
     {
         mValues[0] = v.mValues[0];
         mValues[1] = v.mValues[1];
@@ -126,7 +126,7 @@ public:
         mValues[3] = v.mValues[3];
     }
     
-    inline Vec4( const Vec4I &v )
+    FORCE_INLINE Vec4( const Vec4I &v )
     {
         mValues[0] = ( Real )v.GetX();
         mValues[1] = ( Real )v.GetY();
@@ -134,7 +134,7 @@ public:
         mValues[3] = ( Real )v.GetW();
     }
     
-    inline Vec4( const Vec3 &other, Real w )
+    FORCE_INLINE Vec4( const Vec3 &other, Real w )
     {
         mValues[0] = other[0];
         mValues[1] = other[1];
@@ -142,7 +142,7 @@ public:
         mValues[3] = w;
     }
     
-    inline Vec4( const Vec2 &other1, const Vec2 &other2 )
+    FORCE_INLINE Vec4( const Vec2 &other1, const Vec2 &other2 )
     {
         mValues[0] = other1[0];
         mValues[1] = other1[1];
@@ -151,21 +151,21 @@ public:
         mValues[3] = other2[1];
     }
     
-    inline Real operator[]( U32 i ) const
+    FORCE_INLINE Real operator[]( U32 i ) const
     {
         assert( i < 4 );
         
         return mValues[i];
     }
     
-    inline Real &operator[]( U32 i )
+    FORCE_INLINE Real &operator[]( U32 i )
     {
         assert( i < 4 );
         
         return mValues[i];
     }
     
-    inline Vec4 &operator=( const Vec4 &other )
+    FORCE_INLINE Vec4 &operator=( const Vec4 &other )
     {
         mValues[0] = other.mValues[0];
         mValues[1] = other.mValues[1];
@@ -175,7 +175,7 @@ public:
         return *this;
     }
     
-    inline Vec4 &operator-=( const Vec4 &v )
+    FORCE_INLINE Vec4 &operator-=( const Vec4 &v )
     {
         mValues[0] -= v.mValues[0];
         mValues[1] -= v.mValues[1];
@@ -185,7 +185,7 @@ public:
         return *this;
     }
     
-    inline Vec4 &operator+=( const Vec4 &v )
+    FORCE_INLINE Vec4 &operator+=( const Vec4 &v )
     {
         mValues[0] += v.mValues[0];
         mValues[1] += v.mValues[1];
@@ -195,7 +195,7 @@ public:
         return *this;
     }
     
-    inline Vec4 &operator/=( Real s )
+    FORCE_INLINE Vec4 &operator/=( Real s )
     {
         assert( s != 0.0f );
     
@@ -207,7 +207,7 @@ public:
         return *this;
     }
     
-    inline Vec4 &operator*=( Real s )
+    FORCE_INLINE Vec4 &operator*=( Real s )
     {
         mValues[0] *= s;
         mValues[1] *= s;
@@ -217,53 +217,53 @@ public:
         return *this;
     }
     
-    inline bool operator==( const Vec4 &other ) const
+    FORCE_INLINE bool operator==( const Vec4 &other ) const
     {
         return Mathf::Equal( mValues[0], other.mValues[0] ) && Mathf::Equal( mValues[1], other.mValues[1] ) &&
                Mathf::Equal( mValues[2], other.mValues[2] ) && Mathf::Equal( mValues[3], other.mValues[3] );
     }
     
-    inline bool operator!=( const Vec4 &other ) const
+    FORCE_INLINE bool operator!=( const Vec4 &other ) const
     {
         return !( *this == other );
     }
     
-    inline Real &operator[]( const U8 axis )
+    FORCE_INLINE Real &operator[]( const U8 axis )
     {
         return mValues[ axis ];
     }
     
-    inline const Real &operator[]( const U8 axis ) const
+    FORCE_INLINE const Real &operator[]( const U8 axis ) const
     {
         return mValues[ axis ];
     }
     
-    inline Real Dot( const Vec4 &v ) const
+    FORCE_INLINE Real Dot( const Vec4 &v ) const
     {
         return mValues[0] * v.mValues[0] + mValues[1] * v.mValues[1] + mValues[2] * v.mValues[2] + mValues[3] * v.mValues[3];
     }
     
-    inline Real Length2() const
+    FORCE_INLINE Real Length2() const
     {
         return Dot( *this );
     }
     
-    inline Real Length() const
+    FORCE_INLINE Real Length() const
     {
         return Mathf::Sqrt( Length2() );
     }
     
-    inline Real Distance2( const Vec4 &v ) const
+    FORCE_INLINE Real Distance2( const Vec4 &v ) const
     {
         return ( *this - v ).Length2();
     }
     
-    inline Real Distance( const Vec4 &v ) const
+    FORCE_INLINE Real Distance( const Vec4 &v ) const
     {
         return ( *this - v ).Length();
     }
     
-    inline void SetValue( const Real x, const Real y, const Real z, const Real w )
+    FORCE_INLINE void SetValue( const Real x, const Real y, const Real z, const Real w )
     {
         mValues[0] = x;
         mValues[1] = y;
@@ -271,7 +271,7 @@ public:
         mValues[3] = w;
     }
     
-    inline Vec4 SafeNormalise()
+    FORCE_INLINE Vec4 SafeNormalise()
     {
         Vec4 absv = Absolute();
         U8 max = absv.MaxAxis();
@@ -289,23 +289,23 @@ public:
         return *this;
     }
     
-    inline Vec4 Normalise()
+    FORCE_INLINE Vec4 Normalise()
     {
         return *this /= Length();
     }
     
-    inline Vec4 Lerp( const Vec4 &v, const Real t ) const
+    FORCE_INLINE Vec4 Lerp( const Vec4 &v, const Real t ) const
     {
         return Vec4( mValues[0] + ( v.mValues[0] - mValues[0] ) * t, mValues[1] + ( v.mValues[1] - mValues[1] ) * t,
                      mValues[2] + ( v.mValues[2] - mValues[2] ) * t, mValues[3] + ( v.mValues[3] - mValues[3] ) * t );
     }
     
-    inline Vec4 Absolute() const
+    FORCE_INLINE Vec4 Absolute() const
     {
         return Vec4( Mathf::Abs( mValues[0] ), Mathf::Abs( mValues[1] ), Mathf::Abs( mValues[2] ), Mathf::Abs( mValues[3] ) );
     }
     
-    inline U8 MinAxis() const
+    FORCE_INLINE U8 MinAxis() const
     {
         U8 axis = 0;
         Real minvalue = mValues[0];
@@ -322,7 +322,7 @@ public:
         return axis;
     }
     
-    inline U8 MaxAxis() const
+    FORCE_INLINE U8 MaxAxis() const
     {
         U8 axis = 0;
         Real maxvalue = mValues[0];
@@ -339,87 +339,87 @@ public:
         return axis;
     }
     
-    inline void SetX( const Real x )
+    FORCE_INLINE void SetX( const Real x )
     {
         mValues[0] = x;
     }
     
-    inline Real GetX() const
+    FORCE_INLINE Real GetX() const
     {
         return mValues[0];
     }
     
-    inline void SetY( const Real y )
+    FORCE_INLINE void SetY( const Real y )
     {
         mValues[1] = y;
     }
     
-    inline Real GetY() const
+    FORCE_INLINE Real GetY() const
     {
         return mValues[1];
     }
     
-    inline void SetZ( const Real z )
+    FORCE_INLINE void SetZ( const Real z )
     {
         mValues[2] = z;
     }
     
-    inline Real GetZ() const
+    FORCE_INLINE Real GetZ() const
     {
         return mValues[2];
     }
     
-    inline void SetW( const Real w )
+    FORCE_INLINE void SetW( const Real w )
     {
         mValues[3] = w;
     }
     
-    inline Real GetW() const
+    FORCE_INLINE Real GetW() const
     {
         return mValues[3];
     }
     
-    inline void SetZero()
+    FORCE_INLINE void SetZero()
     {
         SetValue( 0.0f, 0.0f, 0.0f, 0.0f );
     }
     
-    inline bool IsZero() const
+    FORCE_INLINE bool IsZero() const
     {
         return mValues[0] == 0.0f && mValues[1] == 0.0f && mValues[2] == 0.0f && mValues[3] == 0.0f;
     }
     
-    inline bool IsFuzzyZero() const
+    FORCE_INLINE bool IsFuzzyZero() const
     {
         return Length2() < Mathf::GetEpsilon();
     }
     
-    inline void Clear()
+    FORCE_INLINE void Clear()
     {
         SetValue( 0.0f, 0.0f, 0.0f, 0.0f );
     }
     
-    static inline Vec4 GetZero()
+    static FORCE_INLINE Vec4 GetZero()
     {
         return Vec4( 0.0f, 0.0f, 0.0f, 0.0f );
     }
     
-    static inline Vec4 GetOne()
+    static FORCE_INLINE Vec4 GetOne()
     {
         return Vec4( 1.0f, 1.0f, 1.0f, 1.0f );
     }
     
-    inline Vec3 GetXYZ() const
+    FORCE_INLINE Vec3 GetXYZ() const
     {
         return Vec3( mValues[0], mValues[1], mValues[2] );
     }
     
-    inline Real *Data()
+    FORCE_INLINE Real *Data()
     {
         return mValues;
     }
     
-    inline const Real *Data() const
+    FORCE_INLINE const Real *Data() const
     {
         return mValues;
     }
@@ -429,7 +429,7 @@ private:
     Real mValues[4];
 };
 
-inline Vec4 operator+( const Vec4 &v1, const Vec4 &v2 )
+FORCE_INLINE Vec4 operator+( const Vec4 &v1, const Vec4 &v2 )
 {
     return Vec4( v1.mValues[0] + v2.mValues[0],
                  v1.mValues[1] + v2.mValues[1],
@@ -437,7 +437,7 @@ inline Vec4 operator+( const Vec4 &v1, const Vec4 &v2 )
                  v1.mValues[3] + v2.mValues[3] );
 }
 
-inline Vec4 operator*( const Vec4 &v1, const Vec4 &v2 )
+FORCE_INLINE Vec4 operator*( const Vec4 &v1, const Vec4 &v2 )
 {
     return Vec4( v1.mValues[0] * v2.mValues[0],
                  v1.mValues[1] * v2.mValues[1],
@@ -445,7 +445,7 @@ inline Vec4 operator*( const Vec4 &v1, const Vec4 &v2 )
                  v1.mValues[3] * v2.mValues[3] );
 }
 
-inline Vec4 operator-( const Vec4 &v1, const Vec4 &v2 )
+FORCE_INLINE Vec4 operator-( const Vec4 &v1, const Vec4 &v2 )
 {
     return Vec4( v1.mValues[0] - v2.mValues[0],
                  v1.mValues[1] - v2.mValues[1],
@@ -453,29 +453,29 @@ inline Vec4 operator-( const Vec4 &v1, const Vec4 &v2 )
                  v1.mValues[3] - v2.mValues[3] );
 }
 
-inline Vec4 operator-( const Vec4 &v )
+FORCE_INLINE Vec4 operator-( const Vec4 &v )
 {
     return Vec4( -v.mValues[0], -v.mValues[1], -v.mValues[2], -v.mValues[3] );
 }
 
-inline Vec4 operator*( const Vec4 &v, const Real s )
+FORCE_INLINE Vec4 operator*( const Vec4 &v, const Real s )
 {
     return Vec4( v.mValues[0] * s, v.mValues[1] * s, v.mValues[2] * s, v.mValues[3] * s );
 }
 
-inline Vec4 operator*( const Real s, const Vec4 &v )
+FORCE_INLINE Vec4 operator*( const Real s, const Vec4 &v )
 {
     return v * s;
 }
 
-inline Vec4 operator/( const Vec4 &v, const Real s )
+FORCE_INLINE Vec4 operator/( const Vec4 &v, const Real s )
 {
     assert( s != 0.0f );
 
     return v * ( Real( 1.0 ) / s );
 }
 
-inline Vec4 operator/( const Vec4 &v1, const Vec4 &v2 )
+FORCE_INLINE Vec4 operator/( const Vec4 &v1, const Vec4 &v2 )
 {
     return Vec4( v1.mValues[0] / v2.mValues[0],
                  v1.mValues[1] / v2.mValues[1],

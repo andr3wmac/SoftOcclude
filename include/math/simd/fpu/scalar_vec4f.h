@@ -29,6 +29,7 @@
 #define __SCALAR_VEC4f_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/scalar/mathf.h"
 
@@ -59,7 +60,7 @@ public:
     ScalarVec4f()
     {}
 
-    inline ScalarVec4f( F32 val )
+    FORCE_INLINE ScalarVec4f( F32 val )
     {
         for ( U32 i = 0; i < 4; ++i )
         {
@@ -68,7 +69,7 @@ public:
     }
 
     /*
-    inline ScalarVec4f( F32 x, F32 y, F32 z, F32 w )
+    FORCE_INLINE ScalarVec4f( F32 x, F32 y, F32 z, F32 w )
     {
         mValue[0] = x;
         mValue[1] = y;
@@ -77,24 +78,24 @@ public:
     }
     */
 
-    inline ScalarVec4f( const F32 *rhs )
+    FORCE_INLINE ScalarVec4f( const F32 *rhs )
     {
         std::copy( rhs, rhs + FpuSimdTraits<F32>::width, mValue );
     }
 
-    inline ScalarVec4f &operator=( const F32 *rhs )
+    FORCE_INLINE ScalarVec4f &operator=( const F32 *rhs )
     {
         std::copy( rhs, rhs + FpuSimdTraits<F32>::width, mValue );
 
         return *this;
     }
 
-    inline operator F32 *()
+    FORCE_INLINE operator F32 *()
     {
         return mValue;
     }
 
-    inline operator const F32 *() const
+    FORCE_INLINE operator const F32 *() const
     {
         return mValue;
     }
@@ -129,9 +130,8 @@ public:
         mValue[3] = temp;
     }
     
-    inline ScalarVec4f RoundToNearest() const
+    FORCE_INLINE ScalarVec4f RoundToNearest() const
     {
-        
         ScalarVec4f newVec;
 
         for ( U32 i = 0; i < 4; ++i )
@@ -151,7 +151,7 @@ private:
 // Math
 //
 
-inline ScalarVec4f operator+( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4f operator+( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4f newVec;
 
@@ -163,7 +163,7 @@ inline ScalarVec4f operator+( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4f operator-( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4f operator-( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4f newVec;
 
@@ -175,7 +175,7 @@ inline ScalarVec4f operator-( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4f operator*( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4f operator*( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4f newVec;
 
@@ -187,7 +187,7 @@ inline ScalarVec4f operator*( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4f operator/( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4f operator/( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4f newVec;
 
@@ -203,7 +203,7 @@ inline ScalarVec4f operator/( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 // Comparison
 //
 
-inline ScalarVec4b operator== ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator== ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -215,7 +215,7 @@ inline ScalarVec4b operator== ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator!= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator!= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -227,7 +227,7 @@ inline ScalarVec4b operator!= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator< ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator< ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -239,7 +239,7 @@ inline ScalarVec4b operator< ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator<= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator<= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -251,7 +251,7 @@ inline ScalarVec4b operator<= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator> ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator> ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -263,7 +263,7 @@ inline ScalarVec4b operator> ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator>= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4b operator>= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4b newVec;
 
@@ -279,7 +279,7 @@ inline ScalarVec4b operator>= ( const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 // Special
 //
 
-inline ScalarVec4f SIMD_Sqrt( const ScalarVec4f &lhs )
+FORCE_INLINE ScalarVec4f SIMD_Sqrt( const ScalarVec4f &lhs )
 {
     ScalarVec4f newVec;
 
@@ -291,7 +291,7 @@ inline ScalarVec4f SIMD_Sqrt( const ScalarVec4f &lhs )
     return newVec;
 }
 
-inline ScalarVec4f SIMD_Rcp( const ScalarVec4f &lhs )
+FORCE_INLINE ScalarVec4f SIMD_Rcp( const ScalarVec4f &lhs )
 {
     ScalarVec4f newVec;
 
@@ -303,12 +303,12 @@ inline ScalarVec4f SIMD_Rcp( const ScalarVec4f &lhs )
     return newVec;
 }
 
-inline ScalarVec4f SIMD_RcpSqrt( const ScalarVec4f &lhs )
+FORCE_INLINE ScalarVec4f SIMD_RcpSqrt( const ScalarVec4f &lhs )
 {
     return SIMD_Sqrt( SIMD_Rcp( lhs ) );
 }
 
-inline ScalarVec4f SIMD_Select( const ScalarVec4b &sel, const ScalarVec4f &lhs, const ScalarVec4f &rhs )
+FORCE_INLINE ScalarVec4f SIMD_Select( const ScalarVec4b &sel, const ScalarVec4f &lhs, const ScalarVec4f &rhs )
 {
     ScalarVec4f newVec;
 
@@ -320,7 +320,7 @@ inline ScalarVec4f SIMD_Select( const ScalarVec4b &sel, const ScalarVec4f &lhs, 
     return newVec;
 }
 
-inline F32 SIMD_Hadd( const ScalarVec4f &lhs )
+FORCE_INLINE F32 SIMD_Hadd( const ScalarVec4f &lhs )
 {
     F32 val = 0.0f;
 
@@ -332,12 +332,12 @@ inline F32 SIMD_Hadd( const ScalarVec4f &lhs )
     return val;
 }
 
-inline ScalarVec4f FMA_ADD( const ScalarVec4f &mul1, const ScalarVec4f &mul2, const ScalarVec4f &add )
+FORCE_INLINE ScalarVec4f FMA_ADD( const ScalarVec4f &mul1, const ScalarVec4f &mul2, const ScalarVec4f &add )
 {
     return mul1 * mul2 + add;
 }
 
-inline ScalarVec4f FMA_SUB( const ScalarVec4f &mul1, const ScalarVec4f &mul2, const ScalarVec4f &sub )
+FORCE_INLINE ScalarVec4f FMA_SUB( const ScalarVec4f &mul1, const ScalarVec4f &mul2, const ScalarVec4f &sub )
 {
     return mul1 * mul2 - sub;
 }

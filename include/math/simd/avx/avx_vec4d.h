@@ -29,6 +29,7 @@
 #define __AVXVEC4D_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -58,55 +59,60 @@ public:
     AvxVec4d()
     {}
 
-    inline AvxVec4d( F64 val ) : mValue( _mm256_set1_pd( val ) )
+    FORCE_INLINE AvxVec4d( F64 val ) : mValue( _mm256_set1_pd( val ) )
     {
     }
 
     /*
-    inline AvxVec4d( F64 v0, F64 v1, F64 v2, F64 v3 ) :
+    FORCE_INLINE AvxVec4d( F64 v0, F64 v1, F64 v2, F64 v3 ) :
         mValue( _mm256_setr_pd( v0, v1, v2, v3 ) )
     {
     }
     */
 
-    inline AvxVec4d( const __m256d &rhs ) : mValue( rhs )
+    FORCE_INLINE AvxVec4d( const __m256d &rhs ) : mValue( rhs )
     {
 
     }
 
-    inline AvxVec4d &operator=( const __m256d &rhs )
+    FORCE_INLINE AvxVec4d(const AvxVec4d &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
+    FORCE_INLINE AvxVec4d &operator=( const __m256d &rhs )
     {
         mValue = rhs;
 
         return *this;
     }
 
-    inline operator __m256d() const
+    FORCE_INLINE operator __m256d() const
     {
         return mValue;
     }
 
-    inline void LoadUnaligned( const F64 *src )
+    FORCE_INLINE void LoadUnaligned( const F64 *src )
     {
         mValue =  _mm256_loadu_pd( src );
     }
 
-    inline void LoadAligned( const F64 *src )
+    FORCE_INLINE void LoadAligned( const F64 *src )
     {
         mValue = _mm256_load_pd( src );
     }
 
-    inline void StoreUnaligned( F64 *dest ) const
+    FORCE_INLINE void StoreUnaligned( F64 *dest ) const
     {
         _mm256_storeu_pd( dest, mValue );
     }
 
-    inline void StoreAligned( F64 *dest ) const
+    FORCE_INLINE void StoreAligned( F64 *dest ) const
     {
         _mm256_store_pd( dest, mValue );
     }
 
-    inline void RotateOne( bool permute128 )
+    FORCE_INLINE void RotateOne( bool permute128 )
     {
         //                 64:127     0:63        255:192     191:128  
         const S32 select = ( 1 ) | ( 0 << 1 ) | ( 1 << 2 ) | ( 0 << 3 );
@@ -122,7 +128,7 @@ public:
         }
     }
     
-    inline AvxVec4d RoundToNearest() const
+    FORCE_INLINE AvxVec4d RoundToNearest() const
     {
         return _mm256_round_pd( mValue, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC );
     }
@@ -136,22 +142,22 @@ private:
 // Math
 //
 
-inline AvxVec4d operator+( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d operator+( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_add_pd( lhs, rhs );
 }
 
-inline AvxVec4d operator-( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d operator-( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_sub_pd( lhs, rhs );
 }
 
-inline AvxVec4d operator*( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d operator*( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_mul_pd( lhs, rhs );
 }
 
-inline AvxVec4d operator/( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d operator/( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_div_pd( lhs, rhs );
 }
@@ -160,32 +166,32 @@ inline AvxVec4d operator/( const AvxVec4d &lhs, const AvxVec4d &rhs )
 // Comparison
 //
 
-inline AvxVec4d_b operator== ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator== ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 0 );
 }
 
-inline AvxVec4d_b operator!= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator!= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 12 );
 }
 
-inline AvxVec4d_b operator< ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator< ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 17 );
 }
 
-inline AvxVec4d_b operator<= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator<= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 18 );
 }
 
-inline AvxVec4d_b operator> ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator> ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 30 );
 }
 
-inline AvxVec4d_b operator>= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d_b operator>= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_cmp_pd( lhs, rhs, 29 );
 }
@@ -194,29 +200,29 @@ inline AvxVec4d_b operator>= ( const AvxVec4d &lhs, const AvxVec4d &rhs )
 // Special
 //
 
-inline AvxVec4d SIMD_Sqrt( const AvxVec4d &lhs )
+FORCE_INLINE AvxVec4d SIMD_Sqrt( const AvxVec4d &lhs )
 {
     return _mm256_sqrt_pd( lhs );
 }
 
-inline AvxVec4d SIMD_Rcp( const AvxVec4d &lhs )
+FORCE_INLINE AvxVec4d SIMD_Rcp( const AvxVec4d &lhs )
 {
     return ( 1.0 / lhs ); 
 }
 
-inline AvxVec4d SIMD_Select( const AvxVec4d_b &sel, const AvxVec4d &lhs, const AvxVec4d &rhs )
+FORCE_INLINE AvxVec4d SIMD_Select( const AvxVec4d_b &sel, const AvxVec4d &lhs, const AvxVec4d &rhs )
 {
     return _mm256_blendv_pd( rhs, lhs, sel );
 }
 
-inline F64 SIMD_Hadd( const AvxVec4d &lhs )
+FORCE_INLINE F64 SIMD_Hadd( const AvxVec4d &lhs )
 {
     const __m128d x128 = _mm_add_pd(_mm256_extractf128_pd(lhs, 1), _mm256_castpd256_pd128(lhs));
     const __m128d x64 = _mm_add_sd( x128, _mm_shuffle_pd(x128, x128, 0x3 ) );
     return _mm_cvtsd_f64(x64);
 }
 
-inline AvxVec4d FMA_ADD( const AvxVec4d &mul1, const AvxVec4d &mul2, const AvxVec4d &add )
+FORCE_INLINE AvxVec4d FMA_ADD( const AvxVec4d &mul1, const AvxVec4d &mul2, const AvxVec4d &add )
 {
 #if SIMD_INSTRUCTION_SET >= 7
     return _mm256_fmadd_pd( mul1, mul2, add );
@@ -225,7 +231,7 @@ inline AvxVec4d FMA_ADD( const AvxVec4d &mul1, const AvxVec4d &mul2, const AvxVe
 #endif
 }
 
-inline AvxVec4d FMA_SUB( const AvxVec4d &mul1, const AvxVec4d &mul2, const AvxVec4d &sub )
+FORCE_INLINE AvxVec4d FMA_SUB( const AvxVec4d &mul1, const AvxVec4d &mul2, const AvxVec4d &sub )
 {
 #if SIMD_INSTRUCTION_SET >= 7
     return _mm256_fmsub_pd( mul1, mul2, sub );

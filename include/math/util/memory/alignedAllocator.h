@@ -32,6 +32,7 @@
 #include <memory>
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/util/memory/malloc.h"
 
@@ -47,7 +48,7 @@
         ~AlignedAllocator() throw()
         {}
         template <class U>
-        inline AlignedAllocator( const AlignedAllocator<U, N> & ) throw()
+        FORCE_INLINE AlignedAllocator( const AlignedAllocator<U, N> & ) throw()
         {}
 
         typedef T value_type;
@@ -63,17 +64,17 @@
             typedef AlignedAllocator< Y, N > other;
         };
 
-        inline pointer addres( reference ref )
+        FORCE_INLINE pointer addres( reference ref )
         {
             return &ref;
         }
 
-        inline const_pointer addres( const_reference ref )
+        FORCE_INLINE const_pointer addres( const_reference ref )
         {
             return &ref;
         }
 
-        inline pointer allocate( size_type n, typename std::allocator<void>::const_pointer hint = 0 )
+        FORCE_INLINE pointer allocate( size_type n, typename std::allocator<void>::const_pointer hint = 0 )
         {
             pointer address = ( pointer )( ZefAlignedMalloc( sizeof( T ) * n, N ) );
 
@@ -85,30 +86,30 @@
             return address;
         }
 
-        inline void deallocate( pointer ptr, size_type )
+        FORCE_INLINE void deallocate( pointer ptr, size_type )
         {
             ZefAlignedFree( ptr );
         }
 
-        inline void construct( pointer p, const_reference val )
+        FORCE_INLINE void construct( pointer p, const_reference val )
         {
             new( p ) value_type( val );
         }
 
-        inline void destroy( pointer p )
+        FORCE_INLINE void destroy( pointer p )
         {
 
             p->~value_type();
         }
 
-        inline size_type max_size() const
+        FORCE_INLINE size_type max_size() const
         {
             return ~size_type( 0 ) / sizeof( T );
         }
 
         //avoid errors
-        inline bool operator==( AlignedAllocator const & ) { return true; }
-        inline bool operator!=( AlignedAllocator const &a ) { return !operator==( a ); }
+        FORCE_INLINE bool operator==( AlignedAllocator const & ) { return true; }
+        FORCE_INLINE bool operator!=( AlignedAllocator const &a ) { return !operator==( a ); }
     };
 
 #endif

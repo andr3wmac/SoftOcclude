@@ -29,6 +29,7 @@
 #define __AVX2_VEC8f_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -61,56 +62,61 @@ public:
     AvxVec8f()
     {}
 
-    inline AvxVec8f( F32 val ) : mValue( _mm256_set1_ps( val ) )
+    FORCE_INLINE AvxVec8f( F32 val ) : mValue( _mm256_set1_ps( val ) )
     {
     }
 
     /*
-    inline AvxVec8f( F32 v0, F32 v1, F32 v2, F32 v3,
+    FORCE_INLINE AvxVec8f( F32 v0, F32 v1, F32 v2, F32 v3,
                      F32 v4, F32 v5, F32 v6, F32 v7 ) :
         mValue( _mm256_setr_ps( v0, v1, v2, v3, v4, v5, v6, v7 ) )
     {
     }
     */
 
-    inline AvxVec8f( const __m256 &rhs ) : mValue( rhs )
+    FORCE_INLINE AvxVec8f( const __m256 &rhs ) : mValue( rhs )
     {
 
     }
 
-    inline AvxVec8f &operator=( const __m256 &rhs )
+    FORCE_INLINE AvxVec8f(const AvxVec8f &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
+    FORCE_INLINE AvxVec8f &operator=( const __m256 &rhs )
     {
         mValue = rhs;
 
         return *this;
     }
 
-    inline operator __m256() const
+    FORCE_INLINE operator __m256() const
     {
         return mValue;
     }
 
-    inline void LoadUnaligned( const F32 *src )
+    FORCE_INLINE void LoadUnaligned( const F32 *src )
     {
         mValue =  _mm256_loadu_ps( src );
     }
 
-    inline void LoadAligned( const F32 *src )
+    FORCE_INLINE void LoadAligned( const F32 *src )
     {
         mValue = _mm256_load_ps( src );
     }
 
-    inline void StoreUnaligned( F32 *dest ) const
+    FORCE_INLINE void StoreUnaligned( F32 *dest ) const
     {
         _mm256_storeu_ps( dest, mValue );
     }
 
-    inline void StoreAligned( F32 *dest ) const
+    FORCE_INLINE void StoreAligned( F32 *dest ) const
     {
         _mm256_store_ps( dest, mValue );
     }
 
-    inline void RotateOne( bool permute128 )
+    FORCE_INLINE void RotateOne( bool permute128 )
     {
         const S32 select = ( 1 ) | ( 2 << 2 ) | ( 3 << 4 ) | ( 0 << 6 );
         AvxVec8f permute = _mm256_permute_ps( mValue, select );
@@ -125,7 +131,7 @@ public:
         }
     }
     
-    inline AvxVec8f RoundToNearest() const
+    FORCE_INLINE AvxVec8f RoundToNearest() const
     {
         return _mm256_round_ps( mValue, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC );
         
@@ -141,22 +147,22 @@ private:
 // Math
 //
 
-inline AvxVec8f operator+( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f operator+( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_add_ps( lhs, rhs );
 }
 
-inline AvxVec8f operator-( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f operator-( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_sub_ps( lhs, rhs );
 }
 
-inline AvxVec8f operator*( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f operator*( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_mul_ps( lhs, rhs );
 }
 
-inline AvxVec8f operator/( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f operator/( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_div_ps( lhs, rhs );
 }
@@ -170,32 +176,32 @@ inline AvxVec8f operator/( const AvxVec8f &lhs, const AvxVec8f &rhs )
 // S: Signal NaN exceptions
 // Q: Do not throw NaN exceptions
 
-inline AvxVec8f_b operator== ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator== ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 0 );
 }
 
-inline AvxVec8f_b operator!= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator!= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 12 );
 }
 
-inline AvxVec8f_b operator< ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator< ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 17 );
 }
 
-inline AvxVec8f_b operator<= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator<= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 18 );
 }
 
-inline AvxVec8f_b operator> ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator> ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 30 );
 }
 
-inline AvxVec8f_b operator>= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f_b operator>= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 29 );
 }
@@ -204,23 +210,23 @@ inline AvxVec8f_b operator>= ( const AvxVec8f &lhs, const AvxVec8f &rhs )
 // Special
 //
 
-inline AvxVec8f SIMD_Sqrt( const AvxVec8f &lhs )
+FORCE_INLINE AvxVec8f SIMD_Sqrt( const AvxVec8f &lhs )
 {
     return _mm256_sqrt_ps( lhs );
 }
 
-inline AvxVec8f SIMD_Rcp( const AvxVec8f &lhs )
+FORCE_INLINE AvxVec8f SIMD_Rcp( const AvxVec8f &lhs )
 {
     return 1.0 / lhs;
     //return _mm256_rcp_ps( lhs );
 }
 
-inline AvxVec8f SIMD_Select( const AvxVec8f_b &sel, const AvxVec8f &lhs, const AvxVec8f &rhs )
+FORCE_INLINE AvxVec8f SIMD_Select( const AvxVec8f_b &sel, const AvxVec8f &lhs, const AvxVec8f &rhs )
 {
     return _mm256_blendv_ps( rhs, lhs, sel );
 }
 
-inline F32 SIMD_Hadd( const AvxVec8f &lhs )
+FORCE_INLINE F32 SIMD_Hadd( const AvxVec8f &lhs )
 {
     const __m128 x128 = _mm_add_ps(_mm256_extractf128_ps(lhs, 1), _mm256_castps256_ps128(lhs));
     const __m128 x64 = _mm_add_ps(x128, _mm_movehl_ps(x128, x128));
@@ -228,7 +234,7 @@ inline F32 SIMD_Hadd( const AvxVec8f &lhs )
     return _mm_cvtss_f32(x32);
 }
 
-inline AvxVec8f FMA_ADD( const AvxVec8f &mul1, const AvxVec8f &mul2, const AvxVec8f &add )
+FORCE_INLINE AvxVec8f FMA_ADD( const AvxVec8f &mul1, const AvxVec8f &mul2, const AvxVec8f &add )
 {
 #if SIMD_INSTRUCTION_SET >= 7
     return _mm256_fmadd_ps( mul1, mul2, add );
@@ -237,7 +243,7 @@ inline AvxVec8f FMA_ADD( const AvxVec8f &mul1, const AvxVec8f &mul2, const AvxVe
 #endif
 }
 
-inline AvxVec8f FMA_SUB( const AvxVec8f &mul1, const AvxVec8f &mul2, const AvxVec8f &sub )
+FORCE_INLINE AvxVec8f FMA_SUB( const AvxVec8f &mul1, const AvxVec8f &mul2, const AvxVec8f &sub )
 {
 #if SIMD_INSTRUCTION_SET >= 7
     return _mm256_fmsub_ps( mul1, mul2, sub );

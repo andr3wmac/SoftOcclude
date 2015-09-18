@@ -47,8 +47,8 @@ UINT cubeIndices[6] = {2, 1, 0, 1, 2, 3};
 
 int main()
 {
-   float width = 640.0f;
-   float height = 360.0f;
+   float width = 800.0f;
+   float height = 600.0f;
 
    SoftOcclusionTest* mOcclusionTest = new SoftOcclusionTest(width, height);
 
@@ -58,7 +58,9 @@ int main()
    // Add a 2x2x2 cube at (0, 0, 10) as an occluder.
    SoftOccluderScalar* occluder = mOcclusionTest->AddOccluder();
 
-   occluder->AddMesh(cubeVerts, 4, cubeIndices, 6, 2);
+   
+       occluder->AddMesh(cubeVerts, 4, cubeIndices, 6, 2);
+
    float4x4 cubeWorldMatrix(1.0f, 0.0f, 0.0f, 0.0f,
                             0.0f, 1.0f, 0.0f, 0.0f,
                             0.0f, 0.0f, 1.0f, 0.0f,
@@ -84,8 +86,12 @@ int main()
 
    // Perform the rendering/testing.
    mOcclusionTest->SetEnableFrustrumCulling(true);
-   mOcclusionTest->Render(&viewMatrix, &projMatrix, &frustum);
-
+   
+   for (int i = 0; i < 1000; ++i)
+   {
+       mOcclusionTest->Render(&viewMatrix, &projMatrix, &frustum);
+   }
+   
    // Check if our occludee is visible or not.
    if ( !mOcclusionTest->IsOccludeeVisible(0) )
       std::cout << "Occludee is not visible!" << std::endl;

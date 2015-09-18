@@ -37,28 +37,28 @@ class Vec2 : public FloatingPointVector< Real, 2 >
 {
 public:
 
-    inline Vec2()
+    FORCE_INLINE Vec2()
     {
         
     }
     
-    inline Vec2( Real p1 )
+    FORCE_INLINE Vec2( Real p1 )
     {
         SetValues( p1, p1 );
     }
     
-    inline Vec2( Real p1, Real p2 )
+    FORCE_INLINE Vec2( Real p1, Real p2 )
     {
         SetValues( p1, p2 );
     }
     
     template< class TYPE2 >
-    inline Vec2( const PrimaryVectorBase< TYPE2, 2 > &v1 )
+    FORCE_INLINE Vec2( const PrimaryVectorBase< TYPE2, 2 > &v1 )
     {
         SetValues( (Real) v1[0], (Real) v1[1] );
     }
 
-    inline Vec2(const FloatingPointVector< Real, 2 > &v1)
+    FORCE_INLINE Vec2(const FloatingPointVector< Real, 2 > &v1)
     {
         SetValues( v1[0], v1[1] );
     }

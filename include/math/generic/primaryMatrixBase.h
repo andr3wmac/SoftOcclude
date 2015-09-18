@@ -39,21 +39,21 @@ class PrimaryMatrixBase : public GenericMatrixData< TYPE, ROWS, COLS >
 public:
 
     // Accessors
-    inline const PrimaryVectorBase< TYPE, COLS > & operator[](U32 i) const
+    FORCE_INLINE const PrimaryVectorBase< TYPE, COLS > & operator[](U32 i) const
     {
         assert(i < ROWS);
 
         return this->mRows[i];
     }
 
-    inline PrimaryVectorBase< TYPE, COLS > &operator[](U32 i)
+    FORCE_INLINE PrimaryVectorBase< TYPE, COLS > &operator[](U32 i)
     {
         assert(i < ROWS);
 
         return this->mRows[i];
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > &operator=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > &operator=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
     {
         for (U32 i = 0; i < ROWS; ++i)
         {
@@ -66,7 +66,7 @@ public:
         return *this;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > &operator*=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > &operator*=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
     {
         PrimaryMatrixBase< TYPE, ROWS, COLS > newMat;
 
@@ -83,7 +83,7 @@ public:
         return *this;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > &operator+=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > &operator+=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
     {
         for (U32 i = 0; i < ROWS; ++i)
         {
@@ -96,7 +96,7 @@ public:
         return *this;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > &operator-=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > &operator-=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m)
     {
         for (U32 i = 0; i < ROWS; ++i)
         {
@@ -109,7 +109,7 @@ public:
         return *this;
     }
 
-    inline bool operator==(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m) const
+    FORCE_INLINE bool operator==(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m) const
     {
         bool result = true;
 
@@ -121,12 +121,12 @@ public:
         return result;
     }
 
-    inline bool operator!=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m) const
+    FORCE_INLINE bool operator!=(const PrimaryMatrixBase< TYPE, ROWS, COLS > &m) const
     {
         return !(*this == m);
     }
 
-    inline void SetColumn(const U8 column, const PrimaryVectorBase< TYPE, ROWS > &v)
+    FORCE_INLINE void SetColumn(const U8 column, const PrimaryVectorBase< TYPE, ROWS > &v)
     {
         for (U32 j = 0; j < COLS; ++j)
         {
@@ -134,7 +134,7 @@ public:
         }
     }
 
-    inline PrimaryVectorBase< TYPE, ROWS > GetColumn(const U8 column) const
+    FORCE_INLINE PrimaryVectorBase< TYPE, ROWS > GetColumn(const U8 column) const
     {
         PrimaryVectorBase< TYPE, COLS > newVec;
 
@@ -146,17 +146,17 @@ public:
         return newVec;
     }
 
-    inline void SetRow(const U8 row, const PrimaryVectorBase< TYPE, COLS > &v)
+    FORCE_INLINE void SetRow(const U8 row, const PrimaryVectorBase< TYPE, COLS > &v)
     {
         this->mRows[row] = v;
     }
 
-    inline PrimaryVectorBase< TYPE, COLS > GetRow(const U8 row) const
+    FORCE_INLINE PrimaryVectorBase< TYPE, COLS > GetRow(const U8 row) const
     {
         return this->mRows[row];
     }
 
-    inline PrimaryMatrixBase< TYPE, COLS, ROWS > GetTranspose() const
+    FORCE_INLINE PrimaryMatrixBase< TYPE, COLS, ROWS > GetTranspose() const
     {
         PrimaryMatrixBase< TYPE, COLS, ROWS > transpMat;
 
@@ -168,7 +168,7 @@ public:
         return transpMat;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > GetAbsolute() const
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > GetAbsolute() const
     {
         PrimaryMatrixBase< TYPE, ROWS, COLS > newMat;
 
@@ -180,7 +180,7 @@ public:
         return newMat;
     }
 
-    inline TYPE GetCofactor(const U8 row, const U8 column) const
+    FORCE_INLINE TYPE GetCofactor(const U8 row, const U8 column) const
     {
         // Make an matrix that is -1 smaller in ROWS and COLS
         PrimaryMatrixBase< TYPE, ROWS - 1, COLS - 1 > localMat;
@@ -222,7 +222,7 @@ public:
         return cof;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > GetAdjoint() const
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > GetAdjoint() const
     {
         PrimaryMatrixBase< TYPE, ROWS, COLS > localMat;
 
@@ -237,7 +237,7 @@ public:
         return localMat;
     }
 
-    inline PrimaryMatrixBase< TYPE, ROWS, COLS > GetInverse() const
+    FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > GetInverse() const
     {
         const TYPE det = GetDeterminant();
 
@@ -247,7 +247,7 @@ public:
         return GetAdjoint().GetTranspose() * s;
     }
 
-    inline void SetIdentity()
+    FORCE_INLINE void SetIdentity()
     {
         for (U32 i = 0; i < ROWS; ++i)
         {
@@ -265,7 +265,7 @@ public:
         }
     }
 
-    inline TYPE GetDeterminant() const
+    FORCE_INLINE TYPE GetDeterminant() const
     {
         TYPE result = 0;
 
@@ -277,7 +277,7 @@ public:
         return result;
     }
 
-    static inline PrimaryMatrixBase< TYPE, ROWS, COLS > GetZero()
+    static FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > GetZero()
     {
         PrimaryMatrixBase< TYPE, ROWS, COLS > localMat;
 
@@ -292,14 +292,14 @@ public:
         return localMat;
     }
 
-    static inline PrimaryMatrixBase< TYPE, ROWS, COLS > GetIdentity()
+    static FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > GetIdentity()
     {
         PrimaryMatrixBase< TYPE, ROWS, COLS > mat;
         mat.SetIdentity();
         return mat;
     }
 
-    inline TYPE DotColumn( U32 tcol, const PrimaryVectorBase< TYPE, COLS > &v) const
+    FORCE_INLINE TYPE DotColumn( U32 tcol, const PrimaryVectorBase< TYPE, COLS > &v) const
     {
         TYPE result = 0;
 
@@ -313,7 +313,7 @@ public:
 };
 
 template< class TYPE, U32 ROWS, U32 COLS >
-inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator+( 
+FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > operator+( 
        const PrimaryMatrixBase< TYPE, ROWS, COLS > &m1, 
        const PrimaryMatrixBase< TYPE, ROWS, COLS > &m2 )
 {
@@ -331,7 +331,7 @@ inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator+(
 }
 
 template< class TYPE, U32 ROWS, U32 COLS >
-inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator-( 
+FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > operator-( 
         const PrimaryMatrixBase< TYPE, ROWS, COLS > &m1, 
         const PrimaryMatrixBase< TYPE, ROWS, COLS > &m2 )
 {
@@ -349,7 +349,7 @@ inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator-(
 }
 
 template< class TYPE, U32 ROWS, U32 COLS >
-inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator*( 
+FORCE_INLINE PrimaryMatrixBase< TYPE, ROWS, COLS > operator*( 
         const PrimaryMatrixBase< TYPE, ROWS, COLS > &m1, 
         const PrimaryMatrixBase< TYPE, ROWS, COLS > &m2 )
 {
@@ -367,7 +367,7 @@ inline PrimaryMatrixBase< TYPE, ROWS, COLS > operator*(
 }
 
 template< class TYPE, U32 ROWS, U32 COLS >
-inline PrimaryVectorBase< TYPE, ROWS > operator*( 
+FORCE_INLINE PrimaryVectorBase< TYPE, ROWS > operator*( 
         const PrimaryMatrixBase< TYPE, ROWS, COLS > &m, 
         const PrimaryVectorBase< TYPE, COLS > &v )
 {

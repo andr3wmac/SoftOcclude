@@ -29,6 +29,7 @@
 #define __SSE2_VEC4B_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/vectorize.h"
 #include "math/simd/generic/simdVectorBoolBase.h"
@@ -43,36 +44,44 @@ public:
     SSE2Vec4f_b()
     {}
 
-    inline SSE2Vec4f_b( bool val ) :
-        mValue( _mm_castsi128_ps( _mm_set1_epi32( -( int )val ) ) )
+    FORCE_INLINE SSE2Vec4f_b( bool val ) :
+        mValue( _mm_castsi128_ps( _mm_set1_epi32( -( S32 )val ) ) )
     {
     }
 
     
-    inline SSE2Vec4f_b(const __m128i &rhs) : mValue(_mm_cvtepi32_ps(rhs))
+    FORCE_INLINE SSE2Vec4f_b(const __m128i &rhs) : mValue(_mm_cvtepi32_ps(rhs))
     {
 
     }
 
-    inline SSE2Vec4f_b( const __m128 &rhs ) :
+
+    FORCE_INLINE SSE2Vec4f_b( const __m128 &rhs ) :
         mValue( rhs )
     {
     }
 
-    inline SSE2Vec4f_b &operator=( const __m128 &rhs )
+    FORCE_INLINE SSE2Vec4f_b(const SSE2Vec4f_b &rhs) :
+        mValue(rhs.mValue)
+    {
+
+    }
+
+
+    FORCE_INLINE SSE2Vec4f_b &operator=( const __m128 &rhs )
     {
         mValue = rhs;
 
         return *this;
     }
 
-    inline operator __m128() const
+    FORCE_INLINE operator __m128() const
     {
         return mValue;
     }
 
     //template< U32 rotate >
-    inline void LoadMask( U32 rotate, U64 mask )
+    FORCE_INLINE void LoadMask( U32 rotate, U64 mask )
     {
         const U32 rot0 = ( ( 0 + rotate ) & 0x03 );
         const U32 rot1 = ( ( 1 + rotate ) & 0x03 );
@@ -87,7 +96,7 @@ public:
                                    ) );
     }
     
-    inline U64 StoreMask() const
+    FORCE_INLINE U64 StoreMask() const
     {       
         return (U64)_mm_movemask_ps( mValue );
     }
@@ -107,32 +116,32 @@ private:
     __m128 mValue;
 };
 
-inline SSE2Vec4f_b operator&( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
+FORCE_INLINE SSE2Vec4f_b operator&( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
 {
     return _mm_and_ps( lhs, rhs );
 }
 
-inline SSE2Vec4f_b operator|( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
+FORCE_INLINE SSE2Vec4f_b operator|( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
 {
     return _mm_or_ps( lhs, rhs );
 }
 
-inline SSE2Vec4f_b operator^( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
+FORCE_INLINE SSE2Vec4f_b operator^( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
 {
     return _mm_xor_ps( lhs, rhs );
 }
 
-inline SSE2Vec4f_b operator==( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
+FORCE_INLINE SSE2Vec4f_b operator==( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
 {
     return _mm_cmpeq_ps( lhs, rhs );
 }
 
-inline SSE2Vec4f_b operator!=( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
+FORCE_INLINE SSE2Vec4f_b operator!=( const SSE2Vec4f_b &lhs, const SSE2Vec4f_b &rhs )
 {
     return _mm_cmpneq_ps( lhs, rhs );
 }
 
-inline bool SIMD_Hadd( const SSE2Vec4f_b &lhs )
+FORCE_INLINE bool SIMD_Hadd( const SSE2Vec4f_b &lhs )
 {
     const __m128 x64 = _mm_add_ps(lhs, _mm_movelh_ps(lhs, lhs));
     const __m128 x32 = _mm_add_ss(x64, _mm_shuffle_ps(x64, x64, 0x55));

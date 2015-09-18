@@ -31,18 +31,20 @@
 // big thanks to http://jmabille.github.io/blog/2014/10/10/writing-c-plus-plus-wrappers-for-simd-intrinsics-3/
 // for the idea's on how to nicely wrap
 
+#include "math/config.h"
+
 template< typename TYPE >
 class SimdVectorBoolBase
 {
 public:
    
     //downcast
-    inline TYPE& operator()()
+    FORCE_INLINE TYPE& operator()()
     {
         return *static_cast< TYPE* >( this );
     }
     
-    inline const TYPE& operator()() const
+    FORCE_INLINE const TYPE& operator()() const
     {
         return *static_cast< const TYPE* >( this );
     }
@@ -50,19 +52,19 @@ public:
     //
     // handle all self operators here
     //
-    inline TYPE& operator&= ( const TYPE& rhs )
+    FORCE_INLINE TYPE& operator&= ( const TYPE& rhs )
     {
         (*this)() = (*this)() && rhs;
         return (*this)();
     } 
     
-    inline TYPE& operator|= ( const TYPE& rhs )
+    FORCE_INLINE TYPE& operator|= ( const TYPE& rhs )
     {
         (*this)() = (*this)() || rhs;
         return (*this)();
     }
     
-    inline TYPE& operator^= ( const TYPE& rhs )
+    FORCE_INLINE TYPE& operator^= ( const TYPE& rhs )
     {
         (*this)() = (*this)() ^ rhs;
         return (*this)();
@@ -70,52 +72,52 @@ public:
     
 protected:
 
-    inline SimdVectorBoolBase(){}
-    inline ~SimdVectorBoolBase(){}
+    FORCE_INLINE SimdVectorBoolBase(){}
+    FORCE_INLINE ~SimdVectorBoolBase(){}
     	
-    inline SimdVectorBoolBase( const SimdVectorBoolBase & ){}
-    inline SimdVectorBoolBase( const SimdVectorBoolBase && ){}
-    inline SimdVectorBoolBase& operator= ( const SimdVectorBoolBase & ){ return *this; }
+    FORCE_INLINE SimdVectorBoolBase( const SimdVectorBoolBase & ){}
+    FORCE_INLINE SimdVectorBoolBase( const SimdVectorBoolBase && ){}
+    FORCE_INLINE SimdVectorBoolBase& operator= ( const SimdVectorBoolBase & ){ return *this; }
 };
 
 template< typename TYPE >
-inline TYPE operator&&( const SimdVectorBoolBase< TYPE > &lhs, const SimdVectorBoolBase< TYPE > &rhs )
+FORCE_INLINE TYPE operator&&( const SimdVectorBoolBase< TYPE > &lhs, const SimdVectorBoolBase< TYPE > &rhs )
 {
     return lhs() & rhs();
 }
 
 template< typename TYPE >
-inline TYPE operator&&( const SimdVectorBoolBase< TYPE > &lhs, bool rhs )
+FORCE_INLINE TYPE operator&&( const SimdVectorBoolBase< TYPE > &lhs, bool rhs )
 {
     return lhs() & TYPE( rhs );
 }
 
 template< typename TYPE >
-inline TYPE operator&&(  bool lhs, const SimdVectorBoolBase< TYPE > &rhs )
+FORCE_INLINE TYPE operator&&(  bool lhs, const SimdVectorBoolBase< TYPE > &rhs )
 {
     return TYPE( lhs ) & rhs();
 }
 
 template< typename TYPE >
-inline TYPE operator||( const SimdVectorBoolBase< TYPE > &lhs, const SimdVectorBoolBase< TYPE > &rhs )
+FORCE_INLINE TYPE operator||( const SimdVectorBoolBase< TYPE > &lhs, const SimdVectorBoolBase< TYPE > &rhs )
 {
     return lhs() | rhs();
 }
 
 template< typename TYPE >
-inline TYPE operator||( const SimdVectorBoolBase< TYPE > &lhs, bool rhs )
+FORCE_INLINE TYPE operator||( const SimdVectorBoolBase< TYPE > &lhs, bool rhs )
 {
     return lhs() | TYPE( rhs );
 }
 
 template< typename TYPE >
-inline TYPE operator||(  bool lhs, const SimdVectorBoolBase< TYPE > &rhs )
+FORCE_INLINE TYPE operator||(  bool lhs, const SimdVectorBoolBase< TYPE > &rhs )
 {
     return TYPE( lhs ) | rhs();
 }
 
 template< typename TYPE >
-inline TYPE operator!( const SimdVectorBoolBase< TYPE > &rhs )
+FORCE_INLINE TYPE operator!( const SimdVectorBoolBase< TYPE > &rhs )
 {
     return rhs() == TYPE( 0 );
 }

@@ -60,7 +60,7 @@ int main()
 
     SIMD_RASTERIZER::RasterizeTileData(0, 0, 800, 600, depthBuffer);
 
-    SaveDepthBuffer("firstTriangle.bmp", depthBuffer);
+    //SaveDepthBuffer("firstTriangle.bmp", depthBuffer);
 
     return 0;
 }

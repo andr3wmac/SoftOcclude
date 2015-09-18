@@ -31,6 +31,8 @@
 // big thanks to http://jmabille.github.io/blog/2014/10/10/writing-c-plus-plus-wrappers-for-simd-intrinsics-3/
 // for the idea's on how to nicely wrap
 
+#include "math/config.h"
+
 template< class VALUE_TYPE >
 struct BaseSimdTraits;
 

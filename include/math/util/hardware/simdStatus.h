@@ -29,6 +29,7 @@
 #define __SIMD_STATUS_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 //
 // CPUID
@@ -86,48 +87,48 @@ class SimdStatus
 {
 public:
 
-    inline SimdStatus() : mIntelCpu( false ), mAmdCpu( false )
+    FORCE_INLINE SimdStatus() : mIntelCpu( false ), mAmdCpu( false )
     {
         CaptureCpuInfo();
         DefineVendor();
     }
 
-    inline bool SupportsSSE() const
+    FORCE_INLINE bool SupportsSSE() const
     {
         return mFunctionLevel1_DINT[25]; 
     }	
     
-    inline bool SupportsSSE2() const
+    FORCE_INLINE bool SupportsSSE2() const
     {
         return mFunctionLevel1_DINT[26]; 
     }	
     
-    inline bool SupportsSSE3() const
+    FORCE_INLINE bool SupportsSSE3() const
     {
         return mFunctionLevel1_CINT[9]; 
     }	
 
-    inline bool SupportsSSE4_1() const
+    FORCE_INLINE bool SupportsSSE4_1() const
     {
         return mFunctionLevel1_CINT[19]; 
     }	
     
-    inline bool SupportsSSE4_2() const
+    FORCE_INLINE bool SupportsSSE4_2() const
     {
         return mFunctionLevel1_CINT[20]; 
     }
     
-    inline bool SupportsAVX() const
+    FORCE_INLINE bool SupportsAVX() const
     {
         return mFunctionLevel1_CINT[28]; 
     }
 
-    inline bool SupportsFMA() const
+    FORCE_INLINE bool SupportsFMA() const
     {
         return mFunctionLevel1_CINT[12]; 
     }
     
-    inline U32 SIMDLevel() const
+    FORCE_INLINE U32 SIMDLevel() const
     {
         U32 level = 0;
         
@@ -142,14 +143,14 @@ public:
         return level;
     }
     
-    inline const std::string &Vendor() const
+    FORCE_INLINE const std::string &Vendor() const
     {
         return mVendor;
     }
 
 private:
 
-    inline void CaptureCpuInfo()
+    FORCE_INLINE void CaptureCpuInfo()
     {
         std::array<int, 4> cpuid;
 
@@ -164,7 +165,7 @@ private:
         }
     }
     
-    inline void DefineVendor()
+    FORCE_INLINE void DefineVendor()
     {
         char vendor[32];
         memset( vendor, 0, sizeof(vendor) );

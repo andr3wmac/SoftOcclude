@@ -29,6 +29,7 @@
 #define __SSE4_1_VEC4f_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -38,6 +39,7 @@
 #include <smmintrin.h>
 #include <iostream>
 #include <limits>
+#include <assert.h>
 
 class SSE41Vec4f;
 
@@ -76,6 +78,11 @@ public:
 
     }
 
+    inline SSE41Vec4f(const SSE41Vec4f &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
     inline SSE41Vec4f(const __m128i &rhs) : mValue(_mm_cvtepi32_ps(rhs))
     {
 
@@ -93,27 +100,27 @@ public:
         return mValue;
     }
 
-    void LoadUnaligned( const F32 *src )
+    inline void LoadUnaligned( const F32 *src )
     {
         mValue =  _mm_loadu_ps( src );
     }
 
-    void LoadAligned( const F32 *src )
+    inline void LoadAligned( const F32 *src )
     {
         mValue = _mm_load_ps( src );
     }
 
-    void StoreUnaligned( F32 *dest ) const
+    inline void StoreUnaligned( F32 *dest ) const
     {
         _mm_storeu_ps( dest, mValue );
     }
 
-    void StoreAligned( F32 *dest ) const
+    inline void StoreAligned( F32 *dest ) const
     {
         _mm_store_ps( dest, mValue );
     }
 
-    void RotateOne( bool permute128 )
+    inline void RotateOne( bool permute128 )
     {
         const S32 select = ( 1 ) | ( 2 << 2 ) | ( 3 << 4 ) | ( 0 << 6 );
         mValue = _mm_shuffle_ps( mValue, mValue, select );
@@ -123,6 +130,27 @@ public:
     {
         return _mm_round_ps( mValue, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC );
     }
+
+    template< U32 i >
+    inline SSE41Vec4f BroadcastIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_shuffle_ps(mValue, mValue, select);
+    }
+
+    template< U32 i >
+    inline F32 ExtractIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_cvtss_f32(_mm_shuffle_ps(mValue, mValue, select));
+    }
+    
 
 private:
 

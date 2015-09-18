@@ -28,12 +28,14 @@
 #ifndef __ZEF_MALLOC_H__
 #define __ZEF_MALLOC_H__
 
+#include "math/config.h"
+
 #include <cstddef>
 
 #include <stdlib.h>
 #include <immintrin.h>
 
-inline void *_InternalAlignedMalloc(size_t bytes, size_t alignment)
+FORCE_INLINE void *_InternalAlignedMalloc(size_t bytes, size_t alignment)
 {
     size_t offset = alignment; //+ sizeof( size_t );
 
@@ -53,7 +55,7 @@ inline void *_InternalAlignedMalloc(size_t bytes, size_t alignment)
     return ptr2;
 }
 
-inline void _InternalAlignedFree(void *ptr)
+FORCE_INLINE void _InternalAlignedFree(void *ptr)
 {
     if (ptr != 0)
     {
@@ -61,7 +63,7 @@ inline void _InternalAlignedFree(void *ptr)
     }
 }
 
-inline void *ZefAlignedMalloc(size_t bytes, size_t alignment)
+FORCE_INLINE void *ZefAlignedMalloc(size_t bytes, size_t alignment)
 {
 #if INTERNAL_ALIGNED_MALLOC 
     return _InternalAlignedMalloc(bytes, alignment);
@@ -70,7 +72,7 @@ inline void *ZefAlignedMalloc(size_t bytes, size_t alignment)
 #endif
 }
 
-inline void ZefAlignedFree(void *ptr)
+FORCE_INLINE void ZefAlignedFree(void *ptr)
 {
 #if INTERNAL_ALIGNED_MALLOC 
     return _InternalAlignedFree(ptr);

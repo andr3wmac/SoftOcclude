@@ -28,6 +28,8 @@
 #ifndef __SIMD_BASE_TRAITS_H__
 #define __SIMD_BASE_TRAITS_H__
 
+#include "math/config.h"
+
 template< typename VALUE_TYPE >
 struct AvxSimdTraits;
 

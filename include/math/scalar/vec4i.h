@@ -70,7 +70,7 @@ public:
     }
     
     template< class TYPE2 >
-    inline Vec4i( const PrimaryVectorBase< TYPE2, 4 > &v1 )
+    FORCE_INLINE Vec4i( const PrimaryVectorBase< TYPE2, 4 > &v1 )
     {
         SetValues( (S32) v1[0], (S32) v1[1], (S32) v1[2], (S32) v1[3] );
     }
@@ -102,7 +102,7 @@ class Vec4I
 
 public:
 
-    inline Vec4I()
+    FORCE_INLINE Vec4I()
     {
         mValues[0] = 0;
         mValues[1] = 0;
@@ -111,67 +111,67 @@ public:
     }
     
     
-    inline Vec4I( const S32 &x, const S32 &y, const S32 &z, const S32 &w )
+    FORCE_INLINE Vec4I( const S32 &x, const S32 &y, const S32 &z, const S32 &w )
     {
         SetValue( x, y, z, w );
     }
     
-    inline Vec4I( Real x, Real y, Real z, Real w )
+    FORCE_INLINE Vec4I( Real x, Real y, Real z, Real w )
     {
         SetValue( ( S32 )x, ( S32 )y, ( S32 )z, ( S32 )w );
     }
     
-    inline S32 &operator[]( const size_t axis )
+    FORCE_INLINE S32 &operator[]( const size_t axis )
     {
         return mValues[ axis ];
     }
     
-    inline const S32 &operator[]( const size_t axis ) const
+    FORCE_INLINE const S32 &operator[]( const size_t axis ) const
     {
         return mValues[ axis ];
     }
     
-    inline S32 GetX() const
+    FORCE_INLINE S32 GetX() const
     {
         return mValues[0];
     }
     
-    inline void SetX( const S32 &val )
+    FORCE_INLINE void SetX( const S32 &val )
     {
         mValues[0] = val;
     }
     
-    inline S32 GetY() const
+    FORCE_INLINE S32 GetY() const
     {
         return mValues[1];
     }
     
-    inline void SetY( const S32 &val )
+    FORCE_INLINE void SetY( const S32 &val )
     {
         mValues[1] = val;
     }
     
-    inline S32 GetZ() const
+    FORCE_INLINE S32 GetZ() const
     {
         return mValues[2];
     }
     
-    inline void SetZ( const S32 &val )
+    FORCE_INLINE void SetZ( const S32 &val )
     {
         mValues[2] = val;
     }
     
-    inline S32 GetW() const
+    FORCE_INLINE S32 GetW() const
     {
         return mValues[3];
     }
     
-    inline void SetW( const S32 &val )
+    FORCE_INLINE void SetW( const S32 &val )
     {
         mValues[3] = val;
     }
     
-    inline void SetValue( const S32 &x, const S32 &y, const S32 &z, const S32 &w )
+    FORCE_INLINE void SetValue( const S32 &x, const S32 &y, const S32 &z, const S32 &w )
     {
         mValues[0] = x;
         mValues[1] = y;
@@ -179,17 +179,17 @@ public:
         mValues[3] = w;
     }
     
-    inline void Clear()
+    FORCE_INLINE void Clear()
     {
         SetValue( 0, 0, 0, 0 );
     }
     
-    static inline Vec4I GetZero()
+    static FORCE_INLINE Vec4I GetZero()
     {
         return Vec4I( 0, 0, 0, 0 );
     }
     
-    static inline Vec4I GetOne()
+    static FORCE_INLINE Vec4I GetOne()
     {
         return Vec4I( 1, 1, 1, 1 );
     }
@@ -199,7 +199,7 @@ private:
     S32 mValues[4];
 };
 
-inline Vec4I operator+( const Vec4I &v1, const Vec4I &v2 )
+FORCE_INLINE Vec4I operator+( const Vec4I &v1, const Vec4I &v2 )
 {
     return Vec4I( v1.mValues[0] + v2.mValues[0],
                   v1.mValues[1] + v2.mValues[1],
@@ -207,7 +207,7 @@ inline Vec4I operator+( const Vec4I &v1, const Vec4I &v2 )
                   v1.mValues[3] + v2.mValues[3] );
 }
 
-inline Vec4I operator*( const Vec4I &v1, const Vec4I &v2 )
+FORCE_INLINE Vec4I operator*( const Vec4I &v1, const Vec4I &v2 )
 {
     return Vec4I( v1.mValues[0] * v2.mValues[0],
                   v1.mValues[1] * v2.mValues[1],
@@ -215,7 +215,7 @@ inline Vec4I operator*( const Vec4I &v1, const Vec4I &v2 )
                   v1.mValues[3] * v2.mValues[3] );
 }
 
-inline Vec4I operator-( const Vec4I &v1, const Vec4I &v2 )
+FORCE_INLINE Vec4I operator-( const Vec4I &v1, const Vec4I &v2 )
 {
     return Vec4I( v1.mValues[0] - v2.mValues[0],
                   v1.mValues[1] - v2.mValues[1],
@@ -223,29 +223,29 @@ inline Vec4I operator-( const Vec4I &v1, const Vec4I &v2 )
                   v1.mValues[3] - v2.mValues[3] );
 }
 
-inline Vec4I operator-( const Vec4I &v )
+FORCE_INLINE Vec4I operator-( const Vec4I &v )
 {
     return Vec4I( -v.mValues[0], -v.mValues[1], -v.mValues[2], -v.mValues[3] );
 }
 
-inline Vec4I operator*( const Vec4I &v, const Real s )
+FORCE_INLINE Vec4I operator*( const Vec4I &v, const Real s )
 {
     return Vec4I( v.mValues[0] * s, v.mValues[1] * s, v.mValues[2] * s, v.mValues[3] * s );
 }
 
-inline Vec4I operator*( const Real s, const Vec4I &v )
+FORCE_INLINE Vec4I operator*( const Real s, const Vec4I &v )
 {
     return v * s;
 }
 
-inline Vec4I operator/( const Vec4I &v, const Real s )
+FORCE_INLINE Vec4I operator/( const Vec4I &v, const Real s )
 {
     assert( s != 0.0f );
 
     return v * ( Real( 1.0 ) / s );
 }
 
-inline Vec4I operator/( const Vec4I &v1, const Vec4I &v2 )
+FORCE_INLINE Vec4I operator/( const Vec4I &v1, const Vec4I &v2 )
 {
     return Vec4I( v1.mValues[0] / v2.mValues[0],
                   v1.mValues[1] / v2.mValues[1],

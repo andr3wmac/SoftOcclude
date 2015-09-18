@@ -29,6 +29,7 @@
 #define __SSE4_1_VEC4I_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -39,6 +40,7 @@
 
 #include <iostream>
 #include <limits>
+#include <assert.h>
 
 class SSE41Vec4i;
 
@@ -70,6 +72,11 @@ public:
 
     }
 
+    inline SSE41Vec4i(const SSE41Vec4i &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
     inline SSE41Vec4i(const __m128 &rhs) : mValue(_mm_cvtps_epi32(rhs) )
     {
 
@@ -82,17 +89,17 @@ public:
         return *this;
     }
 
-    inline SSE41Vec4i operator<<( S32 shift)
+    inline SSE41Vec4i operator<<( S32 shift) const
     {
         return _mm_slli_epi32(mValue, shift);
     }
 
-    inline SSE41Vec4i operator|(const __m128i &rhs)
+    inline SSE41Vec4i operator|(const __m128i &rhs) const
     {
         return _mm_or_si128(mValue, rhs);
     }
 
-    inline SSE41Vec4i operator&(const __m128i &rhs)
+    inline SSE41Vec4i operator&(const __m128i &rhs) const
     {
         return _mm_and_si128(mValue, rhs);
     }
@@ -102,29 +109,49 @@ public:
         return mValue;
     }
 
-    inline SSE41Vec4i Min(const SSE41Vec4i &rhs)
+    inline SSE41Vec4i Min(const SSE41Vec4i &rhs) const
     {
         return _mm_min_epi32(mValue, rhs);
     }
 
-    inline SSE41Vec4i Max(const SSE41Vec4i &rhs)
+    inline SSE41Vec4i Max(const SSE41Vec4i &rhs) const
     {
         return _mm_max_epi32(mValue, rhs);
     }
 
-    inline bool IsEmpty()
+    inline bool IsEmpty() const
     {
         return _mm_test_all_zeros(mValue, mValue) == 1;
     }
 
-    void LoadAligned(S32 *dest)
+    FORCE_INLINE void LoadAligned(S32 *dest)
     {
         mValue = _mm_load_si128((__m128i*)dest);
     }
 
-    void StoreAligned(S32 *dest) const
+    FORCE_INLINE void StoreAligned(S32 *dest) const
     {
         _mm_store_si128( (__m128i*)dest, mValue);
+    }
+
+    template< U32 i >
+    FORCE_INLINE SSE41Vec4i BroadcastIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_shuffle_epi32(mValue, select);
+    }
+
+    template< U32 i >
+    FORCE_INLINE S32 ExtractIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_cvtsi128_si32(_mm_shuffle_epi32(mValue, select));
     }
 
 private:
@@ -172,13 +199,7 @@ inline SSE41Vec4i_b operator> (const SSE41Vec4i &lhs, const SSE41Vec4i &rhs)
 
 inline SSE41Vec4i SIMD_Select(const SSE41Vec4i_b &sel, const SSE41Vec4i &lhs, const SSE41Vec4i &rhs)
 {
-    SSE41Vec4i comp(0x80000000);
-
-    //we need to ensure a FULL mask from sel
-    SSE41Vec4i_b sel_full = _mm_cmpeq_epi32(_mm_and_si128(sel, comp), comp);
-
-    // (((b ^ a) & mask)^a)
-    return _mm_xor_si128(rhs, _mm_and_si128(sel_full, _mm_xor_si128(lhs, rhs)));
+    return _mm_castps_si128(_mm_blendv_ps(_mm_castsi128_ps(rhs), _mm_castsi128_ps(lhs), _mm_castsi128_ps(sel) ));
 }
 
 #endif

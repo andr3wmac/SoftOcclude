@@ -29,6 +29,7 @@
 #define __SSE2_VEC4IB_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/vectorize.h"
 #include "math/simd/generic/simdVectorBoolBase.h"
@@ -40,26 +41,42 @@ class SSE2Vec4i_b : public SimdVectorBoolBase< SSE2Vec4i_b >
 {
 public:
 
-    inline SSE2Vec4i_b(const __m128i &rhs) :
+    FORCE_INLINE SSE2Vec4i_b(const __m128i &rhs) :
         mValue(rhs)
     {
     }
 
-    inline SSE2Vec4i_b &operator=(const __m128i &rhs)
+    FORCE_INLINE SSE2Vec4i_b(const SSE2Vec4i_b &rhs) :
+        mValue(rhs.mValue)
+    {
+    }
+
+    FORCE_INLINE SSE2Vec4i_b &operator=(const __m128i &rhs)
     {
         mValue = rhs;
 
         return *this;
     }
 
-    inline operator __m128i() const
+    FORCE_INLINE operator __m128i() const
     {
         return mValue;
+    }
+
+    inline SSE2Vec4i_b operator|(const __m128i &rhs) const
+    {
+        return _mm_or_si128(mValue, rhs);
+    }
+
+    inline SSE2Vec4i_b operator&(const __m128i &rhs) const
+    {
+        return _mm_and_si128(mValue, rhs);
     }
 
 private:
 
     __m128i mValue;
 };
+
 
 #endif

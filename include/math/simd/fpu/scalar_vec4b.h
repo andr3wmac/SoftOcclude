@@ -29,6 +29,7 @@
 #define __SCALAR_VEC_4B_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdVectorBoolBase.h"
 
@@ -41,7 +42,7 @@ public:
     ScalarVec4b()
     {}
 
-    inline ScalarVec4b( bool val )
+    FORCE_INLINE ScalarVec4b( bool val )
     {
         for ( U32 i=0; i < 4; ++i )
         {
@@ -50,24 +51,24 @@ public:
     }
     
     
-    inline ScalarVec4b( const bool *rhs ) 
+    FORCE_INLINE ScalarVec4b( const bool *rhs ) 
     {
     	std::copy( rhs,rhs+4, mValue );
     }
 
-    inline ScalarVec4b &operator=( const bool *rhs )
+    FORCE_INLINE ScalarVec4b &operator=( const bool *rhs )
     {
         std::copy( rhs,rhs+4, mValue );
 
         return *this;
     }
     
-    inline operator bool* ()
+    FORCE_INLINE operator bool* ()
     {
         return mValue;
     }
     
-    inline operator const bool* () const
+    FORCE_INLINE operator const bool* () const
     {
         return mValue;
     }
@@ -89,7 +90,7 @@ public:
     }
     
 
-    inline void LoadMask( U32 rotate, U64 mask ) 
+    FORCE_INLINE void LoadMask( U32 rotate, U64 mask ) 
     {
         mValue[0] = ( mask >> ( 0  + ( 0 + rotate ) % 4 ) ) & 0x1;
         mValue[1] = ( mask >> ( 4  + ( 1 + rotate ) % 4 ) ) & 0x1;
@@ -97,7 +98,7 @@ public:
         mValue[3] = ( mask >> ( 12 + ( 3 + rotate ) % 4 ) ) & 0x1;                    
     }
     
-    inline U64 StoreMask() const
+    FORCE_INLINE U64 StoreMask() const
     {   
         U64 mask = 0;    
         
@@ -114,7 +115,7 @@ private:
     bool mValue[4];
 };
 
-inline ScalarVec4b operator&( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
+FORCE_INLINE ScalarVec4b operator&( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
 {
     ScalarVec4b newVec;
     
@@ -126,7 +127,7 @@ inline ScalarVec4b operator&( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator|( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
+FORCE_INLINE ScalarVec4b operator|( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
 {
     ScalarVec4b newVec;
     
@@ -138,7 +139,7 @@ inline ScalarVec4b operator|( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator^( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
+FORCE_INLINE ScalarVec4b operator^( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
 {
     ScalarVec4b newVec;
     
@@ -150,7 +151,7 @@ inline ScalarVec4b operator^( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator==( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
+FORCE_INLINE ScalarVec4b operator==( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
 {
     ScalarVec4b newVec;
     
@@ -162,7 +163,7 @@ inline ScalarVec4b operator==( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
     return newVec;
 }
 
-inline ScalarVec4b operator!=( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
+FORCE_INLINE ScalarVec4b operator!=( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
 {
     ScalarVec4b newVec;
     
@@ -174,7 +175,7 @@ inline ScalarVec4b operator!=( const ScalarVec4b &lhs, const ScalarVec4b &rhs )
     return newVec;
 }
 
-inline bool SIMD_Hadd( const ScalarVec4b &lhs )
+FORCE_INLINE bool SIMD_Hadd( const ScalarVec4b &lhs )
 {
     int val = 0;
     

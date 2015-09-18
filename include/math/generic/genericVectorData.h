@@ -54,27 +54,27 @@ class GenericVectorData< TYPE, 2 >
 {
 public:
 
-    inline void SetX( const TYPE p1 )
+    FORCE_INLINE void SetX( const TYPE p1 )
     {
         mValues[0] = p1;
     }
     
-    inline TYPE GetX() const
+    FORCE_INLINE TYPE GetX() const
     {
         return mValues[0];
     }
     
-    inline void SetY( const TYPE p1 )
+    FORCE_INLINE void SetY( const TYPE p1 )
     {
         mValues[1] = p1;
     }
     
-    inline TYPE GetY() const
+    FORCE_INLINE TYPE GetY() const
     {
         return mValues[1];
     }
     
-    inline void SetValues( const TYPE &p1, const TYPE &p2 )
+    FORCE_INLINE void SetValues( const TYPE &p1, const TYPE &p2 )
     {
         mValues[0] = p1;
         mValues[1] = p2;
@@ -93,37 +93,37 @@ class GenericVectorData< TYPE, 3 >
 {
 public:
     
-    inline void SetX( const TYPE p1 )
+    FORCE_INLINE void SetX( const TYPE p1 )
     {
         mValues[0] = p1;
     }
     
-    inline TYPE GetX() const
+    FORCE_INLINE TYPE GetX() const
     {
         return mValues[0];
     }
     
-    inline void SetY( const TYPE p1 )
+    FORCE_INLINE void SetY( const TYPE p1 )
     {
         mValues[1] = p1;
     }
     
-    inline TYPE GetY() const
+    FORCE_INLINE TYPE GetY() const
     {
         return mValues[1];
     }
     
-    inline void SetZ( const TYPE p1 )
+    FORCE_INLINE void SetZ( const TYPE p1 )
     {
         mValues[2] = p1;
     }
     
-    inline TYPE GetZ() const
+    FORCE_INLINE TYPE GetZ() const
     {
         return mValues[2];
     }
     
-    inline void SetValues( const TYPE &p1, const TYPE &p2, const TYPE &p3 )
+    FORCE_INLINE void SetValues( const TYPE &p1, const TYPE &p2, const TYPE &p3 )
     {
         mValues[0] = p1;
         mValues[1] = p2;
@@ -145,47 +145,47 @@ class GenericVectorData< TYPE, 4 >
 {
 public:
 
-    inline void SetX( const TYPE p1)
+    FORCE_INLINE void SetX( const TYPE p1)
     {
         mValues[0] = p1;
     }
     
-    inline TYPE GetX() const
+    FORCE_INLINE TYPE GetX() const
     {
         return mValues[0];
     }
     
-    inline void SetY( const TYPE p1)
+    FORCE_INLINE void SetY( const TYPE p1)
     {
         mValues[1] = p1;
     }
     
-    inline TYPE GetY() const
+    FORCE_INLINE TYPE GetY() const
     {
         return mValues[1];
     }
     
-    inline void SetZ( const TYPE p1)
+    FORCE_INLINE void SetZ( const TYPE p1)
     {
         mValues[2] = p1;
     }
     
-    inline TYPE GetZ() const
+    FORCE_INLINE TYPE GetZ() const
     {
         return mValues[2];
     }
     
-    inline void SetW( const TYPE p1)
+    FORCE_INLINE void SetW( const TYPE p1)
     {
         mValues[3] = p1;
     }
     
-    inline TYPE GetW() const
+    FORCE_INLINE TYPE GetW() const
     {
         return mValues[3];
     }
     
-    inline void SetValues( const TYPE &p1, const TYPE &p2, const TYPE &p3, const TYPE &p4 )
+    FORCE_INLINE void SetValues( const TYPE &p1, const TYPE &p2, const TYPE &p3, const TYPE &p4 )
     {
         mValues[0] = p1;
         mValues[1] = p2;

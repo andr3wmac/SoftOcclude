@@ -75,9 +75,13 @@ solution "SoftOcclude"
 			defines "PREFIX=X64D_"
 		
 		configuration { "Release", "x32" }
+			flags "LinkTimeOptimization"
+			optimize "Speed"
 			defines "PREFIX=X32R_"
 		
 		configuration { "Release", "x64" }
+			flags "LinkTimeOptimization"
+			optimize "Speed"
 			defines "PREFIX=X64R_"
 			
 	project "SoftOccludeCore"

@@ -42,7 +42,7 @@ BEGIN_MATH_NAMESPACE
 
 namespace Mathf
 {
-    inline Real GetEpsilon()
+    FORCE_INLINE Real GetEpsilon()
     {
 #ifdef  REAL_PRECISION_DOUBLE
         return DBL_EPSILON;
@@ -51,47 +51,47 @@ namespace Mathf
 #endif
     }
     
-    inline Real GetPi()
+    FORCE_INLINE Real GetPi()
     {
         return ( Real )M_PI;
     }
     
-    inline Real Get2Pi()
+    FORCE_INLINE Real Get2Pi()
     {
         return ( Real )M_PI_2;
     }
     
-    inline Real GetSqrt2()
+    FORCE_INLINE Real GetSqrt2()
     {
         return ( Real )M_SQRT2;
     }
     
-    inline Real GetE()
+    FORCE_INLINE Real GetE()
     {
         return ( Real )M_E;
     }
     
-    inline Real GetLog2E()
+    FORCE_INLINE Real GetLog2E()
     {
         return ( Real )M_LOG2E;
     }
     
-    inline Real GetLog10E()
+    FORCE_INLINE Real GetLog10E()
     {
         return ( Real )M_LOG10E;
     }
     
-    inline Real GetLn2()
+    FORCE_INLINE Real GetLn2()
     {
         return ( Real )M_LN2;
     }
     
-    inline Real GetLn10()
+    FORCE_INLINE Real GetLn10()
     {
         return ( Real )M_LN10;
     }
     
-    inline Real Acos( const Real f )
+    FORCE_INLINE Real Acos( const Real f )
     {
         assert( f >= -1.0f && f <= 1.0f );
         
@@ -102,7 +102,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Asin( const Real f )
+    FORCE_INLINE Real Asin( const Real f )
     {
         assert( f >= -1.0f && f <= 1.0f );
     
@@ -113,7 +113,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Atan( const Real f )
+    FORCE_INLINE Real Atan( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return atan( f );
@@ -122,7 +122,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Atan2( const Real x, const Real y )
+    FORCE_INLINE Real Atan2( const Real x, const Real y )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return atan2( x, y );
@@ -131,7 +131,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Cos( const Real f )
+    FORCE_INLINE Real Cos( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return cos( f );
@@ -140,7 +140,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Sin( const Real f )
+    FORCE_INLINE Real Sin( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return sin( f );
@@ -149,7 +149,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Tan( const Real f )
+    FORCE_INLINE Real Tan( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return tan( f );
@@ -158,7 +158,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Exp( const Real f )
+    FORCE_INLINE Real Exp( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return exp( f );
@@ -167,7 +167,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Ceil( const Real f )
+    FORCE_INLINE Real Ceil( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return ceil( f );
@@ -176,7 +176,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Floor( const Real f )
+    FORCE_INLINE Real Floor( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return floor( f );
@@ -185,12 +185,12 @@ namespace Mathf
 #endif
     }
     
-    inline Real Round( const Real f )
+    FORCE_INLINE Real Round( const Real f )
     {
         return f >= 0.0 ? f + 0.5f : ( ( f - ( Real )( S32 )f ) <= -0.5 ? f : f - 0.5f );
     }
     
-    inline Real Log( const Real f )
+    FORCE_INLINE Real Log( const Real f )
     {
         assert( f > 0.0f );
     
@@ -201,7 +201,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Log10( const Real f )
+    FORCE_INLINE Real Log10( const Real f )
     {
         assert( f > 0.0f );   
 #ifdef REAL_PRECISION_DOUBLE
@@ -211,7 +211,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Pow( const Real base, const Real exp )
+    FORCE_INLINE Real Pow( const Real base, const Real exp )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return pow( base, exp );
@@ -220,32 +220,32 @@ namespace Mathf
 #endif
     }
     
-    inline Real Clamp( const Real f, const Real min, const Real max )
+    FORCE_INLINE Real Clamp( const Real f, const Real min, const Real max )
     {
         return f < min ? min : ( f > max ? max : f );
     }
     
-    inline Real RadToDeg( const Real f )
+    FORCE_INLINE Real RadToDeg( const Real f )
     {
         return f * 180.0f / GetPi();
     }
     
-    inline Real DegToRad( const Real f )
+    FORCE_INLINE Real DegToRad( const Real f )
     {
         return f * GetPi() / 180.0f;
     }
     
-    inline Real Lerp( const Real a, const Real b, const Real t )
+    FORCE_INLINE Real Lerp( const Real a, const Real b, const Real t )
     {
         return a + ( b - a ) * t;
     }
     
-    inline bool IsPow2( const U32 n )
+    FORCE_INLINE bool IsPow2( const U32 n )
     {
         return ( !( n & ( n - 1 ) ) && n );
     }
     
-    inline U32 NextPow2( const U32 x )
+    FORCE_INLINE U32 NextPow2( const U32 x )
     {
         U32 y = x - 1;
         y |= y >> 1;
@@ -256,12 +256,12 @@ namespace Mathf
         return ++y;
     }
     
-    inline Real Square( Real a )
+    FORCE_INLINE Real Square( Real a )
     {
         return a * a;
     }
 
-    inline Real Sqrt( const Real f )
+    FORCE_INLINE Real Sqrt( const Real f )
     {
         assert( f >= 0.0f );
 #ifdef REAL_PRECISION_DOUBLE
@@ -271,7 +271,7 @@ namespace Mathf
 #endif
     }
     
-    inline Real Abs( const Real f )
+    FORCE_INLINE Real Abs( const Real f )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return std::abs( f );
@@ -280,12 +280,12 @@ namespace Mathf
 #endif
     }
     
-    inline U32 Abs( const S32 f )
+    FORCE_INLINE U32 Abs( const S32 f )
     {
         return abs( ( int )f );
     }
     
-    inline S32 Rint( Real x )
+    FORCE_INLINE S32 Rint( Real x )
     {
 #ifdef _WIN32
         return ( S32 )( x + 0.5 );
@@ -294,7 +294,7 @@ namespace Mathf
 #endif
     }
   
-    inline bool Equal( const Real a, const Real b )
+    FORCE_INLINE bool Equal( const Real a, const Real b )
     {
 #ifdef REAL_PRECISION_DOUBLE
         return std::abs( a - b ) < GetEpsilon();
@@ -304,19 +304,19 @@ namespace Mathf
     }
 
     template< typename tT >
-    inline tT GetMin( const tT &a, const tT &b )
+    FORCE_INLINE tT GetMin( const tT &a, const tT &b )
     {
         return a < b ? a : b;
     }
 
     template< typename tT >
-    inline tT GetMax( const tT &a, const tT &b )
+    FORCE_INLINE tT GetMax( const tT &a, const tT &b )
     {
         return a > b ? a : b;
     }
 
     template< typename tT >
-    inline tT Rcp( const tT &_a )
+    FORCE_INLINE tT Rcp( const tT &_a )
     {
         return (tT)1.0 / _a;
     }

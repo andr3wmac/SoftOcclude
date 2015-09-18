@@ -5,6 +5,10 @@
 #include "core/common/types.h"
 
 #include "math/simd/simdTraits.h"
+#include "math/simd/avx.h"
+#include "math/simd/sse2.h"
+#include "math/simd/sse41.h"
+#include "math/simd/fpu.h"
 
 #include "math/util/memory/stackAlign.h"
 
@@ -29,23 +33,21 @@ struct MeshRasterizer
         {
         }
 
-        inline SimdVertexSet( F32 *x, F32 *y, F32 *z )
+        inline SimdVertexSet( F32 *tx, F32 *ty, F32 *tz )
         {
-            mValues[0].LoadAligned( x );
-            mValues[1].LoadAligned( y );
-            mValues[2].LoadAligned( z );
+            simd_vec tempX, tempY;
+
+            tempX.LoadAligned( tx );
+            tempY.LoadAligned( ty );
+
+            x = simd_veci(tempX);
+            y = simd_veci(tempY);
+            z.LoadAligned( tz );
         }
 
-        const simd_vec &operator[]( U32 i ) const
-        {
-            assert( i < 3 );
-
-            return mValues[i];
-        }
-
-    private:
-
-        simd_vec mValues[3];
+        simd_veci x;
+        simd_veci y;
+        simd_vec  z;
     };
 
     class SimdTriangleSet
@@ -73,13 +75,172 @@ struct MeshRasterizer
         SimdVertexSet mVertices[3];
     };
 
+    class SimdEdge
+    {
+    public:
+
+        inline SimdEdge(const SimdVertexSet &v1, const SimdVertexSet &v2)
+        {
+            a = v1.y - v2.y;
+            b = v2.x - v1.x;
+            c = v1.x * v2.y - v2.x * v1.y;
+
+            xStride = a << 1;
+            yStride = b << 1;
+        }
+
+        inline simd_veci EdgeFunction(const simd_veci &x, const simd_veci &y) const
+        {
+            return (a * x) + (b * y) + c;
+        }
+
+        simd_veci a;
+        simd_veci b;
+        simd_veci c;
+
+        simd_veci xStride = a << 1;
+        simd_veci yStride = b << 1;
+    };
+
     //
     // Functions
     //
+   
+    template< U32 TriangleIndex >
+    static inline void RasterizeTriangle(
+        const DepthBufferTile &tile,
+        const simd_veci &texelPatternX,
+        const simd_veci &texelPatternY,
+        const SimdTriangleSet &triangles,
+        const SimdEdge &edge1,
+        const SimdEdge &edge2,
+        const SimdEdge &edge3,
+        const simd_vec &triangleAreaRcp,
+        const simd_veci &startFillX,
+        const simd_veci &endFillX,
+        const simd_veci &startFillY,
+        const simd_veci &endFillY,
+        SimdDepthBuffer &depthBuffer )
+    {
+        simd_vec tri_z_0 = triangles[0].z.BroadcastIndex<TriangleIndex>();
+        simd_vec tri_z_1 = triangles[1].z.BroadcastIndex<TriangleIndex>();
+        simd_vec tri_z_2 = triangles[2].z.BroadcastIndex<TriangleIndex>();
+        
+        const simd_vec triAreaRcp = triangleAreaRcp.BroadcastIndex<TriangleIndex>();
+        
+        tri_z_0 *= triAreaRcp;
+        tri_z_1 *= triAreaRcp;
+        tri_z_2 *= triAreaRcp;
+        
+        const simd_veci tri_a0 = edge1.a.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_a1 = edge2.a.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_a2 = edge3.a.BroadcastIndex<TriangleIndex>();
+
+        const simd_veci tri_b0 = edge1.b.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_b1 = edge2.b.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_b2 = edge3.b.BroadcastIndex<TriangleIndex>();
+
+        const simd_veci tri_c0 = edge1.c.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_c1 = edge2.c.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_c2 = edge3.c.BroadcastIndex<TriangleIndex>();
+
+        const simd_veci tri_a0_stride = edge1.xStride.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_a1_stride = edge2.xStride.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_a2_stride = edge3.xStride.BroadcastIndex<TriangleIndex>();
+
+        const S32 ac_min_x = startFillX.ExtractIndex<TriangleIndex>();
+        const S32 ac_min_y = startFillY.ExtractIndex<TriangleIndex>();
+        const S32 ac_max_x = endFillX.ExtractIndex<TriangleIndex>();
+        const S32 ac_max_y = endFillY.ExtractIndex<TriangleIndex>();
+
+        const simd_veci tri_fillX = simd_veci(ac_min_x) + texelPatternX;
+
+        const simd_veci tri_b0_stride = edge1.yStride.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_b1_stride = edge2.yStride.BroadcastIndex<TriangleIndex>();
+        const simd_veci tri_b2_stride = edge3.yStride.BroadcastIndex<TriangleIndex>();
+
+        const simd_veci tri_fillY = simd_veci(ac_min_y) + texelPatternY;
+
+        simd_veci w0_row = (tri_a0 * tri_fillX) + (tri_b0 * tri_fillY) + tri_c0;
+        simd_veci w1_row = (tri_a1 * tri_fillX) + (tri_b1 * tri_fillY) + tri_c1;
+        simd_veci w2_row = (tri_a2 * tri_fillX) + (tri_b2 * tri_fillY) + tri_c2;
+
+        U32 rowStoreStride = tile.tileSizeX * ac_min_y * 4 + ac_min_x * 4;
+        
+        // Progress
+        // Iterate y dimension
+        for (U32 y = ac_min_y, yend = ac_max_y; y < yend; ++y)
+        {
+            U32 storeStride = rowStoreStride;
+
+            simd_veci w0 = w0_row;
+            simd_veci w1 = w1_row;
+            simd_veci w2 = w2_row;
+
+            for (U32 x = ac_min_x, xend = ac_max_x; x < xend; ++x)
+            {
+                const simd_veci iCoverageMask = w0 | w1 | w2;
+
+                if (iCoverageMask.IsEmpty())
+                {
+                    continue;
+                }
+
+                simd_vec texelDepth = simd_vec(w0) * tri_z_0 + simd_vec(w1) * tri_z_1 + simd_vec(w2) * tri_z_2;
+
+                F32 *depthLink = depthBuffer.GetDepthSequence(storeStride);
+
+                simd_vec prevDepth;
+                prevDepth.LoadAligned(depthLink);
+
+                const simd_bool depthMask = (texelDepth >= prevDepth) & simd_bool(iCoverageMask);
+
+                texelDepth = SIMD_Select(depthMask, prevDepth, texelDepth);
+                texelDepth.StoreAligned(depthLink);
+
+                storeStride += 4;
+                w0 += tri_a0_stride;
+                w1 += tri_a1_stride;
+                w2 += tri_a2_stride;
+            }
+
+            rowStoreStride += 4 * tile.tileSizeX;
+            w0_row += tri_b0_stride;
+            w1_row += tri_b1_stride;
+            w2_row += tri_b2_stride;
+        }
+
+        // RECURSIVE
+        RasterizeTriangle< TriangleIndex + 1 >(tile, texelPatternX, texelPatternY, triangles,
+                                               edge1, edge2, edge3, triangleAreaRcp,
+                                               startFillX, endFillX,
+                                               startFillY, endFillY,
+                                               depthBuffer);
+    }
+
+    template<>
+    static inline void RasterizeTriangle< SimdTraitsReal::width >
+        (
+            const DepthBufferTile &tile,
+            const simd_veci &texelPatternX,
+            const simd_veci &texelPatternY,
+            const SimdTriangleSet &triangles,
+            const SimdEdge &edge1,
+            const SimdEdge &edge2,
+            const SimdEdge &edge3,
+            const simd_vec &triangleAreaRcp,
+            const simd_veci &startFillX,
+            const simd_veci &endFillX,
+            const simd_veci &startFillY,
+            const simd_veci &endFillY,
+            SimdDepthBuffer &depthBuffer)
+    {
+
+    }
 
     static void RasterizeToDepthBuffer( const DepthBufferTile &tile,
-                                        const simd_veci &pixelPatternX,
-                                        const simd_veci &pixelPatternY,
+                                        const simd_veci &texelPatternX,
+                                        const simd_veci &texelPatternY,
                                         SimdDepthBuffer &depthBuffer,
                                         const SimdTriangleSet &triangles )
     {
@@ -87,169 +248,34 @@ struct MeshRasterizer
         // Process simd_width triangles
         //
 
-        simd_veci iVertexXY[3][2];
+        SimdEdge edge1(triangles[1], triangles[2]);
+        SimdEdge edge2(triangles[2], triangles[0]);
+        SimdEdge edge3(triangles[0], triangles[1]);
 
-        for ( U32 i = 0; i < 3; ++i )
-        {
-            for ( U32 j = 0; j < 2; ++j )
-            {
-                iVertexXY[i][j] = simd_veci( triangles[i][j] );
-            }
-        }
+        simd_veci triangleArea = edge1.EdgeFunction(triangles[0].x, triangles[0].y);
+        simd_vec  triangleAreaRcp = SIMD_Rcp( simd_vec( triangleArea ) );
+      
+        simd_veci startFillX = triangles[0].x.Min(triangles[1].x.Min(triangles[2].x));
+        startFillX = startFillX.Max(simd_veci(tile.xStart));
 
-        simd_veci A0 = iVertexXY[1][1] - iVertexXY[2][1];
-        simd_veci A1 = iVertexXY[2][1] - iVertexXY[0][1];
-        simd_veci A2 = iVertexXY[0][1] - iVertexXY[1][1];
+        simd_veci endFillX = triangles[0].x.Max(triangles[1].x.Max(triangles[2].x));
+        endFillX = endFillX.Min(simd_veci(tile.xEnd));
 
-        simd_veci B0 = iVertexXY[2][0] - iVertexXY[1][0];
-        simd_veci B1 = iVertexXY[0][0] - iVertexXY[2][0];
-        simd_veci B2 = iVertexXY[1][0] - iVertexXY[0][0];
+        simd_veci startFillY = triangles[0].y.Min(triangles[1].y.Min(triangles[2].y));
+        startFillY = startFillY.Max(simd_veci(tile.yStart));
 
-        simd_veci C0 = iVertexXY[1][0] * iVertexXY[2][1] - iVertexXY[2][0] * iVertexXY[1][1];
-        simd_veci C1 = iVertexXY[2][0] * iVertexXY[0][1] - iVertexXY[0][0] * iVertexXY[2][1];
-        simd_veci C2 = iVertexXY[0][0] * iVertexXY[1][1] - iVertexXY[1][0] * iVertexXY[0][1];
-
-        simd_veci triangleArea = ( A0 * iVertexXY[0][0] ) + ( B0 * iVertexXY[0][1] ) + C0;
-        simd_vec triangleArea_rcp = SIMD_Rcp( simd_vec( triangleArea ) );
+        simd_veci endFillY = triangles[0].y.Max(triangles[1].y.Max(triangles[2].y));
+        endFillY = endFillY.Min(simd_veci(tile.yEnd));
 
         //
         // Per triangle process
         //
-
-        simd_veci startFillX = iVertexXY[0][0].Min( iVertexXY[1][0].Min( iVertexXY[2][0] ) );
-        startFillX = startFillX.Max( simd_veci( tile.xStart ) );
-        simd_veci endFillX = iVertexXY[0][0].Max( iVertexXY[1][0].Max( iVertexXY[2][0] ) );
-        endFillX = endFillX.Max( simd_veci( tile.xEnd ) );
-
-        simd_veci startFillY = iVertexXY[0][1].Min( iVertexXY[1][1].Min( iVertexXY[2][1] ) );
-        startFillY = startFillY.Max( simd_veci( tile.yStart ) );
-        simd_veci endFillY = iVertexXY[0][1].Max( iVertexXY[1][1].Max( iVertexXY[2][1] ) );
-        endFillY = endFillY.Max( simd_veci( tile.yEnd ) );
-
-
-        F32 StackAlign( 32 ) stackDepth[3][SimdTraitsReal::width];
-        triangles[0][2].StoreAligned( stackDepth[0] );
-        triangles[1][2].StoreAligned( stackDepth[1] );
-        triangles[2][2].StoreAligned( stackDepth[2] );
-
-        F32 StackAlign( 32 ) stackAreaRcp[SimdTraitsReal::width];
-        triangleArea_rcp.StoreAligned( stackAreaRcp );
-
-        S32 StackAlign( 32 ) minMaxXY[2][2][SimdTraitsReal::width];
-        startFillX.StoreAligned( minMaxXY[0][0] );
-        endFillX.StoreAligned( minMaxXY[1][0] );
-        startFillY.StoreAligned( minMaxXY[0][1] );
-        endFillY.StoreAligned( minMaxXY[1][1] );
-
-        S32 StackAlign( 32 ) stackA[3][SimdTraitsReal::width];
-        A0.StoreAligned( stackA[0] );
-        A1.StoreAligned( stackA[1] );
-        A2.StoreAligned( stackA[2] );
-
-        S32 StackAlign( 32 ) stackB[3][SimdTraitsReal::width];
-        B0.StoreAligned( stackB[0] );
-        B1.StoreAligned( stackB[1] );
-        B2.StoreAligned( stackB[2] );
-
-        S32 StackAlign( 32 ) stackC[3][SimdTraitsReal::width];
-        C0.StoreAligned( stackC[0] );
-        C1.StoreAligned( stackC[1] );
-        C2.StoreAligned( stackC[2] );
-
-        for ( U32 tri = 0; tri < SimdTraitsReal::width; ++tri )
-        {
-            simd_vec tri_z_0( stackDepth[0][tri] );
-            simd_vec tri_z_1( stackDepth[1][tri] );
-            simd_vec tri_z_2( stackDepth[2][tri] );
-
-            simd_vec triAreaRcp( stackAreaRcp[tri] );
-
-            tri_z_0 *= triAreaRcp;
-            tri_z_1 *= triAreaRcp;
-            tri_z_2 *= triAreaRcp;
-
-            simd_veci tri_a0( stackA[0][tri] );
-            simd_veci tri_a1( stackA[1][tri] );
-            simd_veci tri_a2( stackA[2][tri] );
-
-            simd_veci tri_b0( stackB[0][tri] );
-            simd_veci tri_b1( stackB[1][tri] );
-            simd_veci tri_b2( stackB[2][tri] );
-
-            simd_veci tri_c0( stackC[0][tri] );
-            simd_veci tri_c1( stackC[1][tri] );
-            simd_veci tri_c2( stackC[2][tri] );
-
-            simd_veci tri_a0_stride = tri_a0 << 1;
-            simd_veci tri_a1_stride = tri_a1 << 1;
-            simd_veci tri_a2_stride = tri_a2 << 1;
-
-            int ac_min_x = minMaxXY[0][0][tri];
-            int ac_min_y = minMaxXY[0][1][tri];
-            int ac_max_x = minMaxXY[1][0][tri];
-            int ac_max_y = minMaxXY[1][1][tri];
-
-            simd_veci tri_fillX = simd_veci( ac_min_x ) + pixelPatternX;
-
-            simd_veci tri_b0_stride = tri_b0 << 1;
-            simd_veci tri_b1_stride = tri_b1 << 1;
-            simd_veci tri_b2_stride = tri_b2 << 1;
-
-            simd_veci tri_fillY = simd_veci( ac_min_y ) + pixelPatternY;
-
-            simd_veci w0_row = ( tri_a0 * tri_fillX ) + ( tri_b0 * tri_fillY ) + tri_c0;
-            simd_veci w1_row = ( tri_a1 * tri_fillX ) + ( tri_b1 * tri_fillY ) + tri_c1;
-            simd_veci w2_row = ( tri_a2 * tri_fillX ) + ( tri_b2 * tri_fillY ) + tri_c2;
-
-            U32 rowStoreStride = tile.tileSizeX * ac_min_y + 2 * ac_min_x;
-
-            // Progress
-            // Iterate y dimension
-            for ( U32 y = ac_min_y, yend = ac_max_y; y < yend; y += 2 )
-            {
-                U32 storeStride = rowStoreStride;
-
-                simd_veci w0 = w0_row;
-                simd_veci w1 = w1_row;
-                simd_veci w2 = w2_row;
-
-                for ( U32 x = ac_min_x, xend = ac_max_x; x < xend; x += 2 )
-                {
-                    simd_veci iCoverageMask = w0 | w1 | w2;
-
-                    if ( iCoverageMask.IsEmpty() )
-                    {
-                        continue;
-                    }
-
-                    simd_vec pixelDepth = simd_vec( w0 ) * tri_z_0 +
-                                          simd_vec( w1 ) * tri_z_1 +
-                                          simd_vec( w2 ) * tri_z_2;
-
-                    F32 *depthLink = depthBuffer.GetDepthSequence( storeStride );
-
-                    simd_vec prevDepth;
-                    prevDepth.LoadAligned( depthLink );
-
-                    simd_bool depthComp = ( pixelDepth >= prevDepth );
-                    simd_bool coverageMask = simd_bool( iCoverageMask );
-                    simd_bool depthMask = depthComp & coverageMask;
-
-                    pixelDepth = SIMD_Select( depthMask, prevDepth, pixelDepth );
-                    pixelDepth.StoreAligned( depthLink );
-
-                    storeStride += 4;
-                    w0 += tri_a0_stride;
-                    w1 += tri_a1_stride;
-                    w2 += tri_a2_stride;
-                }
-
-                rowStoreStride += 2 * tile.tileSizeX;
-                w0_row += tri_b0_stride;
-                w1_row += tri_b1_stride;
-                w2_row += tri_b2_stride;
-            }
-        }
+        RasterizeTriangle< 0 >( tile, texelPatternX, texelPatternY, triangles, 
+                                edge1, edge2, edge3, triangleAreaRcp, 
+                                startFillX, endFillX, 
+                                startFillY, endFillY,  
+                                depthBuffer);
+        
     }
 
     static void RasterizeTileData( U32 tileShiftX, U32 tileShiftY,
@@ -257,16 +283,16 @@ struct MeshRasterizer
                                    SimdDepthBuffer &depthBuffer )
     {
 
-        F32 StackAlign( 64 ) tv1_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
-        F32 StackAlign( 64 ) tv1_y[4] = { 129.613052, 129.613052, 129.613052, 129.613052 };
+        F32 StackAlign( 64 ) tv1_x[4] = { 26.613068, 126.613068, 26.613068, 126.613068 };
+        F32 StackAlign( 64 ) tv1_y[4] = { 12.613052, 12.613052, 112.613052, 12.613052 };
         F32 StackAlign( 64 ) tv1_z[4] = { 0.3, 0.4, 0.5, 0.6 };
 
-        F32 StackAlign( 64 ) tv2_x[4] = { 370.386932, 370.386932, 370.386932, 370.386932 };
-        F32 StackAlign( 64 ) tv2_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+        F32 StackAlign( 64 ) tv2_x[4] = { 37.386932, 137.386932, 37.386932, 137.386932 };
+        F32 StackAlign( 64 ) tv2_y[4] = { 23.386948, 23.386948, 123.386948, 23.386948 };
         F32 StackAlign( 64 ) tv2_z[4] = { 0.4, 0.5, 0.6, 0.7 };
 
-        F32 StackAlign( 64 ) tv3_x[4] = { 269.613068, 269.613068, 269.613068, 269.613068 };
-        F32 StackAlign( 64 ) tv3_y[4] = { 230.386948, 230.386948, 230.386948, 230.386948 };
+        F32 StackAlign( 64 ) tv3_x[4] = { 26.613068, 126.613068, 26.613068, 126.613068 };
+        F32 StackAlign( 64 ) tv3_y[4] = { 23.386948, 23.386948, 123.386948, 23.386948 };
         F32 StackAlign( 64 ) tv3_z[4] = { 0.8, 0.9, 1.0, 1.1 };
 
         SimdTriangleSet triangles(
@@ -275,20 +301,24 @@ struct MeshRasterizer
             SimdVertexSet( tv3_x, tv3_y, tv3_z )
         );
 
-        simd_veci pixelPatternX, pixelPatternY;
+        simd_veci texelPatternX, texelPatternY;
 
         S32 StackAlign( 64 ) patternX[4] = { 0, 1, 0, 1 };
         S32 StackAlign( 64 ) patternY[4] = { 0, 0, 1, 1 };
 
-        pixelPatternX.LoadAligned( patternX );
-        pixelPatternY.LoadAligned( patternY );
+        texelPatternX.LoadAligned( patternX );
+        texelPatternY.LoadAligned( patternY );
 
-        RasterizeToDepthBuffer( DepthBufferTile( 800, 600,
-                                0, 800,
-                                0, 600 ),
-                                pixelPatternX,
-                                pixelPatternY,
-                                depthBuffer, triangles );
+        for (volatile U32 i = 0; i < 1000000; ++i)
+        {
+            RasterizeToDepthBuffer(DepthBufferTile( 400, 300,
+                                                    0, 300,
+                                                    0, 300),
+                                                    texelPatternX,
+                                                    texelPatternY,
+                                                    depthBuffer, triangles);
+        }
+        
     }
 
 

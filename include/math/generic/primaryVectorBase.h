@@ -43,14 +43,14 @@ public:
     }
 
     // Accessors
-    inline const TYPE & operator[](U32 i) const
+    FORCE_INLINE const TYPE & operator[](U32 i) const
     {
         assert(i < N);
 
         return this->mValues[i];
     }
 
-    inline TYPE &operator[](U32 i)
+    FORCE_INLINE TYPE &operator[](U32 i)
     {
         assert(i < N);
 
@@ -58,7 +58,7 @@ public:
     }
 
     // Self operators
-    inline PrimaryVectorBase< TYPE, N > &operator+=(const PrimaryVectorBase< TYPE, N > &v)
+    FORCE_INLINE PrimaryVectorBase< TYPE, N > &operator+=(const PrimaryVectorBase< TYPE, N > &v)
     {
         for (U32 i = 0; i < N; ++i)
         {
@@ -68,7 +68,7 @@ public:
         return *(PrimaryVectorBase< TYPE, N >*)this;
     }
     
-    inline PrimaryVectorBase< TYPE, N > &operator-=(const PrimaryVectorBase< TYPE, N > &v)
+    FORCE_INLINE PrimaryVectorBase< TYPE, N > &operator-=(const PrimaryVectorBase< TYPE, N > &v)
     {
         for (U32 i = 0; i < N; ++i)
         {
@@ -78,7 +78,7 @@ public:
         return *(PrimaryVectorBase< TYPE, N >*)this;
     }
 
-    inline PrimaryVectorBase< TYPE, N > &operator /= (const TYPE s)
+    FORCE_INLINE PrimaryVectorBase< TYPE, N > &operator /= (const TYPE s)
     {
         assert(s != 0.0f);
 
@@ -90,7 +90,7 @@ public:
         return *(PrimaryVectorBase< TYPE, N >*)this;
     }
 
-    inline PrimaryVectorBase< TYPE, N > &operator *= (const TYPE s)
+    FORCE_INLINE PrimaryVectorBase< TYPE, N > &operator *= (const TYPE s)
     {
         for (U32 i = 0; i < N; ++i)
         {
@@ -101,7 +101,7 @@ public:
     }
 
     // Equality
-    inline bool operator==(const PrimaryVectorBase< TYPE, N > &other) const
+    FORCE_INLINE bool operator==(const PrimaryVectorBase< TYPE, N > &other) const
     {
         bool result = true;
 
@@ -113,13 +113,13 @@ public:
         return result;
     }
 
-    inline bool operator!=(const PrimaryVectorBase< TYPE, N > &other) const
+    FORCE_INLINE bool operator!=(const PrimaryVectorBase< TYPE, N > &other) const
     {
         return !(PrimaryVectorBase< TYPE, N >(*this) == other);
     }
 
     // Internal intrinsics
-    inline TYPE Dot(const PrimaryVectorBase< TYPE, N > &v) const
+    FORCE_INLINE TYPE Dot(const PrimaryVectorBase< TYPE, N > &v) const
     {
         TYPE result = this->mValues[0] * v.mValues[0];
 
@@ -131,22 +131,22 @@ public:
         return  result;
     }
 
-    inline TYPE Length2() const
+    FORCE_INLINE TYPE Length2() const
     {
         return Dot(PrimaryVectorBase< TYPE, N >(*this));
     }
 
-    inline TYPE Distance2(const PrimaryVectorBase< TYPE, N > &v) const
+    FORCE_INLINE TYPE Distance2(const PrimaryVectorBase< TYPE, N > &v) const
     {
         return (PrimaryVectorBase< TYPE, N >(*this) - v).Length2();
     }
 
-    inline void SetValue(U32 axis, TYPE val)
+    FORCE_INLINE void SetValue(U32 axis, TYPE val)
     {
         this->mValues[axis] = val;
     }
 
-    inline PrimaryVectorBase< TYPE, N > Absolute() const
+    FORCE_INLINE PrimaryVectorBase< TYPE, N > Absolute() const
     {
         PrimaryVectorBase< TYPE, N > newVec;
 
@@ -158,7 +158,7 @@ public:
         return newVec;
     }
 
-    inline U8 MinAxis() const
+    FORCE_INLINE U8 MinAxis() const
     {
         U8 axis = 0;
         TYPE val = this->mValues[0];
@@ -177,7 +177,7 @@ public:
         return axis;
     }
 
-    inline U8 MaxAxis() const
+    FORCE_INLINE U8 MaxAxis() const
     {
         U8 axis = 0;
         TYPE val = this->mValues[0];
@@ -196,7 +196,7 @@ public:
         return axis;
     }
 
-    inline void SetZero()
+    FORCE_INLINE void SetZero()
     {
         for (U32 i = 0; i < N; ++i)
         {
@@ -204,7 +204,7 @@ public:
         }
     }
 
-    inline bool IsZero() const
+    FORCE_INLINE bool IsZero() const
     {
         bool result = true;
 
@@ -216,19 +216,19 @@ public:
         return result;
     }
 
-    inline bool IsFuzzyZero() const
+    FORCE_INLINE bool IsFuzzyZero() const
     {
         return Length2() < Mathf::GetEpsilon();
     }
 
-    inline void Clear()
+    FORCE_INLINE void Clear()
     {
         SetZero();
     }
 };
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator+(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator+(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 
@@ -241,7 +241,7 @@ inline PrimaryVectorBase< TYPE, N > operator+(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 
@@ -254,7 +254,7 @@ inline PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 
@@ -267,7 +267,7 @@ inline PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N > &v)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N > &v)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 
@@ -280,7 +280,7 @@ inline PrimaryVectorBase< TYPE, N > operator-(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N > &v, const TYPE s)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N > &v, const TYPE s)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 
@@ -293,13 +293,13 @@ inline PrimaryVectorBase< TYPE, N > operator*(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator*(TYPE s, const PrimaryVectorBase< TYPE, N > &v)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator*(TYPE s, const PrimaryVectorBase< TYPE, N > &v)
 {
     return v * s;
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator/(const PrimaryVectorBase< TYPE, N > &v, TYPE s)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator/(const PrimaryVectorBase< TYPE, N > &v, TYPE s)
 {
     assert(s != TYPE(0));
     
@@ -314,7 +314,7 @@ inline PrimaryVectorBase< TYPE, N > operator/(const PrimaryVectorBase< TYPE, N >
 }
 
 template< class TYPE, U32 N >
-inline PrimaryVectorBase< TYPE, N > operator/(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
+FORCE_INLINE PrimaryVectorBase< TYPE, N > operator/(const PrimaryVectorBase< TYPE, N > &v1, const PrimaryVectorBase< TYPE, N > &v2)
 {
     PrimaryVectorBase< TYPE, N > newVec;
 

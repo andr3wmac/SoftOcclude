@@ -50,19 +50,19 @@ public:
     }
 
     // Internal intrinsics
-    inline TYPE Distance( const FloatingPointVector< TYPE, N > &v ) const
+    FORCE_INLINE TYPE Distance( const FloatingPointVector< TYPE, N > &v ) const
     {
         FloatingPointVector< TYPE, N > intermediate = (*this - v);
 
         return intermediate.Length();
     }
     
-    inline TYPE Length() const
+    FORCE_INLINE TYPE Length() const
     {
         return Mathf::Sqrt( this->Length2() );
     }
     
-    inline FloatingPointVector< TYPE, N > SafeNormalise()
+    FORCE_INLINE FloatingPointVector< TYPE, N > SafeNormalise()
     {
         const FloatingPointVector< TYPE, N > absv = this->Absolute();
         U8 max = absv.MaxAxis();
@@ -86,14 +86,14 @@ public:
         return FloatingPointVector< TYPE, N >(*this);
     }
     
-    inline FloatingPointVector< TYPE, N > Normalise()
+    FORCE_INLINE FloatingPointVector< TYPE, N > Normalise()
     {
         assert( Length() != 0.0f );
     
         return FloatingPointVector< TYPE, N >(*this) /= Length();
     }
     
-    inline FloatingPointVector< TYPE, N > Lerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
+    FORCE_INLINE FloatingPointVector< TYPE, N > Lerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
     {
         FloatingPointVector< TYPE, N > newVec;
         
@@ -105,7 +105,7 @@ public:
         return newVec;
     }
     
-    inline FloatingPointVector< TYPE, N > Slerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
+    FORCE_INLINE FloatingPointVector< TYPE, N > Slerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
     {
         TYPE dotp = Dot( v );
     
@@ -120,12 +120,12 @@ public:
         return FloatingPointVector< TYPE, N >(*this) * Mathf::Cos( theta ) + relative * Mathf::Sin( theta );
     }
     
-    inline FloatingPointVector< TYPE, N > Nlerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
+    FORCE_INLINE FloatingPointVector< TYPE, N > Nlerp( const FloatingPointVector< TYPE, N > &v, const TYPE t ) const
     {
         return Lerp( v, t ).Normalise();
     }
     
-    inline TYPE Angle( const FloatingPointVector< TYPE, N > &v ) const
+    FORCE_INLINE TYPE Angle( const FloatingPointVector< TYPE, N > &v ) const
     {
         TYPE s = Mathf::Sqrt( this->Length2() * v.Length2() );
     

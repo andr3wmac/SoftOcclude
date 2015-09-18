@@ -36,4 +36,15 @@
 #define END_MATH_NAMESPACE 
 #endif
 
+#ifdef _WIN32
+
+#define FORCE_INLINE  __forceinline
+
+#else
+
+#define FORCE_INLINE  __attribute__((always_inline))
+
+#endif
+
+
 #endif

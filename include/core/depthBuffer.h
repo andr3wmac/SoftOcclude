@@ -43,11 +43,12 @@ public:
         std::fill(mDepthSequence.begin(), mDepthSequence.end(), 0);
     }
 
-    F32 * GetDepthSequence(U32 offset)
+    inline F32 * GetDepthSequence(U32 offset)
     {
         assert(offset < mDepthSequence.size());
+        assert((offset % 4) == 0);
 
-        return mDepthSequence.data() + offset;
+        return &mDepthSequence[0] + offset;
     }
 
     void SetTilingPatern(U32 tileX, U32 tileY)
@@ -84,7 +85,7 @@ private:
     U32 mHeight;
 
     //Align to cache line
-    std::vector< F32, AlignedAllocator< Real, 64 > > mDepthSequence;
+    std::vector< F32, AlignedAllocator< F32, 32 > > mDepthSequence;
 };
 
 #endif

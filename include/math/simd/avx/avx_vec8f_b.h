@@ -29,6 +29,7 @@
 #define __AVX2_VEC8B_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/scalar/mathf.h"
 
@@ -46,13 +47,13 @@ public:
     AvxVec8f_b()
     {}
 
-    inline AvxVec8f_b( bool val ) : 
+    FORCE_INLINE AvxVec8f_b( bool val ) : 
     mValue( _mm256_castsi256_ps( _mm256_set1_epi32( -(int)val ) ) )
     {
     }
     
     /*
-    inline AvxVec8f_b( bool b0, bool b1, bool b2, bool b3,
+    FORCE_INLINE AvxVec8f_b( bool b0, bool b1, bool b2, bool b3,
                         bool b4, bool b5, bool b6, bool b7 ) :
     mValue( _mm256_castsi256_ps( _mm256_setr_epi32( -(int)b0, -(int)b1, -(int)b2, -(int)b3,
                                                     -(int)b4, -(int)b5, -(int)b6, -(int)b7 ) ) )
@@ -60,24 +61,29 @@ public:
     }
     */
     
-    inline AvxVec8f_b( const __m256 &rhs ) :
+    FORCE_INLINE AvxVec8f_b( const __m256 &rhs ) :
     mValue( rhs )
     {
     }
 
-    inline AvxVec8f_b &operator=( const __m256 &rhs )
+    FORCE_INLINE AvxVec8f_b(const AvxVec8f_b &rhs) :
+        mValue(rhs.mValue)
+    {
+    }
+
+    FORCE_INLINE AvxVec8f_b &operator=( const __m256 &rhs )
     {
         mValue = rhs;
         
         return *this;
     }
     
-    inline operator __m256 () const
+    FORCE_INLINE operator __m256 () const
     {
         return mValue;
     }
     
-    inline void LoadMask( U32 rotate, U64 mask ) 
+    FORCE_INLINE void LoadMask( U32 rotate, U64 mask ) 
     {
         U32 shift = rotate >> 2;
            
@@ -103,7 +109,7 @@ public:
     }
    
     template< U32 rotate >
-    inline void LoadMask( U64 mask ) 
+    FORCE_INLINE void LoadMask( U64 mask ) 
     {
         U32 shift = rotate >> 2;
            
@@ -128,7 +134,7 @@ public:
     }
     
     // TODO: MIGHT CAUSE PROBLEMS WITH MANUAL LOADED VALS
-    inline U64 StoreMask() const
+    FORCE_INLINE U64 StoreMask() const
     {       
         return (U64)_mm256_movemask_ps( mValue );
     }
@@ -148,32 +154,32 @@ private:
     __m256 mValue;
 };
 
-inline AvxVec8f_b operator&( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
+FORCE_INLINE AvxVec8f_b operator&( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
 {
     return _mm256_and_ps( lhs, rhs );
 }
 
-inline AvxVec8f_b operator|( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
+FORCE_INLINE AvxVec8f_b operator|( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
 {
     return _mm256_or_ps( lhs, rhs );
 }
 
-inline AvxVec8f_b operator^( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
+FORCE_INLINE AvxVec8f_b operator^( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
 {
     return _mm256_xor_ps( lhs, rhs );
 }
 
-inline AvxVec8f_b operator==( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
+FORCE_INLINE AvxVec8f_b operator==( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 16 );
 }
 
-inline AvxVec8f_b operator!=( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
+FORCE_INLINE AvxVec8f_b operator!=( const AvxVec8f_b &lhs, const AvxVec8f_b &rhs )
 {
     return _mm256_cmp_ps( lhs, rhs, 28 );
 }
 
-inline bool SIMD_Hadd( const AvxVec8f_b &lhs )
+FORCE_INLINE bool SIMD_Hadd( const AvxVec8f_b &lhs )
 {
     return (bool)_mm256_movemask_ps( lhs );
 }

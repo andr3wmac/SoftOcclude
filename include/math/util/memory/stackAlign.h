@@ -28,7 +28,7 @@
 
 #if _WIN32 
 
-#define StackAlign( x ) __declspec(align(x))
+#define StackAlign( x ) __declspec(align( x ))
 
 #else 
 

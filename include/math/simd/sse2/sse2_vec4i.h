@@ -29,6 +29,7 @@
 #define __SSE2_VEC4I_H__
 
 #include "math/types.h"
+#include "math/config.h"
 
 #include "math/simd/generic/simdBaseTraits.h"
 #include "math/simd/generic/simdVectorBase.h"
@@ -70,6 +71,11 @@ public:
 
     }
 
+    inline SSE2Vec4i(const SSE2Vec4i &rhs) : mValue(rhs.mValue)
+    {
+
+    }
+
     inline SSE2Vec4i(const __m128 &rhs) : mValue(_mm_cvtps_epi32(rhs) )
     {
 
@@ -82,17 +88,17 @@ public:
         return *this;
     }
 
-    inline SSE2Vec4i operator<<( S32 shift)
+    inline SSE2Vec4i operator<<( S32 shift) const
     {
         return _mm_slli_epi32(mValue, shift);
     }
 
-    inline SSE2Vec4i operator|(const __m128i &rhs)
+    inline SSE2Vec4i operator|(const __m128i &rhs) const
     {
         return _mm_or_si128(mValue, rhs);
     }
 
-    inline SSE2Vec4i operator&(const __m128i &rhs)
+    inline SSE2Vec4i operator&(const __m128i &rhs) const
     {
         return _mm_and_si128(mValue, rhs);
     }
@@ -102,17 +108,17 @@ public:
         return mValue;
     }
 
-    inline SSE2Vec4i Min(const SSE2Vec4i &rhs)
+    inline SSE2Vec4i Min(const SSE2Vec4i &rhs) const
     {
         return _mm_xor_si128(rhs, _mm_and_si128(_mm_cmplt_epi32(mValue, rhs), _mm_xor_si128(mValue, rhs)));
     }
 
-    inline SSE2Vec4i Max(const SSE2Vec4i &rhs)
+    inline SSE2Vec4i Max(const SSE2Vec4i &rhs) const
     {
         return _mm_xor_si128(rhs, _mm_and_si128(_mm_cmpgt_epi32(mValue, rhs), _mm_xor_si128(mValue, rhs)));
     }
 
-    inline bool IsEmpty()
+    inline bool IsEmpty() const
     {
         __m128i zero = _mm_setzero_si128();
         return _mm_movemask_epi8(_mm_cmpeq_epi32(mValue, zero)) == 0xFFFF;
@@ -126,6 +132,26 @@ public:
     void StoreAligned(S32 *dest) const
     {
         _mm_store_si128( (__m128i*)dest, mValue);
+    }
+
+    template< U32 i >
+    inline SSE2Vec4i BroadcastIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_shuffle_epi32(mValue, select);
+    }
+
+    template< U32 i >
+    inline S32 ExtractIndex() const
+    {
+        assert(i < 4);
+
+        const S32 select = i | (i << 2) | (i << 4) | (i << 6);
+
+        return _mm_cvtsi128_si32(_mm_shuffle_epi32(mValue, select));
     }
 
 private:
